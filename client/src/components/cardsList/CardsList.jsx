@@ -1,0 +1,39 @@
+import styled from 'styled-components';
+import Card from '../card/Card';
+
+const CardsContainer = styled.ul`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  list-style-type: none;
+  padding-left: 0;
+  row-gap: 1.5rem;
+  column-gap: 1.5rem;
+  :active {
+    transform: scale(0.88);
+  }
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 496px) {
+    grid-template-columns: 1fr;
+  }
+`;
+const CardsList = ({ cardsList, entity }) => {
+  return (
+    <CardsContainer>
+      {cardsList.map((card) => (
+        <Card
+          key={card.titleID}
+          full_name={card.full_name}
+          brevis={card.brevis}
+          id={card.titleID}
+          code={card.title_code}
+          entity={entity}
+        />
+      ))}
+    </CardsContainer>
+  );
+};
+
+export default CardsList;

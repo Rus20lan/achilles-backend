@@ -1,0 +1,81 @@
+.domino {
+  //   margin: 0 auto;
+  width: auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  div {
+    border-radius: 8px;
+    transform: rotate(45deg);
+    display: inline-flex;
+    width: 2rem;
+    height: 2rem;
+    margin: 1rem;
+  }
+  div::after {
+    content: '';
+    position: relative;
+    top: 0px;
+    left: -45px;
+    opacity: 0;
+    border-radius: 8px;
+    width: 2rem;
+    height: 2rem;
+  }
+  div:nth-child(1) {
+    background: #00679c;
+    animation-delay: 0.7s;
+  }
+  div:nth-child(2) {
+    background: #009e6e;
+    animation-delay: 1.4s;
+  }
+  div:nth-child(3) {
+    background: #009d43;
+    animation-delay: 2.1s;
+  }
+  div:nth-child(4) {
+    background: #75b737;
+    animation-delay: 2.8s;
+  }
+  div:nth-child(1)::after {
+    background: #00679c;
+    animation-delay: 0.7s;
+  }
+  div:nth-child(2)::after {
+    background: #009e6e;
+    animation-delay: 1.4s;
+  }
+  div:nth-child(3)::after {
+    background: #009d43;
+    animation-delay: 2.1s;
+  }
+  div:nth-child(4)::after {
+    background: #75b737;
+    animation-delay: 2.8s;
+  }
+}
+.domino > div {
+  animation: domino-effect 2.8s infinite ease-in-out;
+}
+.domino > div:after {
+  animation: illusion 2.8s infinite ease-in-out;
+}
+@keyframes domino-effect {
+  20%,
+  100% {
+    transform: rotate(135deg);
+  }
+}
+@keyframes illusion {
+  0%,
+  25% {
+    opacity: 1;
+  }
+  26.10%,
+  33.33%,
+  100% {
+    opacity: 0;
+  }
+}
