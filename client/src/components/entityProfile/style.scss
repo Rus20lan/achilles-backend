@@ -92,19 +92,7 @@
     padding-bottom: 0.2rem;
     border-bottom: 2px solid $main-first-color-company;
   }
-  .entity_volume_name {
-    color: $primary-color-text;
-  }
-  .entity_volume_value {
-    color: $secondary-color-text;
-  }
-  .entity_full_name {
-    max-width: 60%;
-    height: 29px;
-    overflow: hidden; /* Обрезка текста */
-    text-overflow: ellipsis; /* Добавление многоточия */
-    white-space: nowrap; /* Запрет переноса текста */
-  }
+
   details p {
     margin: 0 auto;
     padding: 1rem 0.5rem;
@@ -132,16 +120,6 @@
     }
     summary {
       font-size: 1.2rem;
-      .entity_volume_name {
-        white-space: nowrap;
-        overflow: hidden;
-        z-index: 0;
-      }
-      .entity_volume_value {
-        flex-shrink: 0;
-        overflow: visible;
-        z-index: 10;
-      }
     }
     details p {
       align-items: center;
