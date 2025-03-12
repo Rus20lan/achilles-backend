@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router";
 // import { useNavigate } from 'react-router-dom';
-import { MainAppContainer } from '../../pages/mainPage';
-import PostgresApi from '../../services/PostgresApi';
-import Loader from '../loader/Loader';
-import './style.scss';
-import SortBtns from '../sortBtns/SortBtns';
+import { MainAppContainer } from "../../pages/mainPage";
+import PostgresApi from "../../services/PostgresApi";
+import Loader from "../loader/Loader";
+import "./style.scss";
+import SortBtns from "../sortBtns/SortBtns";
 
 const EntityProfile = () => {
   // const history = useNavigate();
@@ -21,7 +21,7 @@ const EntityProfile = () => {
         const result = await postgresApi.getEntity(`/api/title/${titleID}`);
         setTitleData(result);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
@@ -65,8 +65,8 @@ const View = ({ data }) => {
             onChangeSort={setSort}
             activeSort={sort}
             arrSort={[
-              { index: 1, name: 'Объем' },
-              { index: 2, name: 'Документация' },
+              { index: 1, name: "Объем" },
+              { index: 2, name: "Документация" },
             ]}
           />
           {aggByVolume.length === 0 ? (
@@ -77,7 +77,7 @@ const View = ({ data }) => {
             <AggByVolumeView aggByDesign={aggByDesign} />
           )}
         </div>
-        <button onClick={() => /*history.back()*/ navigate('/main')}>
+        <button onClick={() => /*history.back()*/ navigate("/main")}>
           Назад
         </button>
       </div>
@@ -95,17 +95,17 @@ const AggByVolumeView = ({ aggByVolume, aggByDesign }) => {
               <summary>
                 <span className="entity_volume_name">{agg.name}</span>
                 <span className="entity_volume_value">
-                  {(+agg.sum).toLocaleString()} {agg.unit}
+                  {(+agg.sum).toLocaleString("ru-RU")} {agg.unit}
                 </span>
               </summary>
               {agg.aggValue.map((design) => (
                 <p key={design.valueId}>
                   <span>{design.brevis}</span>
                   <span className="entity_full_name">
-                    {design.full_name.split('.').pop()}
+                    {design.full_name.split(".").pop()}
                   </span>
                   <span>
-                    {(+design.value).toLocaleString()} {agg.unit}
+                    {(+design.value).toLocaleString("ru-RU")} {agg.unit}
                   </span>
                 </p>
               ))}
@@ -116,10 +116,10 @@ const AggByVolumeView = ({ aggByVolume, aggByDesign }) => {
         aggByDesign.map((design, index) => (
           <li key={index}>
             <details>
-              <summary style={{ justifyContent: 'flex-start', gap: '1%' }}>
+              <summary style={{ justifyContent: "flex-start", gap: "1%" }}>
                 <span className="entity_volume_name">{design.brevis}</span>
                 <span className="entity_volume_name">
-                  {design.full_name.split('.').pop()}
+                  {design.full_name.split(".").pop()}
                 </span>
               </summary>
               {design.volumes.map((vol) => (
@@ -129,7 +129,7 @@ const AggByVolumeView = ({ aggByVolume, aggByDesign }) => {
                     {vol.unit}
                   </span> */}
                   <span>
-                    {(+vol.value).toLocaleString()} {vol.unit}
+                    {(+vol.value).toLocaleString("ru-RU")} {vol.unit}
                   </span>
                 </p>
               ))}
