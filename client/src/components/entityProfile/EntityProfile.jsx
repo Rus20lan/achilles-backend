@@ -9,8 +9,6 @@ import SortBtns from '../sortBtns/SortBtns';
 import AggItemMain from '../aggItemMain/AggItemMain';
 
 const EntityProfile = () => {
-  // const history = useNavigate();
-
   const postgresApi = new PostgresApi();
   const { titleID } = useParams();
   const [titleData, setTitleData] = useState(null);
@@ -42,8 +40,6 @@ const View = ({ data }) => {
   const navigate = useNavigate();
   const [sort, setSort] = useState(1);
   const { brevis, full_name, aggByVolume, aggByDesign } = data;
-  // console.log(data);
-
   return (
     <MainAppContainer>
       <div className="entity_container">

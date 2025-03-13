@@ -1,5 +1,5 @@
-@use "../App/mixins" as m;
-@use "../App/vars" as *;
+@use '../App/mixins' as m;
+@use '../App/vars' as *;
 
 .entity_container {
   display: grid;
@@ -93,7 +93,6 @@
     padding-bottom: 0.2rem;
     border-bottom: 2px solid $main-first-color-company;
     .btn_round_wrapper {
-      // width: 100%;
       height: auto;
     }
   }

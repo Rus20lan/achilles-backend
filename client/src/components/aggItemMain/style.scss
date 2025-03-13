@@ -1,9 +1,16 @@
 @use '../App/vars' as *;
+.summary_wrapper {
+  display: flex;
+  box-sizing: border-box;
+}
 .entity_volume_name {
   color: $primary-color-text;
+  white-space: nowrap;
 }
 .entity_volume_value {
+  display: block;
   color: $secondary-color-text;
+  white-space: nowrap;
 }
 .entity_full_name {
   max-width: 60%;
