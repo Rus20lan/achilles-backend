@@ -1,9 +1,10 @@
-import './style.scss';
-const Btn = (props) => {
+import "./style.scss";
+const Btn = ({ btnClassName, text, icon }) => {
   return (
-    <button className="button-17" role="button">
-      {props.text}
-    </button>
+    <a className={btnClassName} role="button">
+      {icon && <i className={icon}></i>}
+      {text}
+    </a>
   );
 };
 

@@ -1,5 +1,5 @@
-@use '../App/mixins' as m;
-@use '../App/vars' as *;
+@use "../App/mixins" as m;
+@use "../App/vars" as *;
 
 .entity_container {
   display: grid;
@@ -83,6 +83,7 @@
   details summary {
     list-style-type: none;
     cursor: pointer;
+    position: relative;
   }
   summary {
     font-size: 1.5rem;
@@ -91,6 +92,10 @@
     justify-content: space-between;
     padding-bottom: 0.2rem;
     border-bottom: 2px solid $main-first-color-company;
+    .btn_round_wrapper {
+      // width: 100%;
+      height: auto;
+    }
   }
 
   details p {
