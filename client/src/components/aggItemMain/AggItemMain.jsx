@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import './style.scss';
-import Btn from '../Btn/btn';
+import { useState } from "react";
+import "./style.scss";
+import Btn from "../Btn/btn";
+import Modal from "../modal/Modal";
 
 const AggItemChildren = ({ childData, unit_main }) => {
   if (!childData) return null;
@@ -10,9 +11,9 @@ const AggItemChildren = ({ childData, unit_main }) => {
       {brevis && (
         <>
           <span>{brevis}</span>
-          <span className="entity_full_name">{full_name.split('.').pop()}</span>
+          <span className="entity_full_name">{full_name.split(".").pop()}</span>
           <span>
-            {(+value).toLocaleString('ru-RU')} {unit_main}
+            {(+value).toLocaleString("ru-RU")} {unit_main}
           </span>
         </>
       )}
@@ -20,7 +21,7 @@ const AggItemChildren = ({ childData, unit_main }) => {
         <>
           <span>{name}</span>
           <span>
-            {(+value).toLocaleString('ru-RU')} {unit}
+            {(+value).toLocaleString("ru-RU")} {unit}
           </span>
         </>
       )}
@@ -30,6 +31,7 @@ const AggItemChildren = ({ childData, unit_main }) => {
 
 const AggItemMain = ({ data }) => {
   const [visibleBtnRound, setVisibleBtnRound] = useState(false);
+
   if (!data) {
     return null;
   }
@@ -41,11 +43,12 @@ const AggItemMain = ({ data }) => {
   const handleMouseOut = () => {
     setVisibleBtnRound(false);
   };
+
   return (
     <li>
       <details>
         <summary
-          style={brevis && { justifyContent: 'flex-start', gap: '1%' }}
+          style={brevis && { justifyContent: "flex-start", gap: "1%" }}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
         >
@@ -53,23 +56,23 @@ const AggItemMain = ({ data }) => {
           <div className="summary_wrapper">
             {sum && (
               <span className="entity_volume_value">
-                {(+sum).toLocaleString('ru-RU')} {unit}
+                {(+sum).toLocaleString("ru-RU")} {unit}
               </span>
             )}
             {brevis && (
               <>
                 <span className="entity_volume_name">{brevis}</span>
                 <span className="entity_volume_name">
-                  {full_name.split('.').pop()}
+                  {full_name.split(".").pop()}
                 </span>
               </>
             )}
             <div
               className={`btn_round_wrapper ${
-                visibleBtnRound ? 'visible' : ''
+                visibleBtnRound ? "visible" : ""
               }`}
             >
-              <Btn btnClassName={'button_round'} icon={'fas fa-plus'} />
+              <Btn btnClassName={"button_round"} icon={"fas fa-plus"} />
             </div>
           </div>
         </summary>
@@ -84,6 +87,11 @@ const AggItemMain = ({ data }) => {
           <AggItemChildren key={data.id} childData={data} unit={unit} />
         ))}
       </details>
+      {/* {isModalOpen && (
+        <Modal onClose={handleCloseModal}>
+          <p>hello</p>
+        </Modal>
+      )} */}
     </li>
   );
 };
