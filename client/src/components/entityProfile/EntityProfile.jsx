@@ -1,19 +1,23 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router';
 // import { useNavigate } from 'react-router-dom';
-import { MainAppContainer } from "../../pages/mainPage";
-import PostgresApi from "../../services/PostgresApi";
-import Loader from "../loader/Loader";
-import "./style.scss";
-import SortBtns from "../sortBtns/SortBtns";
-import AggItemMain from "../aggItemMain/AggItemMain";
+import { MainAppContainer } from '../../pages/mainPage';
+import PostgresApi from '../../services/PostgresApi';
+import Loader from '../loader/Loader';
+import './style.scss';
+import SortBtns from '../sortBtns/SortBtns';
+import AggItemMain from '../aggItemMain/AggItemMain';
+import AddFactForm from '../addFactForm/AddFactForm';
+import Modal from '../modal/Modal';
+import { useSelector } from 'react-redux';
 
 const EntityProfile = () => {
   const postgresApi = new PostgresApi();
   const { titleID } = useParams();
   const [titleData, setTitleData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const volume = useSelector((state) => state.volume.current);
   // Создаем эффект для получение из базы данных по выбранному объекту по titleID
   useEffect(() => {
     const fetchData = async () => {
@@ -21,30 +25,50 @@ const EntityProfile = () => {
         const result = await postgresApi.getEntity(`/api/title/${titleID}`);
         setTitleData(result);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [titleID]);
+
+  useEffect(() => {
+    //Если volume = true, то отображаем модальное окно внесения факта
+    if (volume) {
+      setIsModalOpen(true);
+    } else {
+      setIsModalOpen(false);
+    }
+  }, [volume]);
 
   if (loading) {
     return <Loader />;
   }
 
-  // const handleCloseModal = () => {
-  //   setIsModalOpen(false);
-  // };
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
 
-  return titleData ? <View data={titleData?.data} /> : <Loader />;
+  return titleData ? (
+    <>
+      <View data={titleData?.data} />
+      {isModalOpen && (
+        <Modal onClose={handleModalClose}>
+          <AddFactForm current={volume} brevis={titleData.data.brevis} />
+        </Modal>
+      )}
+    </>
+  ) : (
+    <Loader />
+  );
 };
 
 const View = ({ data }) => {
   const navigate = useNavigate();
   const [sort, setSort] = useState(1);
   const { brevis, full_name, aggByVolume, aggByDesign } = data;
+  // console.log(data);
   return (
     <MainAppContainer>
       <div className="entity_container">
@@ -59,8 +83,8 @@ const View = ({ data }) => {
             onChangeSort={setSort}
             activeSort={sort}
             arrSort={[
-              { index: 1, name: "Объем" },
-              { index: 2, name: "Документация" },
+              { index: 1, name: 'Объем' },
+              { index: 2, name: 'Документация' },
             ]}
           />
           {aggByVolume.length === 0 ? (
@@ -73,7 +97,7 @@ const View = ({ data }) => {
             />
           )}
         </div>
-        <button onClick={() => navigate("/main")}>Назад</button>
+        <button onClick={() => navigate('/main')}>Назад</button>
       </div>
     </MainAppContainer>
   );

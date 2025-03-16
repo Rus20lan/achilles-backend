@@ -28,8 +28,14 @@
 }
 
 .button_round {
-  background-color: #547aa5;
   border-radius: 25px;
+  cursor: pointer;
+}
+.blue {
+  background-color: #547aa5;
+}
+.red-40 {
+  background-color: $red-error-40;
 }
 .icon_white {
   color: $background;

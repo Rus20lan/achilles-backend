@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCandidateLogin } from '../../redux/slices/authDataSlice';
 
-const ModalContext = styled.div`
+export const ModalContext = styled.div`
   max-width: 420px;
   width: 100%;
   max-height: 196px;
