@@ -1,4 +1,4 @@
-import './style.scss';
+import "./style.scss";
 const Btn = ({ btnClassName, text, icon, onClickBtn }) => {
   const handleClick = (event) => {
     event.preventDefault();
@@ -6,8 +6,8 @@ const Btn = ({ btnClassName, text, icon, onClickBtn }) => {
     // console.log('Клик по кнопке');
   };
   return (
-    <a className={btnClassName} role="button" onClick={handleClick}>
-      {icon && <i className={`${icon} ${'icon_white'}`}></i>}
+    <a className={btnClassName} onClick={handleClick}>
+      {icon && <i className={`${icon} ${"icon_white"}`}></i>}
       {text}
     </a>
   );

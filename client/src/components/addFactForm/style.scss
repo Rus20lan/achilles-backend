@@ -1,5 +1,5 @@
-@use '../App/vars' as *;
-@use '../App/mixins' as m;
+@use "../App/vars" as *;
+@use "../App/mixins" as m;
 
 .modal_context {
   @include m.box-shadow-card;
@@ -19,8 +19,7 @@
 
 .form_fact_container {
   width: 100%;
-  padding: 0.5rem 1rem;
-  //   border: 5px solid red;
+  // padding: 0.5rem 1rem;
   font-size: 14px;
   div {
     .p_second_line {
@@ -71,28 +70,14 @@
     @include m.select-style-one;
     margin: 0;
   }
+  .group_btns {
+    @include m.flex-end;
+    padding: 0.5rem 0;
+    margin-top: 2%;
+    gap: 1%;
+  }
 }
 
 .btn_center {
   @include m.flex-center;
-}
-
-.custom-select {
-  @include m.label-style-one;
-  position: relative;
-  .selected-option {
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    .option {
-      padding: 10px;
-      cursor: pointer;
-    }
-  }
 }

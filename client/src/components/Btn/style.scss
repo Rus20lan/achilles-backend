@@ -1,5 +1,5 @@
-@use '../App/vars' as *;
-@use '../App/mixins' as m;
+@use "../App/vars" as *;
+@use "../App/mixins" as m;
 .btn_round_wrapper {
   font-size: 16px;
   padding-left: 0.2em;
@@ -8,7 +8,7 @@
   transition: opacity 0.3s ease, visibility 0.3s ease;
   a {
     @include m.flex-center;
-
+    user-select: none;
     height: 2.5em;
     width: 2.5em;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
@@ -19,6 +19,15 @@
   }
   @media (max-width: 696px) {
     font-size: 14px;
+  }
+}
+.btn_rectangle_wrapper {
+  a {
+    @include m.flex-center;
+    @include m.box-shadow-card;
+    @include m.active-btn;
+    box-sizing: border-box;
+    padding: 0.5rem 2em;
   }
 }
 
@@ -36,6 +45,9 @@
 }
 .red-40 {
   background-color: $red-error-40;
+}
+.green-ok {
+  background-color: $green-ok;
 }
 .icon_white {
   color: $background;

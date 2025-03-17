@@ -1,6 +1,8 @@
-import { memo, useCallback, useEffect, useState } from 'react';
-import './style.scss';
-import Btn from '../Btn/btn';
+import { memo, useCallback, useEffect, useState, useRef } from "react";
+import "./style.scss";
+import Btn from "../Btn/btn";
+import { useDispatch } from "react-redux";
+import { remoteCurrentVolume } from "../../redux/slices/volumeSlice";
 
 const Select = ({ fact, options, onChange }) => {
   const handleChange = (e) => {
@@ -9,7 +11,7 @@ const Select = ({ fact, options, onChange }) => {
   return (
     <select
       className="selected-option"
-      value={fact.valueId || ''}
+      value={fact.valueId || ""}
       onChange={handleChange}
     >
       {options &&
@@ -24,7 +26,7 @@ const Select = ({ fact, options, onChange }) => {
 
 const Fact = memo(({ options, id, initFact, onChange, onRemote }) => {
   const [fact, setFact] = useState(
-    initFact ?? { id, fact: 0, date: '', valueId: 0 }
+    initFact ?? { id, fact: 0, date: "", valueId: 0 }
   );
 
   useEffect(() => {
@@ -64,8 +66,8 @@ const Fact = memo(({ options, id, initFact, onChange, onRemote }) => {
       />
       <input type="number" disabled />
       <Btn
-        btnClassName={'button_round red-40'}
-        icon={'fas fa-close'}
+        btnClassName={"button_round red-40"}
+        icon={"fas fa-close"}
         onClickBtn={() => {
           onRemote(fact);
         }}
@@ -76,12 +78,16 @@ const Fact = memo(({ options, id, initFact, onChange, onRemote }) => {
 
 const AddFactForm = ({ current, brevis }) => {
   const [factArray, setFactArray] = useState([]);
+  const dispatch = useDispatch();
+  const saveRef = useRef(null); // saveRef - для кнопки Сохранить
+  const cancelRef = useRef(null); // cancelRef - для кнопки Отмена
   const handleClickAddEmptyFactString = () => {
     setFactArray((factArray) => {
+      // crypto.randomUUID()
       const newFact = {
-        id: crypto.randomUUID(),
+        id: Date.now(),
         fact: 0,
-        date: new Date().toISOString().split('T')[0],
+        date: new Date().toISOString().split("T")[0],
         valueId: current?.array?.[0]?.valueId || 0,
       };
       return [...factArray, newFact];
@@ -128,8 +134,8 @@ const AddFactForm = ({ current, brevis }) => {
             </ul>
             <div className="btn_round_wrapper btn_center visible">
               <Btn
-                btnClassName={'button_round blue'}
-                icon={'fas fa-plus'}
+                btnClassName={"button_round blue"}
+                icon={"fas fa-plus"}
                 onClickBtn={handleClickAddEmptyFactString}
               />
             </div>
@@ -138,12 +144,27 @@ const AddFactForm = ({ current, brevis }) => {
         {factArray.length === 0 && (
           <div className="btn_round_wrapper btn_center visible">
             <Btn
-              btnClassName={'button_round blue'}
-              icon={'fas fa-plus'}
+              btnClassName={"button_round blue"}
+              icon={"fas fa-plus"}
               onClickBtn={handleClickAddEmptyFactString}
             />
           </div>
         )}
+        <div className="group_btns btn_rectangle_wrapper">
+          <Btn
+            ref={saveRef}
+            text={"Сохранить"}
+            btnClassName={"icon_white green-ok"}
+            onClickBtn={() => {
+              dispatch(remoteCurrentVolume());
+            }}
+          />
+          <Btn
+            ref={cancelRef}
+            text={"Отмена"}
+            btnClassName={"icon_white red-40"}
+          />
+        </div>
       </div>
     </div>
   );
