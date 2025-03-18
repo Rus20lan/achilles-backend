@@ -6,7 +6,7 @@ class FactApi {
     this.year = this.dateObject.getFullYear();
     this.month = this.dateObject.getMonth() + 1;
     this.day = this.dateObject.geDay();
-    this.valueId = newFact.valueId;
+    this.volumeId = newFact.valueId;
     this.creating = newFact.id;
   }
 
@@ -18,7 +18,7 @@ class FactApi {
             year:${this.year}, 
             month:${this.month}, 
             day:${this.day}, 
-            valueId:${this.valueId}, 
+            valueId:${this.volumeId}, 
             creating:${this.creating}
         `;
   };

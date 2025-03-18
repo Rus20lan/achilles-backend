@@ -8,6 +8,7 @@ import sequelize from './config/db.js';
 import { router as authRouters } from './routes/auth.js';
 import { router as titlesRouters } from './routes/titles.js';
 import { router as titleRouters } from './routes/title.js';
+import { router as factRouters } from './routes/fact.js';
 import funPassport from './middleware/passport.js';
 
 const app = express();
@@ -30,5 +31,6 @@ app.use(bodyParser.json());
 app.use('/api/auth', authRouters);
 app.use('/api/titles', titlesRouters);
 app.use('/api/title', titleRouters);
+app.use('/api/fact', factRouters);
 
 export default app;
