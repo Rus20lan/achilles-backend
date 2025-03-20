@@ -8,6 +8,7 @@
   transition: opacity 0.3s ease, visibility 0.3s ease;
   a {
     @include m.flex-center;
+    text-decoration: none;
     user-select: none;
     height: 2.5em;
     width: 2.5em;
@@ -26,6 +27,7 @@
     @include m.flex-center;
     @include m.box-shadow-card;
     @include m.active-btn;
+    text-decoration: none;
     box-sizing: border-box;
     padding: 0.5rem 2em;
   }
@@ -38,6 +40,7 @@
 
 .button_round {
   border-radius: 25px;
+  text-decoration: none;
   cursor: pointer;
 }
 .blue {

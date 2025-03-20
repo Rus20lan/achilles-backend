@@ -3,15 +3,16 @@ import "./style.scss";
 import Btn from "../Btn/btn";
 import { useDispatch } from "react-redux";
 import { remoteCurrentVolume } from "../../redux/slices/volumeSlice";
+import FactApi from "../../services/FactApi";
 
 const Select = ({ fact, options, onChange }) => {
   const handleChange = (e) => {
-    onChange({ ...fact, valueId: +e.target.value });
+    onChange({ ...fact, volumeId: +e.target.value });
   };
   return (
     <select
       className="selected-option"
-      value={fact.valueId || ""}
+      value={fact.volumeId || ""}
       onChange={handleChange}
     >
       {options &&
@@ -26,7 +27,7 @@ const Select = ({ fact, options, onChange }) => {
 
 const Fact = memo(({ options, id, initFact, onChange, onRemote }) => {
   const [fact, setFact] = useState(
-    initFact ?? { id, fact: 0, date: "", valueId: 0 }
+    initFact ?? { id, fact: 0, date: "", volumeId: 0 }
   );
 
   useEffect(() => {
@@ -83,12 +84,11 @@ const AddFactForm = ({ current, brevis }) => {
   const cancelRef = useRef(null); // cancelRef - для кнопки Отмена
   const handleClickAddEmptyFactString = () => {
     setFactArray((factArray) => {
-      // crypto.randomUUID()
       const newFact = {
         id: Date.now(),
         fact: 0,
         date: new Date().toISOString().split("T")[0],
-        valueId: current?.array?.[0]?.valueId || 0,
+        volumeId: current?.array?.[0]?.valueId || 0,
       };
       return [...factArray, newFact];
     });
@@ -104,6 +104,24 @@ const AddFactForm = ({ current, brevis }) => {
       factArray.filter((item) => item.id !== fact.id)
     );
   }, []);
+
+  // Отвечает за нажатие на кнопки "Сохранить" или "Отмена"
+  const handleClickSaveOrCancel = (e) => {
+    if (!e) {
+      console.error("Event object is undefined");
+      return;
+    }
+    const target = e.target;
+    if (target === saveRef.current) {
+      console.log("save button");
+      const factApi = new FactApi();
+      factApi.sendFactArray("/api/fact/save", factArray);
+      dispatch(remoteCurrentVolume());
+    }
+    if (target === cancelRef.current) {
+      console.log("cancel button");
+    }
+  };
   console.log(factArray);
   return (
     <div className="modal_context">
@@ -112,7 +130,7 @@ const AddFactForm = ({ current, brevis }) => {
           <p className="p_first_line">Объект: {brevis}</p>
           <p className="p_second_line">Физ.объем: {current?.name}</p>
         </div>
-        {factArray.length > 0 && (
+        {current && factArray.length > 0 && (
           <>
             <div className="group_inputs">
               <label>РД</label>
@@ -155,14 +173,15 @@ const AddFactForm = ({ current, brevis }) => {
             ref={saveRef}
             text={"Сохранить"}
             btnClassName={"icon_white green-ok"}
-            onClickBtn={() => {
-              dispatch(remoteCurrentVolume());
+            onClickBtn={(e) => {
+              handleClickSaveOrCancel(e);
             }}
           />
           <Btn
             ref={cancelRef}
             text={"Отмена"}
             btnClassName={"icon_white red-40"}
+            onClickBtn={handleClickSaveOrCancel}
           />
         </div>
       </div>

@@ -13,6 +13,7 @@ const Fact = sequelize.define(
     values: {
       type: DataTypes.JSONB,
       allowNull: false,
+      defaultValue: [],
       comment: "Поле хранит фактические данные по каждому объему",
     },
     volumeId: {
