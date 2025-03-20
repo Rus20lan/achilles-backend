@@ -1,5 +1,5 @@
-@use "../App/vars" as *;
-@use "../App/mixins" as m;
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
 
 .modal_context {
   @include m.box-shadow-card;
@@ -14,6 +14,10 @@
     padding: 0.5rem 2rem;
     font-size: 1.5em;
     text-align: center;
+  }
+  @media (max-width: 360px) {
+    width: 95%;
+    padding: 0.5rem 0.2rem;
   }
 }
 

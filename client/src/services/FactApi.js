@@ -28,9 +28,9 @@ class FactApi {
     try {
       const resultArray = { factsArray: this.fillFactArray(factArray) };
       const res = await fetch(url, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(resultArray),
       });
