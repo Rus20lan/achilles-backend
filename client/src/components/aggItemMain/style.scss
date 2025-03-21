@@ -1,11 +1,24 @@
-@use '../App/vars' as *;
+@use "../App/vars" as *;
 .summary_wrapper {
   display: flex;
   box-sizing: border-box;
+  position: relative;
 }
 .entity_volume_name {
+  display: flex;
+  align-items: center;
   color: $primary-color-text;
+  // white-space: nowrap;
+}
+.nowrap {
   white-space: nowrap;
+  margin-right: 1%;
+  flex-shrink: 0;
+}
+.long {
+  font-size: 0.8em;
+  overflow: hidden;
+  width: auto;
 }
 .entity_volume_value {
   display: block;
@@ -15,17 +28,22 @@
 .entity_full_name {
   max-width: 60%;
   height: 29px;
-  overflow: hidden; /* Обрезка текста */
-  text-overflow: ellipsis; /* Добавление многоточия */
-  white-space: nowrap; /* Запрет переноса текста */
+  // overflow: hidden; /* Обрезка текста */
+  // white-space: normal;
+  // word-wrap: break-word;
+  // text-overflow: ellipsis; /* Добавление многоточия */
+  // white-space: nowrap; /* Запрет переноса текста */
 }
 @media (max-width: 696px) {
   .entity_volume_name {
-    white-space: nowrap;
+    // white-space: nowrap;
+
     overflow: hidden;
     z-index: 0;
   }
   .entity_volume_value {
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
     overflow: visible;
     z-index: 10;

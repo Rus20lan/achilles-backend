@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import './style.scss';
-import Btn from '../Btn/btn';
-import { useDispatch } from 'react-redux';
-import { setCurrentVolume } from '../../redux/slices/volumeSlice';
+import { useState } from "react";
+import "./style.scss";
+import Btn from "../Btn/btn";
+import { useDispatch } from "react-redux";
+import { setCurrentVolume } from "../../redux/slices/volumeSlice";
 
 const AggItemChildren = ({ childData, unit_main }) => {
   if (!childData) return null;
@@ -12,9 +12,9 @@ const AggItemChildren = ({ childData, unit_main }) => {
       {brevis && (
         <>
           <span>{brevis}</span>
-          <span className="entity_full_name">{full_name.split('.').pop()}</span>
+          <span className="entity_full_name">{full_name.split(".").pop()}</span>
           <span>
-            {(+value).toLocaleString('ru-RU')} {unit_main}
+            {(+value).toLocaleString("ru-RU")} {unit_main}
           </span>
         </>
       )}
@@ -22,7 +22,7 @@ const AggItemChildren = ({ childData, unit_main }) => {
         <>
           <span>{name}</span>
           <span>
-            {(+value).toLocaleString('ru-RU')} {unit}
+            {(+value).toLocaleString("ru-RU")} {unit}
           </span>
         </>
       )}
@@ -47,9 +47,9 @@ const AggItemMain = ({ data }) => {
   // Обработчик события при нажатии на кнопку добавить факт, открывается модальное окно
   const handleClick = () => {
     const currentVolumes = {
-      ...(name && { name }),
+      ...(name && { name, isDesign: false }),
       ...(aggValue && { array: aggValue }),
-      ...(brevis && { name: brevis }),
+      ...(brevis && { name: brevis, isDesign: true }),
       ...(volumes && { array: volumes }),
     };
     // Используя dispatch сохраняем объем в который будем добавляться факт
@@ -62,34 +62,30 @@ const AggItemMain = ({ data }) => {
   return (
     <li>
       <details>
-        <summary
-          style={brevis && { justifyContent: 'flex-start', gap: '1%' }}
-          onMouseOver={handleMouseOver}
-          onMouseOut={handleMouseOut}
-        >
+        <summary onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
           {name && <span className="entity_volume_name">{name}</span>}
           <div className="summary_wrapper">
             {sum && (
               <span className="entity_volume_value">
-                {(+sum).toLocaleString('ru-RU')} {unit}
+                {(+sum).toLocaleString("ru-RU")} {unit}
               </span>
             )}
             {brevis && (
               <>
-                <span className="entity_volume_name">{brevis}</span>
-                <span className="entity_volume_name">
-                  {full_name.split('.').pop()}
+                <span className="entity_volume_name nowrap">{brevis}</span>
+                <span className="entity_volume_name long">
+                  {full_name.split(".").pop()}
                 </span>
               </>
             )}
             <div
               className={`btn_round_wrapper ${
-                visibleBtnRound ? 'visible' : ''
+                visibleBtnRound ? "visible" : ""
               }`}
             >
               <Btn
-                btnClassName={'button_round blue'}
-                icon={'fas fa-plus'}
+                btnClassName={"button_round blue"}
+                icon={"fas fa-plus"}
                 onClickBtn={handleClick}
               />
             </div>

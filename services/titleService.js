@@ -16,7 +16,7 @@ export function aggregationByVolume(volumes) {
       unit,
       sum,
       aggValue: filter.map((val) => ({
-        valueId: val.id,
+        id: val.id,
         value: val.value,
         designId: val.designId,
         brevis: val.Design.brevis,
@@ -50,7 +50,7 @@ export function aggregationByDesign(volumes) {
       value: volume.value,
       name: volume.Resource.name,
       unit: volume.Resource.unit,
-      id: volume.resourceId,
+      id: volume.id,
     });
   }
 
