@@ -1,8 +1,8 @@
-import { useState } from "react";
-import "./style.scss";
-import Btn from "../Btn/btn";
-import { useDispatch } from "react-redux";
-import { setCurrentVolume } from "../../redux/slices/volumeSlice";
+import { useState } from 'react';
+import './style.scss';
+import Btn from '../Btn/btn';
+import { useDispatch } from 'react-redux';
+import { setCurrentVolume } from '../../redux/slices/volumeSlice';
 
 const AggItemChildren = ({ childData, unit_main }) => {
   if (!childData) return null;
@@ -12,9 +12,9 @@ const AggItemChildren = ({ childData, unit_main }) => {
       {brevis && (
         <>
           <span>{brevis}</span>
-          <span className="entity_full_name">{full_name.split(".").pop()}</span>
+          <span className="entity_full_name">{full_name.split('.').pop()}</span>
           <span>
-            {(+value).toLocaleString("ru-RU")} {unit_main}
+            {(+value).toLocaleString('ru-RU')} {unit_main}
           </span>
         </>
       )}
@@ -22,7 +22,7 @@ const AggItemChildren = ({ childData, unit_main }) => {
         <>
           <span>{name}</span>
           <span>
-            {(+value).toLocaleString("ru-RU")} {unit}
+            {(+value).toLocaleString('ru-RU')} {unit}
           </span>
         </>
       )}
@@ -36,7 +36,6 @@ const AggItemMain = ({ data }) => {
   if (!data) {
     return null;
   }
-  // console.log(data);
   const { name, sum, unit, aggValue, brevis, full_name, volumes } = data;
   const handleMouseOver = () => {
     setVisibleBtnRound(true);
@@ -67,36 +66,32 @@ const AggItemMain = ({ data }) => {
           <div className="summary_wrapper">
             {sum && (
               <span className="entity_volume_value">
-                {(+sum).toLocaleString("ru-RU")} {unit}
+                {(+sum).toLocaleString('ru-RU')} {unit}
               </span>
             )}
             {brevis && (
               <>
                 <span className="entity_volume_name nowrap">{brevis}</span>
                 <span className="entity_volume_name long">
-                  {full_name.split(".").pop()}
+                  {full_name.split('.').pop()}
                 </span>
               </>
             )}
             <div
               className={`btn_round_wrapper ${
-                visibleBtnRound ? "visible" : ""
+                visibleBtnRound ? 'visible' : ''
               }`}
             >
               <Btn
-                btnClassName={"button_round blue"}
-                icon={"fas fa-plus"}
+                btnClassName={'button_round blue'}
+                icon={'fas fa-plus'}
                 onClickBtn={handleClick}
               />
             </div>
           </div>
         </summary>
         {aggValue?.map((data) => (
-          <AggItemChildren
-            key={data.valueId}
-            childData={data}
-            unit_main={unit}
-          />
+          <AggItemChildren key={data.id} childData={data} unit_main={unit} />
         ))}
         {volumes?.map((data) => (
           <AggItemChildren key={data.id} childData={data} unit={unit} />
