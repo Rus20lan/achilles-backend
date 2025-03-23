@@ -1,0 +1,31 @@
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
+
+.burger_btn {
+  width: $bar-w;
+  height: ($bar-w * 3)/4;
+  margin-left: -($bar-w/2);
+  margin-top: -($bar-w/2);
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  b {
+    position: absolute;
+    left: 0;
+    color: $primary-color-text;
+    width: $bar-w;
+    height: $bar-h;
+    background-color: $primary-color-text;
+    &:nth-child(1) {
+      top: 0;
+    }
+    &:nth-child(2) {
+      top: 50%;
+    }
+    &:nth-child(3) {
+      top: 100%;
+    }
+  }
+}
