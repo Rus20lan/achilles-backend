@@ -1,11 +1,12 @@
 @use '../App/vars' as *;
 @use '../App/mixins' as m;
+@use 'sass:math';
 
 .burger_btn {
   width: $bar-w;
-  height: ($bar-w * 3)/4;
-  margin-left: -($bar-w/2);
-  margin-top: -($bar-w/2);
+  height: calc((#{$bar-w}* 3) / 4);
+  margin-left: calc(-#{$bar-w} / 2);
+  margin-top: calc(-#{$bar-w} / 2);
   cursor: pointer;
   position: absolute;
   top: 50%;
