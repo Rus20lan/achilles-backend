@@ -20,13 +20,71 @@
     height: $bar-h;
     background-color: $primary-color-text;
     &:nth-child(1) {
-      top: 0;
+      top: 0%;
     }
     &:nth-child(2) {
       top: 50%;
     }
     &:nth-child(3) {
       top: 100%;
+    }
+  }
+}
+
+.active {
+  @include m.rotateZ(
+    'rotate-135',
+    (
+      transform: rotate(135deg),
+    ),
+    800ms,
+    ease,
+    500ms
+  );
+  b {
+    &:nth-child(1) {
+      @include m.moving(
+        'swing-down',
+        (
+          top: 0,
+        ),
+        (
+          top: 50%,
+        ),
+        500ms,
+        cubic-bezier(0.4, 0, 0.2, 1)
+      );
+    }
+    &:nth-child(3) {
+      @include m.moving(
+        'swing-up',
+        (
+          top: 100%,
+        ),
+        (
+          top: 50%,
+        ),
+        500ms,
+        cubic-bezier(0.4, 0, 0.2, 1)
+      );
+      @include m.rotateZ(
+        'rotate-90',
+        (
+          transform: rotate(90deg),
+        ),
+        800ms,
+        500ms,
+        cubic-bezier(0.4, 0, 0.2, 1)
+      );
+
+      & {
+        animation-name: swing-up, rotate-90;
+        animation-duration: 500ms, 800ms;
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1),
+          cubic-bezier(0.4, 0, 0.2, 1);
+        animation-delay: 0ms, 500ms;
+        animation-fill-mode: forwards;
+      }
     }
   }
 }

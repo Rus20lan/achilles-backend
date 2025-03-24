@@ -1,4 +1,4 @@
-@use "./vars" as *;
+@use './vars' as *;
 @mixin flex-center {
   display: flex;
   justify-content: center;
@@ -55,5 +55,37 @@
   border-radius: 4px;
   &:active {
     transform: scale(0.8);
+  }
+}
+
+@mixin moving($name, $start, $end, $duration: 1s, $timing: ease) {
+  @keyframes #{$name} {
+    from {
+      @each $prop, $value in $start {
+        #{$prop}: $value;
+      }
+    }
+    to {
+      @each $prop, $value in $end {
+        #{$prop}: $value;
+      }
+    }
+  }
+  & {
+    animation: $name $duration $timing forwards;
+    -webkit-animation: $name $duration $timing forwards;
+  }
+}
+@mixin rotateZ($name, $end, $duration: 1s, $delay: 500s, $timing: ease) {
+  @keyframes #{$name} {
+    to {
+      @each $prop, $value in $end {
+        #{$prop}: $value;
+      }
+    }
+  }
+  & {
+    animation: $name $duration $timing $delay forwards;
+    -webkit-animation: $name $duration $timing $delay forwards;
   }
 }
