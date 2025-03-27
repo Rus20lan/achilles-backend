@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import './style.scss';
 
-const BurgerBtn = () => {
-  const [isActive, setActive] = useState(false);
+const BurgerBtn = ({ isOpen, setIsOpen }) => {
+  // const [isActive, setActive] = useState(false);
   const handleClick = () => {
     console.log('hello world');
-    setActive((isActive) => {
-      return !isActive;
+    setIsOpen((isOpen) => {
+      return !isOpen;
     });
   };
 
   return (
     <a
-      className={`burger_btn ${isActive ? 'active' : ''}`}
+      className={`burger_btn ${isOpen ? 'active' : 'shut'}`}
       onClick={handleClick}
     >
       <b></b>

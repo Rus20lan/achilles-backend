@@ -1,9 +1,8 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Footer from '../components/footer/Footer';
-import Loader from '../components/loader/Loader';
 import { useResize } from '../hooks/useResize';
-import BurgerBtn from '../components/burgerBtn/BurgerBtn';
+import BurgerMenu from '../components/burgerMenu/BurgerMenu';
 
 const MainContainer = styled.div`
   width: 100%;
@@ -46,7 +45,7 @@ const MainLayout = () => {
     <MainContainer>
       <header style={{ width: '100%' }}>
         <NavContainer>
-          <Link to="/" className="link_header_a">
+          <Link to="/" className="link_header_a" style={{ zIndex: '1000' }}>
             Home
           </Link>
           {!isScreenMD && (
@@ -61,7 +60,7 @@ const MainLayout = () => {
           )}
           {isScreenMD && (
             <BurgerContainer>
-              <BurgerBtn />
+              <BurgerMenu />
             </BurgerContainer>
           )}
         </NavContainer>

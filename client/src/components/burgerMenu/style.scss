@@ -1,0 +1,43 @@
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
+$transition-duration: 5.5s;
+$transition-delay: 0.05s;
+.burger_menu_container {
+  @include m.flex-center;
+  position: fixed; // Лучше fixed для модальных меню
+  top: 0;
+  right: 0;
+  left: 0; // Занимает весь экран
+  display: flex;
+  background-color: $color-by-burger-menu;
+  //   width: 100vw;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s, clip-path 0.4s;
+  clip-path: circle(0% at 50% 50%); // Начальное состояние - невидимо
+  opacity: 0;
+  padding: 2rem;
+  box-sizing: border-box;
+  .nav_refs {
+    padding: 1em 2em;
+  }
+  p {
+    width: 100%;
+    color: white;
+  }
+}
+
+.open {
+  //   animation: openMenu 1s ease forwards;
+}
+
+// @keyframes openMenu {
+//   from {
+//     width: 0vw;
+//     transform: translate(200%, -100%);
+//   }
+//   to {
+//     width: 100vw;
+//     transform: translate(0, 0);
+//   }
+// }
