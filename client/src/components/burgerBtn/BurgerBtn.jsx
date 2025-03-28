@@ -1,18 +1,20 @@
-import { useState } from 'react';
-import './style.scss';
+import { useState } from "react";
+import "./style.scss";
 
-const BurgerBtn = ({ isOpen, setIsOpen }) => {
-  // const [isActive, setActive] = useState(false);
+const BurgerBtn = ({ installer, setIsOpen }) => {
   const handleClick = () => {
-    console.log('hello world');
-    setIsOpen((isOpen) => {
-      return !isOpen;
+    console.log("hello world");
+    // setIsOpen((isOpen) => {
+    //   return !isOpen;
+    // });
+    setIsOpen((installer) => {
+      return { ...installer, isOpenBurger: !installer.isOpenBurger };
     });
   };
 
   return (
     <a
-      className={`burger_btn ${isOpen ? 'active' : 'shut'}`}
+      className={`burger_btn ${installer.isOpenBurger ? "active" : "shut"}`}
       onClick={handleClick}
     >
       <b></b>

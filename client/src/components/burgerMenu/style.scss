@@ -1,6 +1,6 @@
-@use '../App/vars' as *;
-@use '../App/mixins' as m;
-$transition-duration: 5.5s;
+@use "../App/vars" as *;
+@use "../App/mixins" as m;
+$transition-duration: 1s;
 $transition-delay: 0.05s;
 .burger_menu_container {
   @include m.flex-center;
@@ -10,14 +10,9 @@ $transition-delay: 0.05s;
   left: 0; // Занимает весь экран
   display: flex;
   background-color: $color-by-burger-menu;
-  //   width: 100vw;
   overflow: hidden;
   pointer-events: none;
-  transition: opacity 0.3s, clip-path 0.4s;
-  clip-path: circle(0% at 50% 50%); // Начальное состояние - невидимо
-  opacity: 0;
-  padding: 2rem;
-  box-sizing: border-box;
+  transform-origin: top right;
   .nav_refs {
     padding: 1em 2em;
   }
@@ -27,17 +22,39 @@ $transition-delay: 0.05s;
   }
 }
 
-.open {
-  //   animation: openMenu 1s ease forwards;
+// Для использования clip-path анимации
+.burger_menu_container.open {
+  animation: openMenu $transition-duration cubic-bezier(0.25, 0.1, 0.25, 1)
+    forwards;
+  transform: none;
 }
+.burger_menu_container.close {
+  animation: closeMenu $transition-duration cubic-bezier(0.25, 0.1, 0.25, 1)
+    forwards;
+  transform: none;
+}
+// Альтернативная анимация через ключевые кадры (если нужно)
+@keyframes openMenu {
+  0% {
+    clip-path: polygon(100% 0, 100% 0, 100% 0, 100% 0);
+    opacity: 0;
+    border-bottom-left-radius: 34px;
+    border-bottom-right-radius: 34px;
+  }
 
-// @keyframes openMenu {
-//   from {
-//     width: 0vw;
-//     transform: translate(200%, -100%);
-//   }
-//   to {
-//     width: 100vw;
-//     transform: translate(0, 0);
-//   }
-// }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    opacity: 1;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+  }
+}
+@keyframes closeMenu {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(100% 0, 100% 0, 100% 0, 100% 0);
+    opacity: 0;
+  }
+}

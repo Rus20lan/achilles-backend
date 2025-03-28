@@ -1,8 +1,10 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
-import Footer from '../components/footer/Footer';
-import { useResize } from '../hooks/useResize';
-import BurgerMenu from '../components/burgerMenu/BurgerMenu';
+import { Link, Outlet, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import Footer from "../components/footer/Footer";
+import { useResize } from "../hooks/useResize";
+import BurgerMenu from "../components/burgerMenu/BurgerMenu";
+import { useContext } from "react";
+import { InstallerContext } from "../components/App/App";
 
 const MainContainer = styled.div`
   width: 100%;
@@ -40,12 +42,18 @@ const BurgerContainer = styled.div`
   align-items: center;
 `;
 const MainLayout = () => {
+  const { installer, setInstaller } = useContext(InstallerContext);
+  const { isOpenBurger, ...tailInstaller } = installer;
   const { isScreenMD } = useResize();
   return (
     <MainContainer>
-      <header style={{ width: '100%' }}>
+      <header style={{ width: "100%" }}>
         <NavContainer>
-          <Link to="/" className="link_header_a" style={{ zIndex: '1000' }}>
+          <Link
+            to="/"
+            className={`link_header_a ${isOpenBurger && "open"}`}
+            style={{ zIndex: "1000" }}
+          >
             Home
           </Link>
           {!isScreenMD && (
@@ -65,7 +73,7 @@ const MainLayout = () => {
           )}
         </NavContainer>
       </header>
-      <main style={{ width: '100%' }}>
+      <main style={{ width: "100%" }}>
         <Outlet />
       </main>
       <footer>
