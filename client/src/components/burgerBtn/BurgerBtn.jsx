@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import './style.scss';
 
 const BurgerBtn = ({ installer, onIsOpen, onClick }) => {
-  const [classIsOpenClose, setClassIsOpenClose] = useState('');
+  // const [classIsOpenClose, setClassIsOpenClose] = useState('');
+
   const handleClick = () => {
     onIsOpen((installer) => {
       return {
@@ -11,18 +12,18 @@ const BurgerBtn = ({ installer, onIsOpen, onClick }) => {
         isActiveBurgerBtn: true,
       };
     });
-    if (installer.isOpenBurger) {
-      setClassIsOpenClose('shut');
-    } else {
-      setClassIsOpenClose('active');
-    }
+    // if (installer.isOpenBurger) {
+    //   setClassIsOpenClose('shut');
+    // } else {
+    //   setClassIsOpenClose('active');
+    // }
     onClick();
   };
 
   return (
     <a
-      className={`burger_btn ${classIsOpenClose}`}
-      // className={`burger_btn ${installer.isOpenBurger ? 'active' : 'shut'}`}
+      // className={`burger_btn ${classIsOpenClose}`}
+      className={`burger_btn ${installer.isOpenBurger ? 'active' : 'shut'}`}
       onClick={handleClick}
     >
       <b></b>

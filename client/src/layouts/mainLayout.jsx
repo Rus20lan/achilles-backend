@@ -1,10 +1,10 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
-import styled from "styled-components";
-import Footer from "../components/footer/Footer";
-import { useResize } from "../hooks/useResize";
-import BurgerMenu from "../components/burgerMenu/BurgerMenu";
-import { useContext } from "react";
-import { InstallerContext } from "../components/App/App";
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+import Footer from '../components/footer/Footer';
+import { useResize } from '../hooks/useResize';
+import BurgerMenu from '../components/burgerMenu/BurgerMenu';
+import { useContext } from 'react';
+import { InstallerContext } from '../components/App/App';
 
 const MainContainer = styled.div`
   width: 100%;
@@ -23,6 +23,10 @@ const NavContainer = styled.div`
   @media (max-width: 1180px) {
     width: 95%;
   }
+  @media (max-width: 696px) {
+    justify-content: flex-end;
+    padding-top: 10px;
+  }
 `;
 const Nav = styled.nav`
   max-width: 300px;
@@ -30,11 +34,11 @@ const Nav = styled.nav`
   display: flex;
   justify-content: space-around;
 `;
+
 const BurgerContainer = styled.div`
   position: relative;
   box-sizing: border-box;
   top: 2px;
-  // padding: 0.5rem 2rem;
   width: 50px; /* Задайте нужную ширину */
   height: 33px; /* Задайте нужную высоту */
   display: flex;
@@ -45,17 +49,16 @@ const MainLayout = () => {
   const { installer, setInstaller } = useContext(InstallerContext);
   const { isOpenBurger, ...tailInstaller } = installer;
   const { isScreenMD } = useResize();
+
   return (
     <MainContainer>
-      <header style={{ width: "100%" }}>
+      <header style={{ width: '100%', height: 'auto' }}>
         <NavContainer>
-          <Link
-            to="/"
-            className={`link_header_a ${isOpenBurger && "open"}`}
-            style={{ zIndex: "1000" }}
-          >
-            Home
-          </Link>
+          {!isScreenMD && (
+            <Link to="/" className={`link_header_a`}>
+              Home
+            </Link>
+          )}
           {!isScreenMD && (
             <Nav>
               <Link to="/auth/login" className="link_header_a">
@@ -68,12 +71,12 @@ const MainLayout = () => {
           )}
           {isScreenMD && (
             <BurgerContainer>
-              <BurgerMenu />
+              <BurgerMenu></BurgerMenu>
             </BurgerContainer>
           )}
         </NavContainer>
       </header>
-      <main style={{ width: "100%" }}>
+      <main style={{ width: '100%' }}>
         <Outlet />
       </main>
       <footer>
