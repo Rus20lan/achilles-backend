@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import './style.scss';
-import Btn from '../Btn/btn';
-import { useDispatch } from 'react-redux';
-import { setCurrentVolume } from '../../redux/slices/volumeSlice';
+import { useState } from "react";
+import "./style.scss";
+import Btn from "../Btn/btn";
+import { useDispatch } from "react-redux";
+import { setCurrentVolume } from "../../redux/slices/volumeSlice";
 
 const AggItemChildren = ({ childData, unit_main }) => {
   if (!childData) return null;
@@ -12,9 +12,9 @@ const AggItemChildren = ({ childData, unit_main }) => {
       {brevis && (
         <>
           <span>{brevis}</span>
-          <span className="entity_full_name">{full_name.split('.').pop()}</span>
+          <span className="entity_full_name">{full_name.split(".").pop()}</span>
           <span>
-            {(+value).toLocaleString('ru-RU')} {unit_main}
+            {(+value).toLocaleString("ru-RU")} {unit_main}
           </span>
         </>
       )}
@@ -22,7 +22,7 @@ const AggItemChildren = ({ childData, unit_main }) => {
         <>
           <span>{name}</span>
           <span>
-            {(+value).toLocaleString('ru-RU')} {unit}
+            {(+value).toLocaleString("ru-RU")} {unit}
           </span>
         </>
       )}
@@ -36,7 +36,18 @@ const AggItemMain = ({ data }) => {
   if (!data) {
     return null;
   }
-  const { name, sum, unit, aggValue, brevis, full_name, volumes } = data;
+  const {
+    name,
+    fact,
+    sum,
+    percent,
+    remains,
+    unit,
+    aggValue,
+    brevis,
+    full_name,
+    volumes,
+  } = data;
   const handleMouseOver = () => {
     setVisibleBtnRound(true);
   };
@@ -53,38 +64,50 @@ const AggItemMain = ({ data }) => {
     };
     // Используя dispatch сохраняем объем в который будем добавляться факт
     if (currentVolumes) {
-      console.log(currentVolumes);
+      // console.log(currentVolumes);
       dispatch(setCurrentVolume(currentVolumes));
     }
   };
-
+  // console.log(data);
   return (
     <li>
       <details>
         <summary onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
           {name && <span className="entity_volume_name">{name}</span>}
-          <div className="summary_wrapper">
+          <div
+            className="summary_wrapper"
+            style={name ? {} : { width: "100%" }}
+          >
             {sum && (
-              <span className="entity_volume_value">
-                {(+sum).toLocaleString('ru-RU')} {unit}
-              </span>
+              <div className="entity_volume_wrapper">
+                <span className="entity_volume__fact">
+                  {fact}
+                  <small>
+                    <sup> {`${percent} %`}</sup>
+                    {remains && <sub>{remains}</sub>}
+                  </small>
+                </span>
+                <span>
+                  {(+sum).toLocaleString("ru-RU")} <small>{unit}</small>
+                </span>
+              </div>
             )}
             {brevis && (
               <>
                 <span className="entity_volume_name nowrap">{brevis}</span>
                 <span className="entity_volume_name long">
-                  {full_name.split('.').pop()}
+                  {full_name.split(".").pop()}
                 </span>
               </>
             )}
             <div
               className={`btn_round_wrapper ${
-                visibleBtnRound ? 'visible' : ''
+                visibleBtnRound ? "visible" : ""
               }`}
             >
               <Btn
-                btnClassName={'button_round blue'}
-                icon={'fas fa-plus'}
+                btnClassName={"button_round blue"}
+                icon={"fas fa-plus"}
                 onClickBtn={handleClick}
               />
             </div>

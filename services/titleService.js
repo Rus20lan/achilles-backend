@@ -1,3 +1,5 @@
+import { totalFact } from "./factService.js";
+
 export function aggregationByVolume(volumes) {
   if (!volumes) return []; // Ранний возврат если volumes пустой
 
@@ -11,10 +13,25 @@ export function aggregationByVolume(volumes) {
       .map((item) => item.value)
       .reduce((acc, curr) => acc + curr, 0)
       .toFixed(2);
+    console.log(filter);
+
+    const factValues = filter[0]?.Fact?.values || null;
+    let fact = 0;
+    for (const item of filter) {
+      if (item?.Fact?.values) {
+        fact += totalFact(factValues);
+      }
+    }
+
+    const percent = ((fact / sum) * 100).toFixed(1);
+
     aggByVolume.push({
       name,
       unit,
       sum,
+      fact,
+      percent,
+      remains: fact > 0 ? sum - fact : null,
       aggValue: filter.map((val) => ({
         id: val.id,
         value: val.value,
@@ -22,6 +39,7 @@ export function aggregationByVolume(volumes) {
         brevis: val.Design.brevis,
         full_name: val.Design.full_name,
         mark: val.Design.mark,
+        // fact: val?.Fact?.values ? totalFact(val.Fact.values) : 0,
       })),
     });
   }

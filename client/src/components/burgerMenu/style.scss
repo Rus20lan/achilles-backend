@@ -1,5 +1,5 @@
-@use '../App/vars' as *;
-@use '../App/mixins' as m;
+@use "../App/vars" as *;
+@use "../App/mixins" as m;
 $transition-duration: 1s;
 $transition-delay: 0.05s;
 .burger_menu_container {
@@ -15,7 +15,7 @@ $transition-delay: 0.05s;
   clip-path: polygon(100% 0, 100% 0, 100% 0, 100% 0);
   border-bottom-left-radius: 34px;
   border-bottom-right-radius: 34px;
-
+  z-index: 900;
   .nav_refs {
     padding: 1em 2em;
   }

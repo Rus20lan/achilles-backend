@@ -1,9 +1,10 @@
-import { Resource, Title, Volume } from '../models/associations.js';
-import Design from '../models/Design.js';
+import { Resource, Title, Volume } from "../models/associations.js";
+import Design from "../models/Design.js";
+import Fact from "../models/Fact.js";
 import {
   aggregationByDesign,
   aggregationByVolume,
-} from '../services/titleService.js';
+} from "../services/titleService.js";
 
 export async function getTitleById(req, res) {
   try {
@@ -14,20 +15,21 @@ export async function getTitleById(req, res) {
       include: [
         {
           model: Volume,
-          as: 'volumes',
+          as: "volumes",
           include: [
-            { model: Resource, attributes: ['name', 'unit'] },
+            { model: Resource, attributes: ["name", "unit"] },
             { model: Design },
+            { model: Fact, attributes: ["id", "values"] },
           ],
         },
       ],
     });
 
-    // console.log(title);
+    // console.log(title.get({ plain: true }));
     const titleWithAggregatedVolumes = {
       ...title.get({ plain: true }),
-      aggByVolume: aggregationByVolume(title.volumes),
-      aggByDesign: aggregationByDesign(title.volumes),
+      aggByVolume: aggregationByVolume(title.get({ plain: true }).volumes),
+      aggByDesign: aggregationByDesign(title.get({ plain: true }).volumes),
     };
     res.status(200).json({ data: titleWithAggregatedVolumes });
   } catch (error) {

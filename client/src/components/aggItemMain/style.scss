@@ -3,6 +3,10 @@
   display: flex;
   box-sizing: border-box;
   position: relative;
+
+  @media (max-width: 512px) {
+    justify-content: flex-end;
+  }
 }
 .entity_volume_name {
   display: flex;
@@ -18,12 +22,41 @@
 .long {
   font-size: 0.8em;
   overflow: hidden;
-  width: auto;
 }
 .entity_volume_value {
   display: block;
   color: $secondary-color-text;
   white-space: nowrap;
+}
+.entity_volume_wrapper {
+  // width: 100%;
+  font-size: 0.88em;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 5%;
+  justify-content: center;
+  align-items: center;
+  span,
+  sup {
+    text-align: center;
+    white-space: nowrap;
+  }
+  .entity_volume__fact {
+    display: inline-flex;
+    align-items: center;
+    gap: 5%;
+    color: $green-ok;
+    small {
+      display: flex;
+      flex-direction: column;
+    }
+    sup {
+      color: $sort-on;
+    }
+    sub {
+      color: $red-error-40;
+    }
+  }
 }
 .entity_full_name {
   max-width: 60%;

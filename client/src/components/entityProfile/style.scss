@@ -81,6 +81,8 @@
     padding: 0.5rem 1rem;
   }
   details summary {
+    display: grid;
+    grid-template-columns: 1fr 0.8fr;
     list-style-type: none;
     cursor: pointer;
     position: relative;
@@ -90,7 +92,6 @@
   summary {
     font-size: 1.5rem;
     font-weight: 700;
-
     display: flex;
     justify-content: space-between;
     padding-bottom: 0.2rem;
@@ -126,6 +127,9 @@
       height: 33px;
       display: flex;
       align-items: center;
+    }
+    details summary {
+      grid-template-columns: 1fr 0.9fr;
     }
     summary {
       font-size: 1.2rem;
