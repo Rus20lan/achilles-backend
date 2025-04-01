@@ -3,6 +3,7 @@
   display: flex;
   box-sizing: border-box;
   position: relative;
+  justify-content: space-between;
 
   @media (max-width: 512px) {
     justify-content: flex-end;
@@ -17,11 +18,12 @@
 .nowrap {
   white-space: nowrap;
   margin-right: 1%;
-  flex-shrink: 0;
+  // flex-shrink: 1;
 }
 .long {
   font-size: 0.8em;
   overflow: hidden;
+  width: 100%;
 }
 .entity_volume_value {
   display: block;
@@ -36,41 +38,13 @@
   gap: 5%;
   justify-content: center;
   align-items: center;
-  span,
-  sup {
-    text-align: center;
-    white-space: nowrap;
-  }
-  .entity_volume__fact {
-    display: inline-flex;
-    align-items: center;
-    gap: 5%;
-    color: $green-ok;
-    small {
-      display: flex;
-      flex-direction: column;
-    }
-    sup {
-      color: $sort-on;
-    }
-    sub {
-      color: $red-error-40;
-    }
-  }
 }
 .entity_full_name {
   max-width: 60%;
   height: 29px;
-  // overflow: hidden; /* Обрезка текста */
-  // white-space: normal;
-  // word-wrap: break-word;
-  // text-overflow: ellipsis; /* Добавление многоточия */
-  // white-space: nowrap; /* Запрет переноса текста */
 }
 @media (max-width: 696px) {
   .entity_volume_name {
-    // white-space: nowrap;
-
     overflow: hidden;
     z-index: 0;
   }

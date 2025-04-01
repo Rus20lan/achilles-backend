@@ -45,10 +45,14 @@ const Fact = memo(({ options, id, initFact, onChange, onRemote, isDesign }) => {
   const handleChangeByInput = (e) => {
     const { name, value } = e.target;
     const num = !isNaN(value) ? +value : value;
-    setFact((prevFact) => ({
-      ...prevFact,
-      [name]: num,
-    }));
+    if (num === 0) {
+      console.log("Нельзя сохранить 0 факт");
+    } else {
+      setFact((prevFact) => ({
+        ...prevFact,
+        [name]: num,
+      }));
+    }
   };
   return (
     <li className="group_inputs">
@@ -69,7 +73,7 @@ const Fact = memo(({ options, id, initFact, onChange, onRemote, isDesign }) => {
         name="fact"
         min="0"
         step="0.01"
-        value={fact.fact}
+        value={fact.fact === 0 ? "" : fact.fact}
         onChange={handleChangeByInput}
       />
       <input type="number" disabled />
@@ -144,7 +148,6 @@ const AddFactForm = ({ current, brevis }) => {
       setMessage("Нет данных для сохранения");
     }
     if (target === cancelRef.current) {
-      // console.log("cancel button");
       dispatch(remoteCurrentVolume());
     }
   };

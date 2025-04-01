@@ -1,0 +1,24 @@
+@use "../App/vars" as *;
+@use "../App/mixins" as m;
+
+.summary_fact_percent_remains {
+  display: inline-flex;
+  align-items: center;
+  gap: 5%;
+  color: $green-ok;
+  small {
+    display: flex;
+    flex-direction: column;
+  }
+  span,
+  sup {
+    text-align: center;
+    white-space: nowrap;
+  }
+  sup {
+    color: $sort-on;
+  }
+  sub {
+    color: $red-error-40;
+  }
+}

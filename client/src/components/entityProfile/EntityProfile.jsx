@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router";
 // import { useNavigate } from 'react-router-dom';
-import { MainAppContainer } from '../../pages/mainPage';
-import PostgresApi from '../../services/PostgresApi';
-import Loader from '../loader/Loader';
-import './style.scss';
-import SortBtns from '../sortBtns/SortBtns';
-import AggItemMain from '../aggItemMain/AggItemMain';
-import AddFactForm from '../addFactForm/AddFactForm';
-import Modal from '../modal/Modal';
-import { useSelector } from 'react-redux';
+import { MainAppContainer } from "../../pages/mainPage";
+import PostgresApi from "../../services/PostgresApi";
+import Loader from "../loader/Loader";
+import "./style.scss";
+import SortBtns from "../sortBtns/SortBtns";
+import AggItemMain from "../aggItemMain/AggItemMain";
+import AddFactForm from "../addFactForm/AddFactForm";
+import Modal from "../modal/Modal";
+import { useSelector } from "react-redux";
 
 const EntityProfile = () => {
   const postgresApi = new PostgresApi();
@@ -25,13 +25,13 @@ const EntityProfile = () => {
         const result = await postgresApi.getEntity(`/api/title/${titleID}`);
         setTitleData(result);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [titleID]);
+  }, [titleID, volume]);
 
   useEffect(() => {
     //Если volume = true, то отображаем модальное окно внесения факта
@@ -82,8 +82,8 @@ const View = ({ data }) => {
             onChangeSort={setSort}
             activeSort={sort}
             arrSort={[
-              { index: 1, name: 'Объем' },
-              { index: 2, name: 'Документация' },
+              { index: 1, name: "Объем" },
+              { index: 2, name: "Документация" },
             ]}
           />
           {aggByVolume.length === 0 ? (
@@ -96,7 +96,7 @@ const View = ({ data }) => {
             />
           )}
         </div>
-        <button onClick={() => navigate('/main')}>Назад</button>
+        <button onClick={() => navigate("/main")}>Назад</button>
       </div>
     </MainAppContainer>
   );
