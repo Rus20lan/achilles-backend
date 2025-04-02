@@ -3,11 +3,7 @@ import "./style.scss";
 const StatsSummary = ({ fact, percent, remains, sum, unit, isSumFirst }) => {
   return (
     <>
-      {isSumFirst && (
-        <span>
-          {(+sum).toLocaleString("ru-RU")} <small>{unit || null}</small>
-        </span>
-      )}
+      {isSumFirst && <span>{(+sum).toLocaleString("ru-RU")}</span>}
       <span className="summary_fact_percent_remains">
         {fact}
         <small>
@@ -15,11 +11,7 @@ const StatsSummary = ({ fact, percent, remains, sum, unit, isSumFirst }) => {
           {remains && <sub>{remains}</sub>}
         </small>
       </span>
-      {!isSumFirst && (
-        <span>
-          {(+sum).toLocaleString("ru-RU")} <small>{unit || null}</small>
-        </span>
-      )}
+      {!isSumFirst && <span>{(+sum).toLocaleString("ru-RU")}</span>}
     </>
   );
 };

@@ -11,7 +11,7 @@ export function aggregationByVolume(volumes) {
     const { name, unit } = firstItem;
 
     const supportVolumes = filteredVolumes.map((item) => {
-      const factValue = item?.Fact?.values ? totalFact(item.Fact.values) : 0;
+      const factValue = item?.Fact?.values ? +totalFact(item.Fact.values) : 0;
       const value = item.value;
       const remains = (value - factValue).toFixed(2);
       const percent = ((factValue / value) * 100).toFixed(1);

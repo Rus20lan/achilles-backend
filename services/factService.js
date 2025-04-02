@@ -12,7 +12,8 @@ export function validateFactValuesAndNewFact(valuesInBD, fact) {
 }
 
 export function totalFact(factArray) {
-  return (
-    factArray?.map((fact) => fact.fact).reduce((acc, curr) => acc + curr) || 0
-  );
+  const resultString = factArray
+    ?.map((fact) => fact.fact)
+    .reduce((acc, curr) => acc + curr, 0);
+  return parseFloat(resultString.toFixed(2)) || 0;
 }

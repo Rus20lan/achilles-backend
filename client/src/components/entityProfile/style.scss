@@ -86,12 +86,10 @@
     list-style-type: none;
     cursor: pointer;
     position: relative;
-
-    // justify-content: center;
   }
 
   .summary_with_volume {
-    grid-template-columns: 1fr 0.8fr;
+    grid-template-columns: 1fr min-content;
   }
   .summary_with_design {
     grid-template-columns: min-content 1fr min-content;
@@ -116,6 +114,7 @@
     padding: 1rem 0.5rem;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 1.2rem;
   }
   details p:last-child {
