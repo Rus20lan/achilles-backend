@@ -30,4 +30,4 @@ sequelize
     console.error("Ошибка при создании таблиц:", error);
   });
 
-export { Title, Resource, Volume };
+export { Title, Resource, Volume, Design, Fact };
