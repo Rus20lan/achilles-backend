@@ -125,7 +125,7 @@
   .entity_container {
     font-size: 14px;
     .entity_section {
-      width: 90%;
+      width: 95%;
     }
   }
   .entity_volumes_list {
@@ -153,4 +153,6 @@
   .entity_volumes_list summary {
     font-size: 0.9rem;
   }
+}
+@media (max-width: 424px) {
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PostgresApi from "../services/PostgresApi";
 import styled from "styled-components";
 import CardsList from "../components/cardsList/CardsList";
@@ -6,6 +6,13 @@ import { useSelector } from "react-redux";
 import Loader from "../components/loader/Loader";
 import "../components/entityProfile/style.scss";
 import SortBtns from "../components/sortBtns/SortBtns";
+
+const entitys = [
+  { index: 1, name: "Титула", entity: "title", url: "/api/titles" },
+  { index: 2, name: "Документация", entity: "design", url: "/api/designs" },
+  { index: 3, name: "Ресурсы", entity: "resource", url: "/api/resources" },
+  { index: 4, name: "Факт", entity: "fact", url: "/api/facts" },
+];
 
 export const MainAppContainer = styled.div`
   max-width: 1180px;
@@ -20,26 +27,41 @@ const MainPage = () => {
   const postgresApi = new PostgresApi();
   const [titles, setTitles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  //  Константа для сохранения текущей ветки страницы
+  const currentIndex = useMemo(() => {
+    return entitys?.findIndex((enti) => enti.index === sort);
+  }, [sort]);
 
   useEffect(() => {
-    postgresApi.getEntity("/api/titles").then((res) => {
-      setTitles([...res.data]);
+    postgresApi.getEntity(entitys[currentIndex].url).then((res) => {
+      setData([...res.data]);
     });
-  }, []);
+  }, [currentIndex]);
 
-  useEffect(() => {
-    if (titles.length > 0) {
-      setLoading(false);
-    } else {
-      setLoading(true);
-    }
-  }, [titles]);
+  // useEffect(() => {
+  //   postgresApi.getEntity("/api/titles").then((res) => {
+  //     setTitles([...res.data]);
+  //   });
+  // }, [sort]);
+
+  // useEffect(() => {
+  //   if (titles.length > 0) {
+  //     setLoading(false);
+  //   } else {
+  //     setLoading(true);
+  //   }
+  // }, [titles]);
 
   return (
     <>
       <MainAppContainer>
         {/* {loading ? <Loader /> : <View titles={titles} />} */}
-        {loading ? <Loader /> : <ViewMain sort={sort} setSort={setSort} />}
+        {loading ? (
+          <Loader />
+        ) : (
+          <ViewMain sort={sort} setSort={setSort} data={data} />
+        )}
       </MainAppContainer>
     </>
   );
@@ -54,7 +76,9 @@ const View = ({ titles }) => {
   );
 };
 
-const ViewMain = ({ sort, setSort }) => {
+const ViewMain = ({ sort, setSort, data }) => {
+  // const currentIndex = entitys.findIndex((enti) => enti.index === sort);
+  console.log(data);
   return (
     <div className="entity_container">
       <div className="entity_section">
@@ -63,14 +87,15 @@ const ViewMain = ({ sort, setSort }) => {
           onChangeSort={setSort}
           activeSort={sort}
           arrSort={[
-            { index: 1, name: "Объемы" },
-            { index: 2, name: "Титула" },
-            { index: 3, name: "Документация" },
-            { index: 4, name: "Ресурсы" },
-            { index: 5, name: "Факт" },
+            { index: 1, name: "Титула" },
+            { index: 2, name: "Документация" },
+            { index: 3, name: "Ресурсы" },
+            { index: 4, name: "Факт" },
           ]}
         />
       </div>
+      <div className="separator"></div>
+      <div className="entity_section">{data?.length}</div>
     </div>
   );
 };
