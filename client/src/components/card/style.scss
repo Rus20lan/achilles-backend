@@ -1,4 +1,5 @@
-@use '../App/vars' as *;
+@use "../App/vars" as *;
+@use "../App/mixins" as m;
 .card_wrapper {
   display: flex;
   justify-content: space-around;
@@ -25,5 +26,86 @@
   }
   @media (max-width: 1024px) {
     font-size: 14px;
+  }
+}
+.card_wrapper_line {
+  // font-size: 0.9em;
+  background: $background-card-light;
+  display: grid;
+  grid-template-columns: 1fr 0.2fr;
+  padding: 0.5rem 2rem;
+  // max-height: 80px;
+  // height: 100%;
+  box-sizing: border-box;
+  .card_info_block {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+
+  .name_field {
+    font-weight: 700;
+    color: $grey-50;
+    font-size: 0.9em;
+  }
+  .value_field {
+    font-weight: 700;
+    color: $dark-30;
+    font-size: 0.9em;
+    // max-height: 41px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    scroll-padding-top: 10px;
+    // box-sizing: border-box;
+    // padding-top: 10px;
+    // overflow: scroll;
+  }
+  .value_field_second {
+    font-weight: 600;
+    color: $dark-30;
+    font-size: 0.9em;
+    flex-shrink: 0;
+    // overflow: scroll;
+  }
+  p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 2%;
+  }
+
+  .card_firts_line {
+    display: flex;
+    gap: 2%;
+    // max-height: 41px;
+    min-height: 0;
+    .no_shrink {
+      flex-shrink: 0;
+    }
+  }
+  .card_second_line {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    p {
+      display: flex;
+      width: 100%;
+    }
+  }
+  .card_btn_block {
+    @include m.flex-center;
+  }
+  @media (max-width: 1024px) {
+    padding: 0.5rem 1em;
+  }
+  @media (max-width: 424px) {
+    .value_field {
+      font-size: 0.8em;
+    }
+    .name_field,
+    .value_field_second {
+      font-size: 0.7em;
+    }
   }
 }

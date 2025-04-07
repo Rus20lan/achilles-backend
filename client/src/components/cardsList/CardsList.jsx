@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import Card from '../card/Card';
+import styled from "styled-components";
+import Card from "../card/Card";
 
-const CardsContainer = styled.ul`
+const CardsContainerGrid = styled.ul`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -19,20 +19,41 @@ const CardsContainer = styled.ul`
     grid-template-columns: 1fr;
   }
 `;
-const CardsList = ({ cardsList, entity }) => {
+const CardsContainerLine = styled.ul`
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto;
+  box-sizing: border-box;
+  padding-left: 0;
+  row-gap: 1.2em;
+  list-style-type: none;
+`;
+const CardsList = ({ cardsList, entity, isGridContainer }) => {
   return (
-    <CardsContainer>
-      {cardsList.map((card) => (
-        <Card
-          key={card.titleID}
-          full_name={card.full_name}
-          brevis={card.brevis}
-          id={card.titleID}
-          code={card.title_code}
-          entity={entity}
-        />
-      ))}
-    </CardsContainer>
+    <>
+      {isGridContainer && (
+        <CardsContainerGrid>
+          {cardsList.map((card) => (
+            <Card
+              key={card.titleID}
+              full_name={card.full_name}
+              brevis={card.brevis}
+              id={card.titleID}
+              code={card.title_code}
+              entity={entity}
+              isGridContainer={isGridContainer}
+            />
+          ))}
+        </CardsContainerGrid>
+      )}
+      {!isGridContainer && (
+        <CardsContainerLine>
+          {cardsList.map(({ id, titleID, ...props }) => (
+            <Card key={id ?? titleID} id={id ?? titleID} {...props} />
+          ))}
+        </CardsContainerLine>
+      )}
+    </>
   );
 };
 

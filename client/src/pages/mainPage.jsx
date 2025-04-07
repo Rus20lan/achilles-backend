@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import Loader from "../components/loader/Loader";
 import "../components/entityProfile/style.scss";
 import SortBtns from "../components/sortBtns/SortBtns";
+import Card from "../components/card/Card";
 
 const entitys = [
   { index: 1, name: "Титула", entity: "title", url: "/api/titles" },
@@ -60,7 +61,12 @@ const MainPage = () => {
         {loading ? (
           <Loader />
         ) : (
-          <ViewMain sort={sort} setSort={setSort} data={data} />
+          <ViewMain
+            sort={sort}
+            setSort={setSort}
+            data={data}
+            isGridContainer={true}
+          />
         )}
       </MainAppContainer>
     </>
@@ -71,7 +77,7 @@ const View = ({ titles }) => {
   return (
     <>
       <h1>Выберите объект для внесения факта</h1>
-      <CardsList cardsList={titles} entity={"title"} />
+      <CardsList cardsList={titles} entity={"title"} isGridContainer={true} />
     </>
   );
 };
@@ -95,7 +101,9 @@ const ViewMain = ({ sort, setSort, data }) => {
         />
       </div>
       <div className="separator"></div>
-      <div className="entity_section">{data?.length}</div>
+      <div className="entity_section">
+        <CardsList cardsList={data} isGridContainer={false} />
+      </div>
     </div>
   );
 };
