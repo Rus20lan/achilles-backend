@@ -1,18 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
-import PostgresApi from "../services/PostgresApi";
-import styled from "styled-components";
-import CardsList from "../components/cardsList/CardsList";
-import { useSelector } from "react-redux";
-import Loader from "../components/loader/Loader";
-import "../components/entityProfile/style.scss";
-import SortBtns from "../components/sortBtns/SortBtns";
-import Card from "../components/card/Card";
+import { useEffect, useMemo, useState } from 'react';
+import PostgresApi from '../services/PostgresApi';
+import styled from 'styled-components';
+import CardsList from '../components/cardsList/CardsList';
+import { useSelector } from 'react-redux';
+import Loader from '../components/loader/Loader';
+import '../components/entityProfile/style.scss';
+import SortBtns from '../components/sortBtns/SortBtns';
+import Card from '../components/card/Card';
+import CustomSelect from '../components/customSelect/CustomSelect';
 
 const entitys = [
-  { index: 1, name: "Титула", entity: "title", url: "/api/titles" },
-  { index: 2, name: "Документация", entity: "design", url: "/api/designs" },
-  { index: 3, name: "Ресурсы", entity: "resource", url: "/api/resources" },
-  { index: 4, name: "Факт", entity: "fact", url: "/api/facts" },
+  { index: 1, name: 'Титула', entity: 'title', url: '/api/titles' },
+  { index: 2, name: 'Документация', entity: 'design', url: '/api/designs' },
+  { index: 3, name: 'Ресурсы', entity: 'resource', url: '/api/resources' },
+  { index: 4, name: 'Факт', entity: 'fact', url: '/api/facts' },
 ];
 
 export const MainAppContainer = styled.div`
@@ -21,10 +22,27 @@ export const MainAppContainer = styled.div`
   margin: 0 auto;
 `;
 
+export const LimitSelectWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  p {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 700;
+    color: #21005d;
+  }
+  @media (max-width: 424px) {
+    p {
+      font-size: 0.8em;
+    }
+  }
+`;
+
 const MainPage = () => {
   // Состояние для новой главной странице
   const [sort, setSort] = useState(1);
-
+  const [limit, setLimit] = useState(10); // указывает какое количество элементов выводить на странице
   const postgresApi = new PostgresApi();
   const [titles, setTitles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -33,6 +51,10 @@ const MainPage = () => {
   const currentIndex = useMemo(() => {
     return entitys?.findIndex((enti) => enti.index === sort);
   }, [sort]);
+
+  const handleSetLimit = (num) => {
+    setLimit(num);
+  };
 
   useEffect(() => {
     postgresApi.getEntity(entitys[currentIndex].url).then((res) => {
@@ -66,6 +88,8 @@ const MainPage = () => {
             setSort={setSort}
             data={data}
             isGridContainer={true}
+            limit={limit}
+            onChange={handleSetLimit}
           />
         )}
       </MainAppContainer>
@@ -77,12 +101,12 @@ const View = ({ titles }) => {
   return (
     <>
       <h1>Выберите объект для внесения факта</h1>
-      <CardsList cardsList={titles} entity={"title"} isGridContainer={true} />
+      <CardsList cardsList={titles} entity={'title'} isGridContainer={true} />
     </>
   );
 };
 
-const ViewMain = ({ sort, setSort, data }) => {
+const ViewMain = ({ sort, setSort, data, limit, onChange }) => {
   // const currentIndex = entitys.findIndex((enti) => enti.index === sort);
   console.log(data);
   return (
@@ -93,12 +117,16 @@ const ViewMain = ({ sort, setSort, data }) => {
           onChangeSort={setSort}
           activeSort={sort}
           arrSort={[
-            { index: 1, name: "Титула" },
-            { index: 2, name: "Документация" },
-            { index: 3, name: "Ресурсы" },
-            { index: 4, name: "Факт" },
+            { index: 1, name: 'Титула' },
+            { index: 2, name: 'Документация' },
+            { index: 3, name: 'Ресурсы' },
+            { index: 4, name: 'Факт' },
           ]}
         />
+        <LimitSelectWrapper>
+          <p>Лимит</p>
+          <CustomSelect limit={limit} onChange={onChange} />
+        </LimitSelectWrapper>
       </div>
       <div className="separator"></div>
       <div className="entity_section">

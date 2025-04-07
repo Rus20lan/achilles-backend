@@ -1,0 +1,19 @@
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
+
+.custom_select {
+  border: 1px solid #79747e;
+  border-radius: 8px;
+  // width: 119px;
+  height: 32px;
+  text-align-last: center;
+  font-weight: 600;
+  font-size: 1em;
+  line-height: 143%;
+  letter-spacing: 0.01em;
+}
+@media (max-width: 424px) {
+  .custom_select {
+    font-size: 0.8em;
+  }
+}
