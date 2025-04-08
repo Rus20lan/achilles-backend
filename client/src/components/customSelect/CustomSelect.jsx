@@ -1,4 +1,4 @@
-import './style.scss';
+import "./style.scss";
 
 const defaultOptions = [10, 20, 50, 100];
 
@@ -16,7 +16,7 @@ const CustomSelect = ({
       onChange(+e.target.value);
     }
   };
-  console.log(options);
+
   return (
     <>
       {fact && (

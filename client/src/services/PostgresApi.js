@@ -2,9 +2,9 @@ class PostgresApi {
   async postUser(url, candidate) {
     try {
       const res = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(candidate),
       });
@@ -22,12 +22,12 @@ class PostgresApi {
     try {
       const res = await fetch(url, {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: localStorage.getItem('token'),
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token"),
         },
       });
       if (res.status == 401) {
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
       }
       if (!res.ok) {
         const obj = await res.json();
@@ -42,15 +42,21 @@ class PostgresApi {
   }
 
   async sendCandidateLogin(candidate) {
-    const result = await this.postUser('/api/auth/login', candidate);
-    if (Object.hasOwn(result, 'token')) {
-      localStorage.setItem('token', result.token);
+    const result = await this.postUser("/api/auth/login", candidate);
+    if (Object.hasOwn(result, "token")) {
+      localStorage.setItem("token", result.token);
     }
     return result;
   }
 
   async sendRegisterUser(candidate) {
-    return await this.postUser('/api/auth/register', candidate);
+    return await this.postUser("/api/auth/register", candidate);
+  }
+
+  async fetchWithPagination({ url, page = 1, limit = 10 }) {
+    const newUrl = `${url}/paginated?page=${page}&limit=${limit}`;
+    const result = await this.getEntity(newUrl);
+    return result;
   }
 }
 
