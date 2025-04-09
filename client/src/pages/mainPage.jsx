@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import PostgresApi from "../services/PostgresApi";
 import styled from "styled-components";
 import CardsList from "../components/cardsList/CardsList";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/loader/Loader";
 import "../components/entityProfile/style.scss";
 import SortBtns from "../components/sortBtns/SortBtns";
-import Card from "../components/card/Card";
 import CustomSelect from "../components/customSelect/CustomSelect";
 import PaginationBtns from "../components/paginationBtns/PaginationBtns";
+import { getFetchWithPagination } from "../redux/slices/dynamicPaginationSlice";
 
 const entitys = [
   { index: 1, name: "Титула", entity: "title", url: "/api/titles" },
@@ -42,32 +41,34 @@ export const LimitSelectWrapper = styled.div`
 
 const MainPage = () => {
   // Состояние для новой главной странице
+  const { limit, page, isLoading } = useSelector(
+    (state) => state.dynamicPagination
+  );
   const [sort, setSort] = useState(1);
-  const [limit, setLimit] = useState(10); // указывает какое количество элементов выводить на странице
-  const postgresApi = new PostgresApi();
-  const [titles, setTitles] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  // Используем redux toolkit
+  const dispatch = useDispatch();
 
   //  Константа для сохранения текущей ветки страницы
   const currentIndex = useMemo(() => {
     return entitys?.findIndex((enti) => enti.index === sort);
   }, [sort]);
 
-  const handleSetLimit = (num) => {
-    setLimit(num);
-  };
-
   useEffect(() => {
     // postgresApi.getEntity(entitys[currentIndex].url).then((res) => {
     //   setData([...res.data]);
     // });
-    postgresApi
-      .fetchWithPagination({ url: entitys[currentIndex].url, limit })
-      .then((res) => {
-        setData([...res.data]);
-      });
-  }, [currentIndex, limit]);
+
+    // postgresApi
+    //   .fetchWithPagination({ url: entitys[currentIndex].url, limit })
+    //   .then((res) => {
+    //     setData([...res.data]);
+    //   });
+
+    // Загрузка данных с помощью dynamicPagination
+    dispatch(
+      getFetchWithPagination({ url: entitys[currentIndex].url, limit, page })
+    );
+  }, [currentIndex, limit, page]);
 
   // useEffect(() => {
   //   postgresApi.getEntity("/api/titles").then((res) => {
@@ -87,26 +88,28 @@ const MainPage = () => {
     <>
       <MainAppContainer>
         {/* {loading ? <Loader /> : <View titles={titles} />} */}
-        {loading ? (
+        {isLoading ? (
           <Loader />
         ) : (
-          <ViewMain
-            sort={sort}
-            setSort={setSort}
-            data={data}
-            isGridContainer={true}
-            limit={limit}
-            onChange={handleSetLimit}
-          />
+          <ViewMain sort={sort} setSort={setSort} isGridContainer={true} />
         )}
       </MainAppContainer>
     </>
   );
 };
 
-const ViewMain = ({ sort, setSort, data, limit, onChange }) => {
-  // const currentIndex = entitys.findIndex((enti) => enti.index === sort);
-  console.log(data);
+const ViewMain = ({ setSort, sort, onChange }) => {
+  const {
+    data,
+    page,
+    limit,
+    totalItems,
+    totalPages,
+    hasNextPage,
+    hasPrevPage,
+  } = useSelector((state) => state.dynamicPagination);
+  // console.log(data);
+  console.log("MainPage");
   return (
     <div className="entity_container">
       <div className="entity_section">
@@ -123,17 +126,21 @@ const ViewMain = ({ sort, setSort, data, limit, onChange }) => {
         />
         <LimitSelectWrapper>
           <p>Лимит</p>
-          <CustomSelect limit={limit} onChange={onChange} />
+          <CustomSelect limit={limit} />
         </LimitSelectWrapper>
       </div>
       <div className="separator"></div>
       <div className="entity_section">
         <CardsList cardsList={data} isGridContainer={false} />
+      </div>
+      <div className="section">
         <PaginationBtns />
       </div>
     </div>
   );
 };
+
+// onChange={onChange}
 
 const View = ({ titles }) => {
   return (

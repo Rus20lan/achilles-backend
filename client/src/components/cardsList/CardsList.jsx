@@ -47,7 +47,7 @@ const CardsList = ({ cardsList, entity, isGridContainer }) => {
         </CardsContainerGrid>
       )}
       {!isGridContainer && (
-        <CardsContainerLine>
+        <CardsContainerLine id="cards_container_line">
           {cardsList.map(({ id, titleID, ...props }) => (
             <Card key={id ?? titleID} id={id ?? titleID} {...props} />
           ))}

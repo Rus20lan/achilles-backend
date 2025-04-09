@@ -96,7 +96,12 @@ const View = ({ data }) => {
             />
           )}
         </div>
-        <button onClick={() => navigate("/main")}>Назад</button>
+        <button
+          className="entity_container__button"
+          onClick={() => navigate("/main")}
+        >
+          Назад
+        </button>
       </div>
     </MainAppContainer>
   );

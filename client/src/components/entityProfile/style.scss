@@ -12,7 +12,8 @@
   border-radius: 16px;
   font-size: 16px;
   .entity_section,
-  .separator {
+  .separator,
+  .section {
     grid-column: 2;
   }
 
@@ -27,7 +28,7 @@
     }
   }
 
-  button {
+  &__button {
     @include m.flex-center;
     border-radius: 4px;
     border: none;
@@ -64,6 +65,12 @@
   h3 {
     color: $main-second-color-company-semi;
   }
+}
+.section {
+  @include m.flex-center;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
 }
 .separator {
   width: 80%;
