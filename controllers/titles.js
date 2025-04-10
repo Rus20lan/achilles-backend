@@ -1,4 +1,5 @@
 import { Title } from "../models/associations.js";
+import { getRequestQueryObject } from "../services/commonService.js";
 
 export async function getAllTitles(req, res) {
   try {
@@ -16,8 +17,12 @@ export async function getAllTitles(req, res) {
 // Функция для реализации пагинации на backend
 export async function getTitlesByPage(req, res) {
   try {
-    const page = parseInt(req.query.page) || 1; // Текущая страница
-    const limit = parseInt(req.query.limit) || 10; // Элементов на странице
+    const { page = 1, limit = 10 } = getRequestQueryObject(req, [
+      "page",
+      "limit",
+    ]);
+    // const page = parseInt(req.query.page) || 1; // Текущая страница
+    // const limit = parseInt(req.query.limit) || 10; // Элементов на странице
     const offset = (page - 1) * limit; // Отступ(смещение) начальная точка
 
     const { count, rows } = await Title.findAndCountAll({

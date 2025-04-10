@@ -7,7 +7,10 @@ import "../components/entityProfile/style.scss";
 import SortBtns from "../components/sortBtns/SortBtns";
 import CustomSelect from "../components/customSelect/CustomSelect";
 import PaginationBtns from "../components/paginationBtns/PaginationBtns";
-import { getFetchWithPagination } from "../redux/slices/dynamicPaginationSlice";
+import {
+  getFetchWithPagination,
+  setPage,
+} from "../redux/slices/dynamicPaginationSlice";
 
 const entitys = [
   { index: 1, name: "Титула", entity: "title", url: "/api/titles" },
@@ -50,44 +53,44 @@ const MainPage = () => {
 
   //  Константа для сохранения текущей ветки страницы
   const currentIndex = useMemo(() => {
+    // При изменении вкладки отображения будем сбрасывать page на 1 страницу
+    // dispatch(setPage(1));
     return entitys?.findIndex((enti) => enti.index === sort);
   }, [sort]);
 
+  // const fetchParams = useMemo(
+  //   () => ({ url: entitys[currentIndex].url, limit, page }),
+  //   [currentIndex, limit, page]
+  // );
+
   useEffect(() => {
-    // postgresApi.getEntity(entitys[currentIndex].url).then((res) => {
-    //   setData([...res.data]);
-    // });
-
-    // postgresApi
-    //   .fetchWithPagination({ url: entitys[currentIndex].url, limit })
-    //   .then((res) => {
-    //     setData([...res.data]);
-    //   });
-
+    if (currentIndex === -1) return;
     // Загрузка данных с помощью dynamicPagination
-    dispatch(
-      getFetchWithPagination({ url: entitys[currentIndex].url, limit, page })
-    );
+    const controller = new AbortController();
+    const fetchData = async () => {
+      try {
+        await dispatch(
+          getFetchWithPagination({
+            url: entitys[currentIndex].url,
+            limit,
+            page,
+            signal: controller.signal,
+          })
+        );
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("Ошибка загрузки:", error);
+        }
+      }
+    };
+    fetchData();
+    return () => controller.abort();
+    // dispatch(getFetchWithPagination(fetchParams));
   }, [currentIndex, limit, page]);
-
-  // useEffect(() => {
-  //   postgresApi.getEntity("/api/titles").then((res) => {
-  //     setTitles([...res.data]);
-  //   });
-  // }, [sort]);
-
-  // useEffect(() => {
-  //   if (titles.length > 0) {
-  //     setLoading(false);
-  //   } else {
-  //     setLoading(true);
-  //   }
-  // }, [titles]);
 
   return (
     <>
       <MainAppContainer>
-        {/* {loading ? <Loader /> : <View titles={titles} />} */}
         {isLoading ? (
           <Loader />
         ) : (
@@ -109,21 +112,12 @@ const ViewMain = ({ setSort, sort, onChange }) => {
     hasPrevPage,
   } = useSelector((state) => state.dynamicPagination);
   // console.log(data);
-  console.log("MainPage");
+  // console.log("MainPage");
   return (
     <div className="entity_container">
       <div className="entity_section">
         {/* <h1>Это главная страница программы</h1> */}
-        <SortBtns
-          onChangeSort={setSort}
-          activeSort={sort}
-          arrSort={[
-            { index: 1, name: "Титула" },
-            { index: 2, name: "Документация" },
-            { index: 3, name: "Ресурсы" },
-            { index: 4, name: "Факт" },
-          ]}
-        />
+        <SortBtns onChangeSort={setSort} activeSort={sort} arrSort={entitys} />
         <LimitSelectWrapper>
           <p>Лимит</p>
           <CustomSelect limit={limit} />

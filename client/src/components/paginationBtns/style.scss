@@ -34,13 +34,12 @@
     background: none;
     cursor: pointer;
   }
-
-  .page_active {
+}
+.page_active {
+  color: $dark-30;
+  border-radius: 50%;
+  border: 2px solid $dark-30;
+  button {
     color: $dark-30;
-    border-radius: 50%;
-    border: 2px solid $dark-30;
-    button {
-      color: $dark-30;
-    }
   }
 }

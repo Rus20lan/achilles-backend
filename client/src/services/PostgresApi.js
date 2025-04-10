@@ -1,62 +1,74 @@
 class PostgresApi {
-  async postUser(url, candidate) {
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(candidate),
-      });
-      if (!res.ok) {
-        const obj = await res.json();
-        throw new Error(obj.message);
-      }
-      return await res.json();
-    } catch (error) {
-      return Promise.reject(error.message);
-    }
+  constructor() {
+    this.controller = null;
   }
 
-  async getEntity(url) {
+  async makeRequest(url, options = {}) {
+    if (this.controller) {
+      this.controller.abort();
+    }
+    this.controller = new AbortController();
+
     try {
-      const res = await fetch(url, {
+      const { method = "GET", body, headers = {}, params } = options;
+      const queryString = params
+        ? `?${new URLSearchParams(params).toString()}`
+        : "";
+      const res = await fetch(`${url}${queryString}`, {
+        method,
         headers: {
           "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),
+          ...headers,
         },
+        body: body ? JSON.stringify(body) : undefined,
+        signal: this.controller.signal,
       });
-      if (res.status == 401) {
-        localStorage.removeItem("token");
-      }
-      if (!res.ok) {
-        const obj = await res.json();
-        console.log(res.status);
 
-        throw new Error(obj.message);
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        throw new Error("Unauthorized");
       }
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Запрос не выполнен");
+      }
+
       return await res.json();
     } catch (error) {
-      return Promise.reject(error.message);
+      if (error.name !== "AbortError") {
+        throw error;
+      }
+    } finally {
+      this.controller = null;
     }
+  }
+  async postUser(url, candidate) {
+    return this.makeRequest(url, { method: "POST", body: candidate });
+  }
+
+  async getEntity(url) {
+    return this.makeRequest(url);
   }
 
   async sendCandidateLogin(candidate) {
     const result = await this.postUser("/api/auth/login", candidate);
-    if (Object.hasOwn(result, "token")) {
+    if (result?.token) {
       localStorage.setItem("token", result.token);
     }
     return result;
   }
 
   async sendRegisterUser(candidate) {
-    return await this.postUser("/api/auth/register", candidate);
+    return this.postUser("/api/auth/register", candidate);
   }
 
-  async fetchWithPagination({ url, page = 1, limit = 10 }) {
-    const newUrl = `${url}/paginated?page=${page}&limit=${limit}`;
-    const result = await this.getEntity(newUrl);
-    return result;
+  async fetchWithPagination({ url, page = 1, limit = 10, signal }) {
+    return this.makeRequest(`${url}/paginated`, {
+      params: { page, limit },
+      signal,
+    });
   }
 }
 
