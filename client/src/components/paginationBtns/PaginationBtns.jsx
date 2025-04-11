@@ -3,6 +3,7 @@ import "./style.scss";
 import { setPage } from "../../redux/slices/dynamicPaginationSlice";
 import { useEffect, useRef, useState } from "react";
 import Loader from "../loader/Loader";
+import getVisiblePages from "../../services/getVisiblePages";
 
 const PaginationBtns = () => {
   const scrollPosition = useRef(0);
@@ -87,7 +88,9 @@ const PaginationBtns = () => {
     return pages;
   };
 
-  const pageNumbers = getPageNumbers();
+  // const pageNumbers = getPageNumbers();
+  console.log(`Page: ${page}, totalPages: ${totalPages}`);
+  const pageNumbers = getVisiblePages(page, totalPages, 5, "...");
 
   if (isLoading) return <Loader />;
 
@@ -101,7 +104,7 @@ const PaginationBtns = () => {
         ) : (
           <li
             key={index}
-            className={`${Number(page) === number ? "page_active" : "s"}`}
+            className={`${Number(page) === +number ? "page_active" : "s"}`}
           >
             <button
               className="pagination__number"
