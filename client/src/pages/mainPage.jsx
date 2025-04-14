@@ -1,22 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
-import CardsList from "../components/cardsList/CardsList";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../components/loader/Loader";
-import "../components/entityProfile/style.scss";
-import SortBtns from "../components/sortBtns/SortBtns";
-import CustomSelect from "../components/customSelect/CustomSelect";
-import PaginationBtns from "../components/paginationBtns/PaginationBtns";
+import { useEffect, useMemo, useState } from 'react';
+import styled from 'styled-components';
+import CardsList from '../components/cardsList/CardsList';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../components/loader/Loader';
+import '../components/entityProfile/style.scss';
+import SortBtns from '../components/sortBtns/SortBtns';
+import CustomSelect from '../components/customSelect/CustomSelect';
+import PaginationBtns from '../components/paginationBtns/PaginationBtns';
 import {
   getFetchWithPagination,
+  resetPagination,
   setPage,
-} from "../redux/slices/dynamicPaginationSlice";
+} from '../redux/slices/dynamicPaginationSlice';
 
 const entitys = [
-  { index: 1, name: "Титула", entity: "title", url: "/api/titles" },
-  { index: 2, name: "Документация", entity: "design", url: "/api/designs" },
-  { index: 3, name: "Ресурсы", entity: "resource", url: "/api/resources" },
-  { index: 4, name: "Факт", entity: "fact", url: "/api/facts" },
+  { index: 1, name: 'Титула', entity: 'title', url: '/api/titles' },
+  { index: 2, name: 'Документация', entity: 'design', url: '/api/designs' },
+  { index: 3, name: 'Ресурсы', entity: 'resource', url: '/api/resources' },
+  { index: 4, name: 'Факт', entity: 'fact', url: '/api/facts' },
 ];
 
 export const MainAppContainer = styled.div`
@@ -53,9 +54,11 @@ const MainPage = () => {
 
   //  Константа для сохранения текущей ветки страницы
   const currentIndex = useMemo(() => {
-    // При изменении вкладки отображения будем сбрасывать page на 1 страницу
-    // dispatch(setPage(1));
     return entitys?.findIndex((enti) => enti.index === sort);
+  }, [sort]);
+  // При изменении вкладки отображения будем сбрасывать page на 1 страницу
+  useEffect(() => {
+    dispatch(resetPagination());
   }, [sort]);
 
   // const fetchParams = useMemo(
@@ -78,8 +81,8 @@ const MainPage = () => {
           })
         );
       } catch (error) {
-        if (error.name !== "AbortError") {
-          console.error("Ошибка загрузки:", error);
+        if (error.name !== 'AbortError') {
+          console.error('Ошибка загрузки:', error);
         }
       }
     };
@@ -140,7 +143,7 @@ const View = ({ titles }) => {
   return (
     <>
       <h1>Выберите объект для внесения факта</h1>
-      <CardsList cardsList={titles} entity={"title"} isGridContainer={true} />
+      <CardsList cardsList={titles} entity={'title'} isGridContainer={true} />
     </>
   );
 };

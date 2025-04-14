@@ -1,10 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import PostgresApi from "../../services/PostgresApi";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import PostgresApi from '../../services/PostgresApi';
 
 const postgresApi = new PostgresApi();
 
 export const getFetchWithPagination = createAsyncThunk(
-  "models/fetchDataWithPagination",
+  'models/fetchDataWithPagination',
   async (objectParams, { signal, rejectWithValue }) => {
     try {
       const response = await postgresApi.fetchWithPagination({
@@ -13,10 +13,10 @@ export const getFetchWithPagination = createAsyncThunk(
       });
       return response;
     } catch (error) {
-      if (error.name === "AbortError") {
-        return rejectWithValue("Запрос отменён");
+      if (error.name === 'AbortError') {
+        return rejectWithValue('Запрос отменён');
       }
-      return rejectWithValue(error.message || "Ошибка загрузки данных");
+      return rejectWithValue(error.message || 'Ошибка загрузки данных');
     }
   }
 );
@@ -34,7 +34,7 @@ const initialState = {
 };
 
 const dynamicPaginationSlice = createSlice({
-  name: "dynamicPagination",
+  name: 'dynamicPagination',
   initialState,
   reducers: {
     setPage: (state, action) => {
@@ -67,6 +67,9 @@ const dynamicPaginationSlice = createSlice({
       })
       .addCase(getFetchWithPagination.fulfilled, (state, action) => {
         if (state.aborted) return;
+        if (!action.payload) {
+          return state;
+        }
         const { data, pagination } = action.payload;
         const {
           page,
@@ -87,7 +90,7 @@ const dynamicPaginationSlice = createSlice({
         state.error = null;
       })
       .addCase(getFetchWithPagination.rejected, (state, action) => {
-        if (action.payload === "Запрос отменён") {
+        if (action.payload === 'Запрос отменён') {
           state.aborted = true;
           return;
         }

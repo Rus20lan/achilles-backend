@@ -1,5 +1,5 @@
-@use "../App/vars" as *;
-@use "../App/mixins" as m;
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
 
 .pagination {
   @include m.flex-center-horizontal;
@@ -34,12 +34,21 @@
     background: none;
     cursor: pointer;
   }
+  &__number:disabled {
+    cursor: not-allowed;
+    // pointer-events: all !important;
+  }
 }
 .page_active {
+  width: 2em; // Например, 2em (можно подобрать под ваш дизайн)
+  height: 2em;
+  @include m.flex-center-horizontal;
   color: $dark-30;
   border-radius: 50%;
   border: 2px solid $dark-30;
   button {
+    @include m.flex-center-horizontal;
+    padding: 0;
     color: $dark-30;
   }
 }

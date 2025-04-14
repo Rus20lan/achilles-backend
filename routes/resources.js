@@ -1,15 +1,22 @@
-import express from "express";
-import passport from "passport";
-import { getAllResources } from "../controllers/resources.js";
+import express from 'express';
+import passport from 'passport';
+import {
+  getAllResources,
+  getResourcesByPage,
+} from '../controllers/resources.js';
 
 const router = express.Router();
 
-// router.get(
-//   "/",
-//   passport.authenticate("jwt", { session: false }),
-//   getAllResources
-// );
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  getAllResources
+);
 
-router.get("/", getAllResources);
+router.get(
+  '/paginated',
+  passport.authenticate('jwt', { session: false }),
+  getResourcesByPage
+);
 
 export { router };
