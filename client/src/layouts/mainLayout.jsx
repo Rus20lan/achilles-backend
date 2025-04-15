@@ -1,10 +1,10 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
-import Footer from '../components/footer/Footer';
-import { useResize } from '../hooks/useResize';
-import BurgerMenu from '../components/burgerMenu/BurgerMenu';
-import { useContext } from 'react';
-import { InstallerContext } from '../components/App/App';
+import { Link, Outlet, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import Footer from "../components/footer/Footer";
+import { useResize } from "../hooks/useResize";
+import BurgerMenu from "../components/burgerMenu/BurgerMenu";
+import { useContext } from "react";
+import { InstallerContext } from "../components/App/App";
 
 const MainContainer = styled.div`
   width: 100%;
@@ -52,7 +52,7 @@ const MainLayout = () => {
 
   return (
     <MainContainer>
-      <header style={{ width: '100%', height: 'auto' }}>
+      <header style={{ width: "100%", height: "auto" }}>
         <NavContainer>
           {!isScreenMD && (
             <Link to="/" className={`link_header_a`}>
@@ -61,6 +61,9 @@ const MainLayout = () => {
           )}
           {!isScreenMD && (
             <Nav>
+              <Link to="/title/1" className="link_header_a">
+                1
+              </Link>
               <Link to="/auth/login" className="link_header_a">
                 Log In
               </Link>
@@ -76,7 +79,7 @@ const MainLayout = () => {
           )}
         </NavContainer>
       </header>
-      <main style={{ width: '100%' }}>
+      <main style={{ width: "100%" }}>
         <Outlet />
       </main>
       <footer>

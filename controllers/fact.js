@@ -26,7 +26,7 @@ export async function setFact(req, res) {
         await prevFact.save(); // Сохраняем изменения
       } else {
         await Fact.create({
-          id: fact.id,
+          // id: fact.id,
           values: [fact],
           volumeId: fact.volumeId,
         });

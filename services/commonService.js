@@ -17,9 +17,10 @@ export async function getEntitysByPage(req, res, model, keys) {
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, data: [], message: 'Not found' });
+        .json({ success: false, data: [], message: "Not found" });
     }
     const totalPages = Math.ceil(count / limit);
+    // console.log(rows);
     return res.status(200).json({
       success: true,
       data: rows,
@@ -33,8 +34,8 @@ export async function getEntitysByPage(req, res, model, keys) {
       },
     });
   } catch (error) {
-    console.error('Ошибка при выборе факта: ', error);
-    const message = error.message ?? 'Ошибка на сервере';
+    console.error("Ошибка при выборе факта: ", error);
+    const message = error.message ?? "Ошибка на сервере";
     res.status(500).json({ succes: false, error: message });
   }
 }

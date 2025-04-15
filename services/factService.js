@@ -17,3 +17,6 @@ export function totalFact(factArray) {
     .reduce((acc, curr) => acc + curr, 0);
   return parseFloat(resultString.toFixed(2)) || 0;
 }
+
+// Функция для преобразования Факта для отображения по дате
+export function convertingFacts(facts) {}

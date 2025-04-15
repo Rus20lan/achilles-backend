@@ -49,7 +49,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/title" element={<ProtectedRoute user={user} />}>
+            <Route path="title" element={<ProtectedRoute user={user} />}>
               <Route path=":titleID" element={<EntityProfile />} />
             </Route>
           </Route>

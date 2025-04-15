@@ -5,10 +5,10 @@ const Fact = sequelize.define(
   "Fact",
   {
     id: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
-      //   autoIncrement: true,
+      autoIncrement: true,
     },
     values: {
       type: DataTypes.JSONB,

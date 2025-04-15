@@ -1,23 +1,23 @@
-import { useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import CardsList from '../components/cardsList/CardsList';
-import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../components/loader/Loader';
-import '../components/entityProfile/style.scss';
-import SortBtns from '../components/sortBtns/SortBtns';
-import CustomSelect from '../components/customSelect/CustomSelect';
-import PaginationBtns from '../components/paginationBtns/PaginationBtns';
+import { useEffect, useMemo, useState } from "react";
+import styled from "styled-components";
+import CardsList from "../components/cardsList/CardsList";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../components/loader/Loader";
+import "../components/entityProfile/style.scss";
+import SortBtns from "../components/sortBtns/SortBtns";
+import CustomSelect from "../components/customSelect/CustomSelect";
+import PaginationBtns from "../components/paginationBtns/PaginationBtns";
 import {
   getFetchWithPagination,
   resetPagination,
   setPage,
-} from '../redux/slices/dynamicPaginationSlice';
+} from "../redux/slices/dynamicPaginationSlice";
 
 const entitys = [
-  { index: 1, name: 'Титула', entity: 'title', url: '/api/titles' },
-  { index: 2, name: 'Документация', entity: 'design', url: '/api/designs' },
-  { index: 3, name: 'Ресурсы', entity: 'resource', url: '/api/resources' },
-  { index: 4, name: 'Факт', entity: 'fact', url: '/api/facts' },
+  { index: 1, name: "Титула", entity: "title", url: "/api/titles" },
+  { index: 2, name: "Документация", entity: "design", url: "/api/designs" },
+  { index: 3, name: "Ресурсы", entity: "resource", url: "/api/resources" },
+  { index: 4, name: "Факт", entity: "fact", url: "/api/facts" },
 ];
 
 export const MainAppContainer = styled.div`
@@ -61,11 +61,6 @@ const MainPage = () => {
     dispatch(resetPagination());
   }, [sort]);
 
-  // const fetchParams = useMemo(
-  //   () => ({ url: entitys[currentIndex].url, limit, page }),
-  //   [currentIndex, limit, page]
-  // );
-
   useEffect(() => {
     if (currentIndex === -1) return;
     // Загрузка данных с помощью dynamicPagination
@@ -81,8 +76,8 @@ const MainPage = () => {
           })
         );
       } catch (error) {
-        if (error.name !== 'AbortError') {
-          console.error('Ошибка загрузки:', error);
+        if (error.name !== "AbortError") {
+          console.error("Ошибка загрузки:", error);
         }
       }
     };
@@ -114,7 +109,7 @@ const ViewMain = ({ setSort, sort, onChange }) => {
     hasNextPage,
     hasPrevPage,
   } = useSelector((state) => state.dynamicPagination);
-  // console.log(data);
+  console.log(data);
   // console.log("MainPage");
   return (
     <div className="entity_container">
@@ -143,7 +138,7 @@ const View = ({ titles }) => {
   return (
     <>
       <h1>Выберите объект для внесения факта</h1>
-      <CardsList cardsList={titles} entity={'title'} isGridContainer={true} />
+      <CardsList cardsList={titles} entity={"title"} isGridContainer={true} />
     </>
   );
 };
