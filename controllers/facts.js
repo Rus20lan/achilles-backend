@@ -1,5 +1,8 @@
-import { Fact } from "../models/associations.js";
-import { getEntitysByPage } from "../services/commonService.js";
+import { Fact, Volume, Resource, Design } from "../models/associations.js";
+import {
+  getEntitysByPage,
+  getRequestQueryObject,
+} from "../services/commonService.js";
 
 export const getAllFacts = async (req, res) => {
   try {
@@ -17,28 +20,74 @@ export const getAllFacts = async (req, res) => {
 
 export async function getFactsByPage(req, res) {
   try {
-    const result = await getAllFacts(req, res);
+    const { page = 1, limit = 10 } = getRequestQueryObject(req, [
+      "page",
+      "limit",
+    ]);
+    const result = await Fact.findAll();
 
     if ("error" in result) {
       throw new Error(result.error.message || "Unknown error");
     }
-    console.log(result);
-    if (result?.success) {
-      const combinedArray = result.flatMap((obj) => obj.values);
+
+    if (result.length !== 0) {
+      const combinedArray = result
+        .flatMap((obj) => obj.values)
+        .sort((a, b) => new Date(b.dateString) - new Date(a.dateString));
+      const volumeIds = combinedArray.map((item) => item.volumeId);
+      const uniqueVolId = new Map();
+      for (const volId of volumeIds) {
+        if (!uniqueVolId.has(volId)) {
+          const volume = await Volume.findOne({
+            where: { id: volId },
+            include: [
+              {
+                model: Resource,
+                attributes: ["name", "unit"],
+              },
+              { model: Design, attributes: ["brevis"] },
+            ],
+            raw: true,
+          });
+          uniqueVolId.set(volId, {
+            // id: volume.id,
+            value: volume.value,
+            titleId: volume.titleId,
+            resourceId: volume.resourceId,
+            designId: volume.designId,
+            name: volume["Resource.name"],
+            unit: volume["Resource.unit"],
+            brevis: volume["Design.brevis"],
+          });
+        }
+      }
+
+      const resultArray = combinedArray.map((item) => {
+        const comb = uniqueVolId.get(item.volumeId);
+        return {
+          ...item,
+          ...comb,
+        };
+      });
+
+      const totalItems = resultArray.length;
+      const totalPages = Math.ceil(totalItems / limit);
+
       return res.status(200).json({
         success: true,
-        data: combinedArray,
+        data: resultArray,
         pagination: {
-          page: 1,
-          limit: 10,
-          totalItems: 10,
-          totalPages: 1,
-          hasNextPage: false,
-          hasPrevPage: false,
+          page,
+          limit,
+          totalItems,
+          totalPages,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1,
         },
       });
     }
   } catch (error) {
+    console.error(error.message);
     res.status(500).json({
       success: false,
       error: error.message,
