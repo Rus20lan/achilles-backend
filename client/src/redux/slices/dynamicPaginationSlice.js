@@ -38,10 +38,12 @@ const dynamicPaginationSlice = createSlice({
   initialState,
   reducers: {
     setPage: (state, action) => {
+      console.log('Изменение page:', action.payload);
       state.page = action.payload.page;
       state.aborted = false; // Сбрасываем флаг при изменении страницы
     },
     setLimit: (state, action) => {
+      console.log('Изменение limit:', action.payload);
       state.limit = action.payload;
       // При изменении limit, сбрасываем page на 1 страницу
       state.page = 1;
@@ -49,9 +51,10 @@ const dynamicPaginationSlice = createSlice({
     },
     // Редюсер для сброса пагинации к начальным значениям
     resetPagination: (state) => {
-      state.limit = initialState.limit;
-      state.page = initialState.page;
+      state.limit = Number(initialState.limit);
+      state.page = Number(initialState.page);
       state.aborted = false;
+      console.log('state.page', state.page);
     },
     clearAbortedFlag: (state) => {
       state.aborted = false;
@@ -80,8 +83,8 @@ const dynamicPaginationSlice = createSlice({
           hasPrevPage,
         } = pagination;
         state.data = data;
-        state.page = page;
-        state.limit = limit;
+        state.page = Number(page);
+        state.limit = Number(limit);
         state.totalItems = totalItems;
         state.totalPages = totalPages;
         state.hasNextPage = hasNextPage;

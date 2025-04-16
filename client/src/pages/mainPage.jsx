@@ -1,23 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
-import CardsList from "../components/cardsList/CardsList";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../components/loader/Loader";
-import "../components/entityProfile/style.scss";
-import SortBtns from "../components/sortBtns/SortBtns";
-import CustomSelect from "../components/customSelect/CustomSelect";
-import PaginationBtns from "../components/paginationBtns/PaginationBtns";
+import { useEffect, useMemo, useState } from 'react';
+import styled from 'styled-components';
+import CardsList from '../components/cardsList/CardsList';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../components/loader/Loader';
+import '../components/entityProfile/style.scss';
+import SortBtns from '../components/sortBtns/SortBtns';
+import CustomSelect from '../components/customSelect/CustomSelect';
+import PaginationBtns from '../components/paginationBtns/PaginationBtns';
 import {
   getFetchWithPagination,
   resetPagination,
   setPage,
-} from "../redux/slices/dynamicPaginationSlice";
+} from '../redux/slices/dynamicPaginationSlice';
 
 const entitys = [
-  { index: 1, name: "Титула", entity: "title", url: "/api/titles" },
-  { index: 2, name: "Документация", entity: "design", url: "/api/designs" },
-  { index: 3, name: "Ресурсы", entity: "resource", url: "/api/resources" },
-  { index: 4, name: "Факт", entity: "fact", url: "/api/facts" },
+  { index: 1, name: 'Титула', entity: 'title', url: '/api/titles' },
+  { index: 2, name: 'Документация', entity: 'design', url: '/api/designs' },
+  { index: 3, name: 'Ресурсы', entity: 'resource', url: '/api/resources' },
+  { index: 4, name: 'Факт', entity: 'fact', url: '/api/facts' },
 ];
 
 export const MainAppContainer = styled.div`
@@ -45,9 +45,13 @@ export const LimitSelectWrapper = styled.div`
 
 const MainPage = () => {
   // Состояние для новой главной странице
-  const { limit, page, isLoading } = useSelector(
-    (state) => state.dynamicPagination
-  );
+  // const { data, limit, page, isLoading } = useSelector(
+  //   (state) => state.dynamicPagination
+  // );
+  const limit = useSelector((state) => state.dynamicPagination.limit);
+  const data = useSelector((state) => state.dynamicPagination.data);
+  const page = useSelector((state) => state.dynamicPagination.page);
+  const isLoading = useSelector((state) => state.dynamicPagination.isLoading);
   const [sort, setSort] = useState(1);
   // Используем redux toolkit
   const dispatch = useDispatch();
@@ -67,7 +71,7 @@ const MainPage = () => {
     const controller = new AbortController();
     const fetchData = async () => {
       try {
-        await dispatch(
+        dispatch(
           getFetchWithPagination({
             url: entitys[currentIndex].url,
             limit,
@@ -76,15 +80,15 @@ const MainPage = () => {
           })
         );
       } catch (error) {
-        if (error.name !== "AbortError") {
-          console.error("Ошибка загрузки:", error);
+        if (error.name !== 'AbortError') {
+          console.error('Ошибка загрузки:', error);
         }
       }
     };
     fetchData();
     return () => controller.abort();
     // dispatch(getFetchWithPagination(fetchParams));
-  }, [currentIndex, limit, page]);
+  }, [limit, page]);
 
   return (
     <>
@@ -92,25 +96,31 @@ const MainPage = () => {
         {isLoading ? (
           <Loader />
         ) : (
-          <ViewMain sort={sort} setSort={setSort} isGridContainer={true} />
+          <ViewMain
+            data={data}
+            sort={sort}
+            setSort={setSort}
+            isGridContainer={true}
+            limit={limit}
+          />
         )}
       </MainAppContainer>
     </>
   );
 };
 
-const ViewMain = ({ setSort, sort, onChange }) => {
+const ViewMain = ({ data, limit, setSort, sort, onChange }) => {
   const {
-    data,
+    //   data,
     page,
-    limit,
-    totalItems,
-    totalPages,
-    hasNextPage,
-    hasPrevPage,
+    //   limit,
+    //   totalItems,
+    //   totalPages,
+    //   hasNextPage,
+    //   hasPrevPage,
   } = useSelector((state) => state.dynamicPagination);
-  console.log(data);
-  // console.log("MainPage");
+  // console.log(data);
+  console.log('MainPage render', { sort, limit, page });
   return (
     <div className="entity_container">
       <div className="entity_section">
@@ -138,7 +148,7 @@ const View = ({ titles }) => {
   return (
     <>
       <h1>Выберите объект для внесения факта</h1>
-      <CardsList cardsList={titles} entity={"title"} isGridContainer={true} />
+      <CardsList cardsList={titles} entity={'title'} isGridContainer={true} />
     </>
   );
 };

@@ -1,6 +1,7 @@
-import { useDispatch } from "react-redux";
-import "./style.scss";
-import { setLimit } from "../../redux/slices/dynamicPaginationSlice";
+import { useDispatch } from 'react-redux';
+import './style.scss';
+import { setLimit } from '../../redux/slices/dynamicPaginationSlice';
+import React, { useCallback } from 'react';
 
 const defaultOptions = [10, 20, 50, 100];
 
@@ -12,14 +13,16 @@ const CustomSelect = ({
   limit,
 }) => {
   const dispath = useDispatch();
-  const handleChange = (e) => {
-    if (fact) {
-      onChange({ ...fact, volumeId: +e.target.value });
-    } else {
-      // onChange(+e.target.value);
-      dispath(setLimit(+e.target.value));
-    }
-  };
+  const handleChange = useCallback(
+    (e) => {
+      if (fact) {
+        onChange({ ...fact, volumeId: +e.target.value });
+      } else {
+        dispath(setLimit(+e.target.value));
+      }
+    },
+    [fact, onChange, dispath]
+  );
 
   return (
     <>
@@ -51,4 +54,4 @@ const CustomSelect = ({
   );
 };
 
-export default CustomSelect;
+export default React.memo(CustomSelect);

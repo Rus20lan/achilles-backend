@@ -3,7 +3,7 @@ import './style.scss';
 
 const SortBtns = ({ activeSort, arrSort, onChangeSort }) => {
   //   const [activeSort, setActiveSort] = useState(1);
-
+  console.log('Active sort', activeSort);
   return (
     <div className="sort_btn_group">
       {arrSort.map((sort) => (
@@ -12,7 +12,7 @@ const SortBtns = ({ activeSort, arrSort, onChangeSort }) => {
             type="radio"
             name="sort_radio"
             id={`sort_${sort.index}`}
-            checked={activeSort === +sort.index}
+            checked={activeSort === sort.index}
             onChange={() => {
               //   setActiveSort(sort.index);
               onChangeSort(sort.index);

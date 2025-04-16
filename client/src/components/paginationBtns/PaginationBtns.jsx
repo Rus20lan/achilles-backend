@@ -6,7 +6,6 @@ import Loader from '../loader/Loader';
 import getVisiblePages from '../../services/getVisiblePages';
 
 const PaginationBtns = () => {
-  const scrollPosition = useRef(0);
   const { page, totalPages, isLoading } = useSelector(
     (state) => state.dynamicPagination
   );
@@ -17,7 +16,7 @@ const PaginationBtns = () => {
     dispatch(setPage({ page: number }));
   };
 
-  console.log(`Page: ${page}, totalPages: ${totalPages}`);
+  // console.log(`Page: ${page}, totalPages: ${totalPages}`);
   const pageNumbers = getVisiblePages(page, totalPages, 5, '...');
 
   if (isLoading) return <Loader />;
