@@ -1,25 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
-import CardsList from "../components/cardsList/CardsList";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../components/loader/Loader";
-import "../components/entityProfile/style.scss";
-import SortBtns from "../components/sortBtns/SortBtns";
-import CustomSelect from "../components/customSelect/CustomSelect";
-import PaginationBtns from "../components/paginationBtns/PaginationBtns";
+import { useEffect, useMemo, useState } from 'react';
+import styled from 'styled-components';
+import CardsList from '../components/cardsList/CardsList';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../components/loader/Loader';
+import '../components/entityProfile/style.scss';
+import SortBtns from '../components/sortBtns/SortBtns';
+import CustomSelect from '../components/customSelect/CustomSelect';
+import PaginationBtns from '../components/paginationBtns/PaginationBtns';
 import {
   getFetchWithPagination,
   resetPagination,
   setPage,
-} from "../redux/slices/dynamicPaginationSlice";
-import Modal from "../components/modal/Modal";
-import { ModalContext } from "../components/authForm/AuthForm";
+} from '../redux/slices/dynamicPaginationSlice';
+import Modal from '../components/modal/Modal';
+import { ModalContext } from '../components/authForm/AuthForm';
 
 const entitys = [
-  { index: 1, name: "Титула", entity: "title", url: "/api/titles" },
-  { index: 2, name: "Документация", entity: "design", url: "/api/designs" },
-  { index: 3, name: "Ресурсы", entity: "resource", url: "/api/resources" },
-  { index: 4, name: "Факт", entity: "fact", url: "/api/facts" },
+  { index: 1, name: 'Титула', entity: 'title', url: '/api/titles' },
+  { index: 2, name: 'Документация', entity: 'design', url: '/api/designs' },
+  { index: 3, name: 'Ресурсы', entity: 'resource', url: '/api/resources' },
+  { index: 4, name: 'Факт', entity: 'fact', url: '/api/facts' },
 ];
 
 export const MainAppContainer = styled.div`
@@ -79,19 +79,21 @@ const MainPage = () => {
           })
         );
       } catch (error) {
-        if (error.name !== "AbortError") {
-          console.error("Ошибка загрузки:", error);
+        if (error.name !== 'AbortError') {
+          console.error('Ошибка загрузки:', error);
         }
       }
     };
     fetchData();
     return () => controller.abort();
-    // dispatch(getFetchWithPagination(fetchParams));
   }, [currentIndex, limit, page]);
   //
   const handleClickEditBtn = (obj) => {
-    console.log("Открываем модальное окно: ", obj);
+    console.log('Открываем модальное окно: ', obj);
     setIsModalOpen(true);
+  };
+  const handleModalClose = () => {
+    setIsModalOpen(false);
   };
   return (
     <>
@@ -110,7 +112,7 @@ const MainPage = () => {
           />
         )}
         {isModalOpen && (
-          <Modal>
+          <Modal onClose={handleModalClose}>
             <ModalContext>
               <p>Hi</p>
             </ModalContext>
@@ -155,7 +157,7 @@ const View = ({ titles }) => {
   return (
     <>
       <h1>Выберите объект для внесения факта</h1>
-      <CardsList cardsList={titles} entity={"title"} isGridContainer={true} />
+      <CardsList cardsList={titles} entity={'title'} isGridContainer={true} />
     </>
   );
 };
