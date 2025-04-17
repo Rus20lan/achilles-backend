@@ -28,7 +28,7 @@ const CardsContainerLine = styled.ul`
   row-gap: 1.2em;
   list-style-type: none;
 `;
-const CardsList = ({ cardsList, entity, isGridContainer }) => {
+const CardsList = ({ cardsList, entity, isGridContainer, onClickEditBtn }) => {
   return (
     <>
       {isGridContainer && (
@@ -49,7 +49,13 @@ const CardsList = ({ cardsList, entity, isGridContainer }) => {
       {!isGridContainer && (
         <CardsContainerLine id="cards_container_line">
           {cardsList.map(({ id, titleID, ...props }) => (
-            <Card key={id ?? titleID} id={id ?? titleID} {...props} />
+            <Card
+              key={id ?? titleID}
+              id={id ?? titleID}
+              entity={entity}
+              onClickEditBtn={onClickEditBtn}
+              {...props}
+            />
           ))}
         </CardsContainerLine>
       )}

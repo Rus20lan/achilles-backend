@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import './style.scss';
+import { useState } from "react";
+import "./style.scss";
 
 const SortBtns = ({ activeSort, arrSort, onChangeSort }) => {
   //   const [activeSort, setActiveSort] = useState(1);
-  console.log('Active sort', activeSort);
   return (
     <div className="sort_btn_group">
       {arrSort.map((sort) => (

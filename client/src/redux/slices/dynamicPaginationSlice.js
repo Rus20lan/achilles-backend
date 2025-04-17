@@ -1,10 +1,10 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import PostgresApi from '../../services/PostgresApi';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import PostgresApi from "../../services/PostgresApi";
 
 const postgresApi = new PostgresApi();
 
 export const getFetchWithPagination = createAsyncThunk(
-  'models/fetchDataWithPagination',
+  "models/fetchDataWithPagination",
   async (objectParams, { signal, rejectWithValue }) => {
     try {
       const response = await postgresApi.fetchWithPagination({
@@ -13,10 +13,10 @@ export const getFetchWithPagination = createAsyncThunk(
       });
       return response;
     } catch (error) {
-      if (error.name === 'AbortError') {
-        return rejectWithValue('Запрос отменён');
+      if (error.name === "AbortError") {
+        return rejectWithValue("Запрос отменён");
       }
-      return rejectWithValue(error.message || 'Ошибка загрузки данных');
+      return rejectWithValue(error.message || "Ошибка загрузки данных");
     }
   }
 );
@@ -34,18 +34,17 @@ const initialState = {
 };
 
 const dynamicPaginationSlice = createSlice({
-  name: 'dynamicPagination',
+  name: "dynamicPagination",
   initialState,
   reducers: {
     setPage: (state, action) => {
-      console.log('Изменение page:', action.payload);
+      console.log("Изменение page:", action.payload);
       state.page = action.payload.page;
       state.aborted = false; // Сбрасываем флаг при изменении страницы
     },
     setLimit: (state, action) => {
-      console.log('Изменение limit:', action.payload);
+      console.log("Изменение limit:", action.payload);
       state.limit = action.payload;
-      // При изменении limit, сбрасываем page на 1 страницу
       state.page = 1;
       state.aborted = false;
     },
@@ -54,7 +53,6 @@ const dynamicPaginationSlice = createSlice({
       state.limit = Number(initialState.limit);
       state.page = Number(initialState.page);
       state.aborted = false;
-      console.log('state.page', state.page);
     },
     clearAbortedFlag: (state) => {
       state.aborted = false;
@@ -93,7 +91,7 @@ const dynamicPaginationSlice = createSlice({
         state.error = null;
       })
       .addCase(getFetchWithPagination.rejected, (state, action) => {
-        if (action.payload === 'Запрос отменён') {
+        if (action.payload === "Запрос отменён") {
           state.aborted = true;
           return;
         }

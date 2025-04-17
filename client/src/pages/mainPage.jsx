@@ -1,23 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import CardsList from '../components/cardsList/CardsList';
-import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../components/loader/Loader';
-import '../components/entityProfile/style.scss';
-import SortBtns from '../components/sortBtns/SortBtns';
-import CustomSelect from '../components/customSelect/CustomSelect';
-import PaginationBtns from '../components/paginationBtns/PaginationBtns';
+import { useEffect, useMemo, useState } from "react";
+import styled from "styled-components";
+import CardsList from "../components/cardsList/CardsList";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../components/loader/Loader";
+import "../components/entityProfile/style.scss";
+import SortBtns from "../components/sortBtns/SortBtns";
+import CustomSelect from "../components/customSelect/CustomSelect";
+import PaginationBtns from "../components/paginationBtns/PaginationBtns";
 import {
   getFetchWithPagination,
   resetPagination,
   setPage,
-} from '../redux/slices/dynamicPaginationSlice';
+} from "../redux/slices/dynamicPaginationSlice";
+import Modal from "../components/modal/Modal";
+import { ModalContext } from "../components/authForm/AuthForm";
 
 const entitys = [
-  { index: 1, name: 'Титула', entity: 'title', url: '/api/titles' },
-  { index: 2, name: 'Документация', entity: 'design', url: '/api/designs' },
-  { index: 3, name: 'Ресурсы', entity: 'resource', url: '/api/resources' },
-  { index: 4, name: 'Факт', entity: 'fact', url: '/api/facts' },
+  { index: 1, name: "Титула", entity: "title", url: "/api/titles" },
+  { index: 2, name: "Документация", entity: "design", url: "/api/designs" },
+  { index: 3, name: "Ресурсы", entity: "resource", url: "/api/resources" },
+  { index: 4, name: "Факт", entity: "fact", url: "/api/facts" },
 ];
 
 export const MainAppContainer = styled.div`
@@ -45,14 +47,11 @@ export const LimitSelectWrapper = styled.div`
 
 const MainPage = () => {
   // Состояние для новой главной странице
-  // const { data, limit, page, isLoading } = useSelector(
-  //   (state) => state.dynamicPagination
-  // );
-  const limit = useSelector((state) => state.dynamicPagination.limit);
-  const data = useSelector((state) => state.dynamicPagination.data);
-  const page = useSelector((state) => state.dynamicPagination.page);
-  const isLoading = useSelector((state) => state.dynamicPagination.isLoading);
+  const { data, limit, page, isLoading } = useSelector(
+    (state) => state.dynamicPagination
+  );
   const [sort, setSort] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // Используем redux toolkit
   const dispatch = useDispatch();
 
@@ -80,16 +79,20 @@ const MainPage = () => {
           })
         );
       } catch (error) {
-        if (error.name !== 'AbortError') {
-          console.error('Ошибка загрузки:', error);
+        if (error.name !== "AbortError") {
+          console.error("Ошибка загрузки:", error);
         }
       }
     };
     fetchData();
     return () => controller.abort();
     // dispatch(getFetchWithPagination(fetchParams));
-  }, [limit, page]);
-
+  }, [currentIndex, limit, page]);
+  //
+  const handleClickEditBtn = (obj) => {
+    console.log("Открываем модальное окно: ", obj);
+    setIsModalOpen(true);
+  };
   return (
     <>
       <MainAppContainer>
@@ -102,25 +105,24 @@ const MainPage = () => {
             setSort={setSort}
             isGridContainer={true}
             limit={limit}
+            entity={entitys[currentIndex].entity}
+            onClickEditBtn={handleClickEditBtn}
           />
+        )}
+        {isModalOpen && (
+          <Modal>
+            <ModalContext>
+              <p>Hi</p>
+            </ModalContext>
+          </Modal>
         )}
       </MainAppContainer>
     </>
   );
 };
 
-const ViewMain = ({ data, limit, setSort, sort, onChange }) => {
-  const {
-    //   data,
-    page,
-    //   limit,
-    //   totalItems,
-    //   totalPages,
-    //   hasNextPage,
-    //   hasPrevPage,
-  } = useSelector((state) => state.dynamicPagination);
-  // console.log(data);
-  console.log('MainPage render', { sort, limit, page });
+const ViewMain = ({ data, limit, setSort, sort, entity, onClickEditBtn }) => {
+  console.log(data);
   return (
     <div className="entity_container">
       <div className="entity_section">
@@ -133,7 +135,12 @@ const ViewMain = ({ data, limit, setSort, sort, onChange }) => {
       </div>
       <div className="separator"></div>
       <div className="entity_section">
-        <CardsList cardsList={data} isGridContainer={false} />
+        <CardsList
+          cardsList={data}
+          entity={entity}
+          isGridContainer={false}
+          onClickEditBtn={onClickEditBtn}
+        />
       </div>
       <div className="section">
         <PaginationBtns />
@@ -148,7 +155,7 @@ const View = ({ titles }) => {
   return (
     <>
       <h1>Выберите объект для внесения факта</h1>
-      <CardsList cardsList={titles} entity={'title'} isGridContainer={true} />
+      <CardsList cardsList={titles} entity={"title"} isGridContainer={true} />
     </>
   );
 };

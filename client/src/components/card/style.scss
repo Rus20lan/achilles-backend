@@ -93,6 +93,12 @@
       width: 100%;
     }
   }
+  .card_fact_line {
+    display: flex;
+    height: 100%;
+    justify-content: flex-start;
+    gap: 2%;
+  }
   .card_btn_block {
     @include m.flex-center;
   }
