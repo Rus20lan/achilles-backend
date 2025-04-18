@@ -1,0 +1,22 @@
+@use "../App/vars" as *;
+@use "../App/mixins" as m;
+
+.universal-form {
+  @include m.box-shadow-card;
+  background: $background;
+  font-size: 16px;
+  padding: 1.5rem;
+  border-radius: 8px;
+
+  &__header {
+    @include m.flex-center;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid rgba($primary-color-text, 0.1);
+    h2 {
+      color: $primary-color-text;
+      font-family: $main-font;
+      font-size: 1.8rem;
+      margin: 0;
+    }
+  }
+}

@@ -1,8 +1,8 @@
-import { Fact, Volume, Resource, Design } from '../models/associations.js';
+import { Fact, Volume, Resource, Design } from "../models/associations.js";
 import {
   getEntitysByPage,
   getRequestQueryObject,
-} from '../services/commonService.js';
+} from "../services/commonService.js";
 
 export const getAllFacts = async (req, res) => {
   try {
@@ -12,8 +12,8 @@ export const getAllFacts = async (req, res) => {
     }
     return res.status(200).json({ success: true, data: facts });
   } catch (error) {
-    console.error('Ошибка при выборке факта: ', error);
-    const message = error.message ?? 'Ошибка на сервере';
+    console.error("Ошибка при выборке факта: ", error);
+    const message = error.message ?? "Ошибка на сервере";
     res.status(500).json({ error: message });
   }
 };
@@ -21,43 +21,46 @@ export const getAllFacts = async (req, res) => {
 export async function getFactsByPage(req, res) {
   try {
     const { page = 1, limit = 10 } = getRequestQueryObject(req, [
-      'page',
-      'limit',
+      "page",
+      "limit",
     ]);
     const result = await Fact.findAll();
 
-    if ('error' in result) {
-      throw new Error(result.error.message || 'Unknown error');
+    if ("error" in result) {
+      throw new Error(result.error.message || "Unknown error");
     }
 
     if (result.length !== 0) {
       const combinedArray = result
         .flatMap((obj) => obj.values)
         .sort((a, b) => new Date(b.dateString) - new Date(a.dateString));
-      const volumeIds = combinedArray.map((item) => item.volumeId);
+      const volumeIds = result.map((item) => ({
+        volumeId: item.volumeId,
+        factId: item.id,
+      }));
       const uniqueVolId = new Map();
-      for (const volId of volumeIds) {
-        if (!uniqueVolId.has(volId)) {
+      for (const { volumeId, factId } of volumeIds) {
+        if (!uniqueVolId.has(volumeId)) {
           const volume = await Volume.findOne({
-            where: { id: volId },
+            where: { id: volumeId },
             include: [
               {
                 model: Resource,
-                attributes: ['name', 'unit'],
+                attributes: ["name", "unit"],
               },
-              { model: Design, attributes: ['brevis'] },
+              { model: Design, attributes: ["brevis"] },
             ],
             raw: true,
           });
-          uniqueVolId.set(volId, {
-            // id: volume.id,
+          uniqueVolId.set(volumeId, {
+            factId,
             value: volume.value,
             titleId: volume.titleId,
             resourceId: volume.resourceId,
             designId: volume.designId,
-            name: volume['Resource.name'],
-            unit: volume['Resource.unit'],
-            brevis: volume['Design.brevis'],
+            name: volume["Resource.name"],
+            unit: volume["Resource.unit"],
+            brevis: volume["Design.brevis"],
           });
         }
       }
@@ -67,7 +70,7 @@ export async function getFactsByPage(req, res) {
         return {
           ...item,
           ...comb,
-          id: item.id + '_' + index,
+          id: item.id + "_" + item.volumeId + "_" + comb.factId,
         };
       });
 

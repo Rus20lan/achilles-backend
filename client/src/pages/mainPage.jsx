@@ -1,25 +1,26 @@
-import { useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import CardsList from '../components/cardsList/CardsList';
-import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../components/loader/Loader';
-import '../components/entityProfile/style.scss';
-import SortBtns from '../components/sortBtns/SortBtns';
-import CustomSelect from '../components/customSelect/CustomSelect';
-import PaginationBtns from '../components/paginationBtns/PaginationBtns';
+import { useEffect, useMemo, useState } from "react";
+import styled from "styled-components";
+import CardsList from "../components/cardsList/CardsList";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../components/loader/Loader";
+import "../components/entityProfile/style.scss";
+import SortBtns from "../components/sortBtns/SortBtns";
+import CustomSelect from "../components/customSelect/CustomSelect";
+import PaginationBtns from "../components/paginationBtns/PaginationBtns";
 import {
   getFetchWithPagination,
   resetPagination,
   setPage,
-} from '../redux/slices/dynamicPaginationSlice';
-import Modal from '../components/modal/Modal';
-import { ModalContext } from '../components/authForm/AuthForm';
+} from "../redux/slices/dynamicPaginationSlice";
+import Modal from "../components/modal/Modal";
+import { ModalContext } from "../components/authForm/AuthForm";
+import UniversalEntityForm from "../components/universalEntityForm/UniversalEntityForm";
 
 const entitys = [
-  { index: 1, name: 'Титула', entity: 'title', url: '/api/titles' },
-  { index: 2, name: 'Документация', entity: 'design', url: '/api/designs' },
-  { index: 3, name: 'Ресурсы', entity: 'resource', url: '/api/resources' },
-  { index: 4, name: 'Факт', entity: 'fact', url: '/api/facts' },
+  { index: 1, name: "Титула", entity: "title", url: "/api/titles" },
+  { index: 2, name: "Документация", entity: "design", url: "/api/designs" },
+  { index: 3, name: "Ресурсы", entity: "resource", url: "/api/resources" },
+  { index: 4, name: "Факт", entity: "fact", url: "/api/facts" },
 ];
 
 export const MainAppContainer = styled.div`
@@ -44,6 +45,11 @@ export const LimitSelectWrapper = styled.div`
     }
   }
 `;
+const initParamConfig = {
+  entityType: "",
+  mode: "",
+  entityId: null,
+};
 
 const MainPage = () => {
   // Состояние для новой главной странице
@@ -52,6 +58,8 @@ const MainPage = () => {
   );
   const [sort, setSort] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // Состояние для универсальной формы, для передачи в форму при открытие модального окна
+  const [paramConfig, setParamConfig] = useState(initParamConfig);
   // Используем redux toolkit
   const dispatch = useDispatch();
 
@@ -59,6 +67,7 @@ const MainPage = () => {
   const currentIndex = useMemo(() => {
     return entitys?.findIndex((enti) => enti.index === sort);
   }, [sort]);
+
   // При изменении вкладки отображения будем сбрасывать page на 1 страницу
   useEffect(() => {
     dispatch(resetPagination());
@@ -79,8 +88,8 @@ const MainPage = () => {
           })
         );
       } catch (error) {
-        if (error.name !== 'AbortError') {
-          console.error('Ошибка загрузки:', error);
+        if (error.name !== "AbortError") {
+          console.error("Ошибка загрузки:", error);
         }
       }
     };
@@ -88,8 +97,13 @@ const MainPage = () => {
     return () => controller.abort();
   }, [currentIndex, limit, page]);
   //
-  const handleClickEditBtn = (obj) => {
-    console.log('Открываем модальное окно: ', obj);
+  const handleClickEditBtn = ({ id }) => {
+    console.log("Открываем модальное окно: ");
+    setParamConfig({
+      entityType: entitys[currentIndex].entity,
+      mode: "edit",
+      entityId: id,
+    });
     setIsModalOpen(true);
   };
   const handleModalClose = () => {
@@ -114,7 +128,8 @@ const MainPage = () => {
         {isModalOpen && (
           <Modal onClose={handleModalClose}>
             <ModalContext>
-              <p>Hi</p>
+              <UniversalEntityForm {...paramConfig} />
+              {/* Здесь будет компонет UniversalEntityForm, который получает props: entityType, mode, entityId*/}
             </ModalContext>
           </Modal>
         )}
@@ -124,7 +139,7 @@ const MainPage = () => {
 };
 
 const ViewMain = ({ data, limit, setSort, sort, entity, onClickEditBtn }) => {
-  console.log(data);
+  // console.log(data);
   return (
     <div className="entity_container">
       <div className="entity_section">
@@ -157,7 +172,7 @@ const View = ({ titles }) => {
   return (
     <>
       <h1>Выберите объект для внесения факта</h1>
-      <CardsList cardsList={titles} entity={'title'} isGridContainer={true} />
+      <CardsList cardsList={titles} entity={"title"} isGridContainer={true} />
     </>
   );
 };
