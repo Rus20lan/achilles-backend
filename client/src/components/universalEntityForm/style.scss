@@ -1,8 +1,10 @@
-@use "../App/vars" as *;
-@use "../App/mixins" as m;
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
 
 .universal-form {
   @include m.box-shadow-card;
+  max-width: 600px;
+  width: 100%;
   background: $background;
   font-size: 16px;
   padding: 1.5rem;
@@ -15,8 +17,67 @@
     h2 {
       color: $primary-color-text;
       font-family: $main-font;
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       margin: 0;
     }
+  }
+  &__body {
+    display: grid;
+    gap: 1.5rem;
+  }
+  &__field {
+    // margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+
+    &-label {
+      @include m.label-style-one;
+      margin: 0 auto;
+      width: 100%;
+      font-size: 1rem;
+    }
+    &-input {
+      @include m.input-style-one;
+      width: 100%;
+    }
+    &-textarea {
+      @include m.textarea-style-one;
+      width: 100%;
+    }
+
+    &--error {
+      .universal-form__field-input {
+        border-color: $red-error-40;
+      }
+    }
+  }
+  &__actions {
+    @include m.flex-end;
+    gap: 1rem;
+    // margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid rgba($primary-color-text, 0.1);
+    button {
+      @include m.active-btn;
+      padding: 0.8rem 1.5rem;
+      border-radius: 4px;
+      font-family: $main-font;
+      font-size: 1em;
+      transition: transform 0.2s ease;
+
+      &[type='submit'] {
+        background-color: $green-ok;
+        color: white;
+      }
+      &[type='button'] {
+        background-color: $red-error-40;
+        color: white;
+      }
+    }
+  }
+  .error-message {
+    color: $red-error-40;
+    font-size: 0.8em;
+    margin-top: 0.3em;
   }
 }
