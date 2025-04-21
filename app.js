@@ -8,7 +8,9 @@ import sequelize from "./config/db.js";
 import { router as authRouters } from "./routes/auth.js";
 import { router as titlesRouters } from "./routes/titles.js";
 import { router as designsRouters } from "./routes/designs.js";
+import { router as designRouters } from "./routes/design.js";
 import { router as resourcesRouters } from "./routes/resources.js";
+import { router as resourceRouters } from "./routes/resource.js";
 import { router as titleRouters } from "./routes/title.js";
 import { router as factsRouters } from "./routes/facts.js";
 import { router as factRouters } from "./routes/fact.js";
@@ -40,8 +42,9 @@ app.use("/api/facts", factsRouters);
 app.use("/api/fact", factRouters);
 
 app.use("/api/designs", designsRouters);
-
+app.use("/api/design", designRouters);
 app.use("/api/resources", resourcesRouters);
+app.use("/api/resource", resourceRouters);
 
 app.use("/api/volumes", volumesRouters);
 
