@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import { ENTITY_CONFIG } from "../../config/entities";
-import "./style.scss";
-import PostgresApi from "../../services/PostgresApi";
+import { useEffect, useRef, useState } from 'react';
+import { ENTITY_CONFIG } from '../../config/entities';
+import './style.scss';
+import PostgresApi from '../../services/PostgresApi';
 
-const entityRus = { title: "Титул", resource: "Ресурс", design: "Проект" };
+const entityRus = { title: 'Титул', resource: 'Ресурс', design: 'Проект' };
 
 const UniversalEntityForm = ({
   entityType,
-  mode = "create",
+  mode = 'create',
   entityId = null,
   valueId = null,
 }) => {
@@ -26,7 +26,7 @@ const UniversalEntityForm = ({
       const fieldErrors = [];
       // Проверка обязательных полей
       if (fiedConfig.required && !value?.toString().trim())
-        fieldErrors.push(fiedConfig.errorMessage || "Обязательное поле");
+        fieldErrors.push(fiedConfig.errorMessage || 'Обязательное поле');
       // Кастомная проверка
       if (fiedConfig.validate) {
         const error = fiedConfig.validate(value);
@@ -43,32 +43,35 @@ const UniversalEntityForm = ({
   };
 
   useEffect(() => {
-    if (mode !== "create" && entityId) {
+    if (mode !== 'create' && entityId) {
       const fethData = async () => {
         const postgresApi = new PostgresApi();
         try {
           let url = `/api/${entityType}/${entityId}`;
+          if (valueId) {
+            url += `/value/${valueId}`;
+          }
           const res = await postgresApi.getEntity(url);
           setData(res.data);
           setIsLoading(false);
         } catch (error) {
-          console.error("Ошибка загрузки данных:", error);
+          console.error('Ошибка загрузки данных:', error);
         }
       };
       fethData();
     }
   }, [entityId, mode, config]);
-  console.log("Данные для редактирования", data);
+  console.log('Данные для редактирования', data);
   // console.log(Object.entries(config.fields));
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      console.log("Форма содержит ошибки");
+      console.log('Форма содержит ошибки');
       return;
     }
-    console.log("Отправляем данные формы", data);
+    console.log('Отправляем данные формы', data);
     // Здесь будет логика отправки данных
   };
   const handleChange = (field, value) => {
@@ -82,7 +85,7 @@ const UniversalEntityForm = ({
     <div className="universal-form">
       <div className="universal-form__header">
         <h2>
-          {mode === "create" ? "Создание" : "Редактирование:"}{" "}
+          {mode === 'create' ? 'Создание' : 'Редактирование:'}{' '}
           {entityRus[entityType]}
         </h2>
       </div>
@@ -117,7 +120,7 @@ const InputField = ({ name, config, value, onChange, error }) => {
   // console.log(config);
   const renderInput = () => {
     switch (config.type) {
-      case "number":
+      case 'number':
         return (
           <input
             className="universal-form__field-input"
@@ -127,7 +130,7 @@ const InputField = ({ name, config, value, onChange, error }) => {
             onChange={handleInputChange}
           />
         );
-      case "text":
+      case 'text':
         return (
           <input
             className="universal-form__field-input"
@@ -137,7 +140,7 @@ const InputField = ({ name, config, value, onChange, error }) => {
             onChange={handleInputChange}
           />
         );
-      case "textarea":
+      case 'textarea':
         return <EditableDiv name={name} value={value} onChange={onChange} />;
     }
   };
@@ -145,7 +148,7 @@ const InputField = ({ name, config, value, onChange, error }) => {
   return (
     <div
       className={`universal-form__field ${
-        error ? "universal-form__field--error" : ""
+        error ? 'universal-form__field--error' : ''
       }`}
     >
       <label className="universal-form__field-label">
@@ -159,7 +162,7 @@ const InputField = ({ name, config, value, onChange, error }) => {
 };
 export default UniversalEntityForm;
 
-const EditableDiv = ({ name, value = "", onChange }) => {
+const EditableDiv = ({ name, value = '', onChange }) => {
   const divRef = useRef(null);
   useEffect(() => {
     if (divRef.current && divRef.current.innerHTML !== value) {

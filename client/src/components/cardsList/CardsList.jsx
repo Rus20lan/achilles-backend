@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import Card from "../card/Card";
+import styled from 'styled-components';
+import Card from '../card/Card';
 
 const CardsContainerGrid = styled.ul`
   width: 100%;
@@ -48,10 +48,10 @@ const CardsList = ({ cardsList, entity, isGridContainer, onClickEditBtn }) => {
       )}
       {!isGridContainer && (
         <CardsContainerLine id="cards_container_line">
-          {cardsList.map(({ id, titleID, ...props }) => (
+          {cardsList.map(({ id, titleID, factId, ...props }) => (
             <Card
-              key={id ?? titleID}
-              id={id ?? titleID}
+              key={id ?? titleID ?? `${id}_${factId}`}
+              id={id ?? titleID ?? factId}
               entity={entity}
               onClickEditBtn={onClickEditBtn}
               {...props}
