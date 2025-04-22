@@ -9,6 +9,7 @@ const UniversalEntityForm = ({
   entityType,
   mode = "create",
   entityId = null,
+  valueId = null,
 }) => {
   const config = ENTITY_CONFIG[entityType];
   const [data, setData] = useState(null);
@@ -46,9 +47,8 @@ const UniversalEntityForm = ({
       const fethData = async () => {
         const postgresApi = new PostgresApi();
         try {
-          const res = await postgresApi.getEntity(
-            `/api/${entityType}/${entityId}`
-          );
+          let url = `/api/${entityType}/${entityId}`;
+          const res = await postgresApi.getEntity(url);
           setData(res.data);
           setIsLoading(false);
         } catch (error) {

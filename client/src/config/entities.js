@@ -92,9 +92,37 @@ export const ENTITY_CONFIG = {
         type: "text",
         label: "Ед.изм",
         priority: 2,
-        required: 2,
+        required: true,
         isVisible: true,
       },
+    },
+  },
+  fact: {
+    fields: {
+      id: {
+        type: "number",
+        priority: 3,
+        isVisible: false,
+      },
+      name: {
+        type: "text",
+        priority: 1,
+        isVisible: true,
+        required: true,
+      },
+      fact: {
+        type: "number",
+        priority: 2,
+        label: "Факт",
+        isVisible: true,
+        required: true,
+      },
+      // dateString: {
+      //   type: "date",
+      //   priority: 1,
+      //   isVisible: true,
+      //   required: true,
+      // },
     },
   },
 };
