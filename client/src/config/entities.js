@@ -101,11 +101,13 @@ export const ENTITY_CONFIG = {
     fields: {
       id: {
         type: "number",
+        label: "ИД",
         priority: 3,
         isVisible: false,
       },
       name: {
         type: "text",
+        label: "Ресурс",
         priority: 1,
         isVisible: true,
         required: true,

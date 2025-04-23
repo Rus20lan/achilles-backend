@@ -60,7 +60,7 @@ export function aggregationByVolume(volumes) {
 }
 export function aggregationByDesign(volumes) {
   if (!volumes) return [];
-  console.log(volumes);
+  // console.log(volumes);
   const aggByDesign = [];
   const desIdMap = new Map();
   // Группируем volumes по designId

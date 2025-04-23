@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import Card from '../card/Card';
+import styled from "styled-components";
+import Card from "../card/Card";
 
 const CardsContainerGrid = styled.ul`
   width: 100%;
@@ -54,6 +54,7 @@ const CardsList = ({ cardsList, entity, isGridContainer, onClickEditBtn }) => {
               id={id ?? titleID ?? factId}
               entity={entity}
               onClickEditBtn={onClickEditBtn}
+              factId={factId}
               {...props}
             />
           ))}

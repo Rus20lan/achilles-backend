@@ -1,19 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
-import { ENTITY_CONFIG } from '../../config/entities';
-import './style.scss';
-import PostgresApi from '../../services/PostgresApi';
+import { useEffect, useRef, useState } from "react";
+import { ENTITY_CONFIG } from "../../config/entities";
+import "./style.scss";
+import PostgresApi from "../../services/PostgresApi";
+import Modal from "../modal/Modal";
+import { ModalContext } from "../authForm/AuthForm";
 
-const entityRus = { title: 'Титул', resource: 'Ресурс', design: 'Проект' };
+const entityRus = {
+  title: "Титул",
+  resource: "Ресурс",
+  design: "Проект",
+  fact: "Факт",
+};
 
 const UniversalEntityForm = ({
   entityType,
-  mode = 'create',
+  mode = "create",
   entityId = null,
   valueId = null,
+  onClose,
 }) => {
   const config = ENTITY_CONFIG[entityType];
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [message, setMessage] = useState("");
   // 1. Добавляем состояние для ошибок
   const [errors, setErrors] = useState({});
   // 2. Создаем функцию валидации
@@ -26,7 +36,7 @@ const UniversalEntityForm = ({
       const fieldErrors = [];
       // Проверка обязательных полей
       if (fiedConfig.required && !value?.toString().trim())
-        fieldErrors.push(fiedConfig.errorMessage || 'Обязательное поле');
+        fieldErrors.push(fiedConfig.errorMessage || "Обязательное поле");
       // Кастомная проверка
       if (fiedConfig.validate) {
         const error = fiedConfig.validate(value);
@@ -43,7 +53,7 @@ const UniversalEntityForm = ({
   };
 
   useEffect(() => {
-    if (mode !== 'create' && entityId) {
+    if (mode !== "create" && entityId) {
       const fethData = async () => {
         const postgresApi = new PostgresApi();
         try {
@@ -55,24 +65,52 @@ const UniversalEntityForm = ({
           setData(res.data);
           setIsLoading(false);
         } catch (error) {
-          console.error('Ошибка загрузки данных:', error);
+          console.error("Ошибка загрузки данных:", error);
         }
       };
       fethData();
     }
   }, [entityId, mode, config]);
-  console.log('Данные для редактирования', data);
+  console.log("Данные для редактирования", data);
   // console.log(Object.entries(config.fields));
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    if (message) {
+      setIsOpenModal(true);
+      setTimeout(() => {
+        setIsOpenModal(false);
+        setTimeout(() => {
+          onClose?.();
+        }, 500);
+      }, 1000);
+    }
+  }, [message]);
+
+  // Обработчик события нажатия кнопки СОХРАНИТЬ
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      console.log('Форма содержит ошибки');
+      console.log("Форма содержит ошибки");
       return;
     }
-    console.log('Отправляем данные формы', data);
+    const postData = {
+      // Поля для Title
+      ...(data.brevis && { brevis: data.brevis }),
+      ...(data.full_name && { full_name: data.full_name }),
+      ...(data.title_code && { title_code: data.title_code }),
+    };
+    console.log("Отправляем данные формы", postData);
     // Здесь будет логика отправки данных
+    const postgresApi = new PostgresApi();
+    const respond = await postgresApi.putEntity(
+      `/api/${entityType}/${entityId}`,
+      postData
+    );
+    if (respond.message) {
+      setMessage(respond.message);
+    }
+    // console.log(respond);
   };
   const handleChange = (field, value) => {
     setData((prev) => ({
@@ -80,12 +118,17 @@ const UniversalEntityForm = ({
       [field]: value,
     }));
   };
+  // Обработчик события нажатия кнопки ОТМЕНА
+  const handleClickOnCancel = () => {
+    onClose?.();
+  };
+
   if (isLoading) return null;
   return (
     <div className="universal-form">
       <div className="universal-form__header">
         <h2>
-          {mode === 'create' ? 'Создание' : 'Редактирование:'}{' '}
+          {mode === "create" ? "Создание" : "Редактирование:"}{" "}
           {entityRus[entityType]}
         </h2>
       </div>
@@ -106,9 +149,18 @@ const UniversalEntityForm = ({
           ))}
         <div className="universal-form__actions">
           <button type="submit">Сохранить</button>
-          <button type="button">Отмена</button>
+          <button type="button" onClick={handleClickOnCancel}>
+            Отмена
+          </button>
         </div>
       </form>
+      {isOpenModal && (
+        <Modal>
+          <ModalContext>
+            <p>{message}</p>
+          </ModalContext>
+        </Modal>
+      )}
     </div>
   );
 };
@@ -120,7 +172,7 @@ const InputField = ({ name, config, value, onChange, error }) => {
   // console.log(config);
   const renderInput = () => {
     switch (config.type) {
-      case 'number':
+      case "number":
         return (
           <input
             className="universal-form__field-input"
@@ -130,7 +182,7 @@ const InputField = ({ name, config, value, onChange, error }) => {
             onChange={handleInputChange}
           />
         );
-      case 'text':
+      case "text":
         return (
           <input
             className="universal-form__field-input"
@@ -140,7 +192,7 @@ const InputField = ({ name, config, value, onChange, error }) => {
             onChange={handleInputChange}
           />
         );
-      case 'textarea':
+      case "textarea":
         return <EditableDiv name={name} value={value} onChange={onChange} />;
     }
   };
@@ -148,7 +200,7 @@ const InputField = ({ name, config, value, onChange, error }) => {
   return (
     <div
       className={`universal-form__field ${
-        error ? 'universal-form__field--error' : ''
+        error ? "universal-form__field--error" : ""
       }`}
     >
       <label className="universal-form__field-label">
@@ -162,7 +214,7 @@ const InputField = ({ name, config, value, onChange, error }) => {
 };
 export default UniversalEntityForm;
 
-const EditableDiv = ({ name, value = '', onChange }) => {
+const EditableDiv = ({ name, value = "", onChange }) => {
   const divRef = useRef(null);
   useEffect(() => {
     if (divRef.current && divRef.current.innerHTML !== value) {

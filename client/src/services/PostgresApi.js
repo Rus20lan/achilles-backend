@@ -70,6 +70,10 @@ class PostgresApi {
       signal,
     });
   }
+
+  async putEntity(url, data) {
+    return await this.makeRequest(url, { method: "PUT", body: data });
+  }
 }
 
 export default PostgresApi;

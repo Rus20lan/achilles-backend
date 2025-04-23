@@ -1,7 +1,7 @@
-import { Link } from 'react-router';
-import moment from 'moment';
-import './style.scss';
-import Btn from '../Btn/btn';
+import { Link } from "react-router";
+import moment from "moment";
+import "./style.scss";
+import Btn from "../Btn/btn";
 const Card = (props) => {
   const {
     name,
@@ -22,11 +22,6 @@ const Card = (props) => {
     onClickEditBtn,
   } = props;
 
-  let obj = {};
-  if (factId) {
-    obj = { id: factId, valueId: valueId };
-  }
-  console.log(factId);
   return (
     <>
       {isGridContainer && (
@@ -38,7 +33,7 @@ const Card = (props) => {
       {!isGridContainer && (
         <li className="card_wrapper_line">
           <div className="card_info_block">
-            {entity !== 'fact' && (
+            {entity !== "fact" && (
               <>
                 <div className="card_firts_line">
                   {brevis && <p className=" name_field no_shrink">{brevis}</p>}
@@ -59,7 +54,7 @@ const Card = (props) => {
                     </p>
                   )}
                   {mark && (
-                    <p style={{ justifyContent: 'flex-end' }}>
+                    <p style={{ justifyContent: "flex-end" }}>
                       <span className="name_field">Марка: </span>
                       <span className="value_field_second">{mark}</span>
                     </p>
@@ -73,13 +68,13 @@ const Card = (props) => {
                 </div>
               </>
             )}
-            {entity === 'fact' && (
+            {entity === "fact" && (
               <>
                 <div className="card_fact_line">
                   {dateString && (
                     <>
                       <p className=" name_field no_shrink">
-                        {moment(dateString).format('DD.MM.YYYY')}
+                        {moment(dateString).format("DD.MM.YYYY")}
                       </p>
                       <p className=" value_field no_shrink">{brevis}</p>
                       <p className=" name_field no_shrink">{name}</p>
@@ -96,13 +91,13 @@ const Card = (props) => {
           <div className="card_btn_block">
             <div className="btn_round_wrapper visible">
               <Btn
-                btnClassName={'button_round blue'}
-                icon={'fa fa-pencil'}
+                btnClassName={"button_round blue"}
+                icon={"fa fa-pencil"}
                 onClickBtn={() => {
                   onClickEditBtn({
                     ...(factId ?? { id }),
-                    ...(factId && obj),
-                    ...(titleId && { id: titleId }),
+                    ...(factId && { id: factId, valueId }),
+                    ...(titleId && !factId && { id: titleId }),
                   });
                 }}
               />

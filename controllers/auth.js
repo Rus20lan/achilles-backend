@@ -1,7 +1,7 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import User from '../models/User.js';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import User from "../models/User.js";
 
 dotenv.config();
 
@@ -22,13 +22,13 @@ export async function login(req, res) {
           user: { email, userID: candidate.userID },
         });
       } else {
-        console.log('Пароль не верный, попробуйте ещё раз');
+        console.log("Пароль не верный, попробуйте ещё раз");
         res
           .status(401)
-          .json({ message: 'Пароль не верный, попробуйте ещё раз' });
+          .json({ message: "Пароль не верный, попробуйте ещё раз" });
       }
     } else {
-      res.status(404).json({ message: 'Неправильный логин или пароль' });
+      res.status(404).json({ message: "Неправильный логин или пароль" });
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -38,11 +38,11 @@ export async function login(req, res) {
 export async function register(req, res) {
   const { email, password } = req.body;
   const result = await User.findOne({ where: { email } });
-  console.log(result);
+
   if (result) {
     res
       .status(403)
-      .json({ message: 'Такой email уже занят. Попробуйте другой' });
+      .json({ message: "Такой email уже занят. Попробуйте другой" });
   } else {
     // Хеширует пароль нового пользователя с помощью bcrypt
     const salt = bcrypt.genSaltSync(10);

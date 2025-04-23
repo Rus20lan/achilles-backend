@@ -26,6 +26,7 @@ export async function getTitlesByPage(req, res) {
     const offset = (page - 1) * limit; // Отступ(смещение) начальная точка
 
     const { count, rows } = await Title.findAndCountAll({
+      order: [["titleID", "ASC"]],
       limit,
       offset,
     });
