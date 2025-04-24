@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import styled from "styled-components";
 import CardsList from "../components/cardsList/CardsList";
 import { useDispatch, useSelector } from "react-redux";
@@ -59,6 +59,7 @@ const MainPage = () => {
   );
   const [sort, setSort] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isSuccess, setIsSuccess] = useState(false);
   // Состояние для универсальной формы, для передачи в форму при открытие модального окна
   const [paramConfig, setParamConfig] = useState(initParamConfig);
   // Используем redux toolkit
@@ -69,39 +70,51 @@ const MainPage = () => {
     return entitys?.findIndex((enti) => enti.index === sort);
   }, [sort]);
 
+  const controllerRef = useRef(null);
+
   // При изменении вкладки отображения будем сбрасывать page на 1 страницу
   useEffect(() => {
     dispatch(resetPagination());
   }, [sort]);
 
-  useEffect(() => {
-    if (currentIndex === -1) return;
-    // Загрузка данных с помощью dynamicPagination
-    const controller = new AbortController();
-    const fetchData = async () => {
+  const fetchData = useCallback(
+    async (signal) => {
       try {
+        if (controllerRef.current) {
+          controllerRef.current.abort();
+        }
+        controllerRef.current = new AbortController();
         dispatch(
           getFetchWithPagination({
             url: entitys[currentIndex].url,
             limit,
             page,
-            signal: controller.signal,
+            signal: controllerRef.current.signal,
           })
         );
       } catch (error) {
         if (error.name !== "AbortError") {
           console.error("Ошибка загрузки:", error);
         }
+      } finally {
+        controllerRef.current = null;
       }
-    };
+    },
+    [currentIndex, dispatch, limit, page]
+  );
+
+  useEffect(() => {
+    if (currentIndex === -1) return;
     fetchData();
-    return () => controller.abort();
-  }, [currentIndex, limit, page]);
+    return () => {
+      if (controllerRef.current) controllerRef.current.abort();
+    };
+  }, [fetchData, currentIndex]);
   //
   const handleClickEditBtn = ({ id, factId, valueId }) => {
-    console.log(
-      `Из card пришли данные id: ${id}, factId: ${factId}, valueId: ${valueId}`
-    );
+    // console.log(
+    //   `Из card пришли данные id: ${id}, factId: ${factId}, valueId: ${valueId}`
+    // );
     setParamConfig({
       entityType: entitys[currentIndex].entity,
       mode: "edit",
@@ -110,8 +123,10 @@ const MainPage = () => {
     });
     setIsModalOpen(true);
   };
-  const handleModalClose = () => {
+  // Закрытие модального окна: создания, редактирования и удаления
+  const handleModalClose = (shouldRefresh = false) => {
     setIsModalOpen(false);
+    if (shouldRefresh) fetchData();
   };
   // console.log("Data из mainPage", data);
   // console.log("При открытии модального окна из MainPage пропсы: ", paramConfig);
@@ -137,6 +152,9 @@ const MainPage = () => {
               <UniversalEntityForm
                 {...paramConfig}
                 onClose={handleModalClose}
+                onSuccess={() => handleModalClose(true)}
+                onCancel={() => handleModalClose(false)}
+                // onSuccess={setIsSuccess}
               />
               {/* Здесь будет компонет UniversalEntityForm, который получает props: entityType, mode, entityId*/}
             </ModalContext>

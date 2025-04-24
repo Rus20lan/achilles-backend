@@ -18,6 +18,9 @@ const UniversalEntityForm = ({
   entityId = null,
   valueId = null,
   onClose,
+  onSuccess,
+  onCancel,
+  // onSuccess,
 }) => {
   const config = ENTITY_CONFIG[entityType];
   const [data, setData] = useState(null);
@@ -71,17 +74,18 @@ const UniversalEntityForm = ({
       fethData();
     }
   }, [entityId, mode, config]);
-  console.log("Данные для редактирования", data);
+  // console.log("Данные для редактирования", data);
   // console.log(Object.entries(config.fields));
 
   useEffect(() => {
     if (message) {
       setIsOpenModal(true);
+      // onSuccess?.(false);
       setTimeout(() => {
         setIsOpenModal(false);
-        setTimeout(() => {
-          onClose?.();
-        }, 500);
+        // setTimeout(() => {
+        //   onClose?.();
+        // }, 500);
       }, 1000);
     }
   }, [message]);
@@ -91,7 +95,7 @@ const UniversalEntityForm = ({
     e.preventDefault();
 
     if (!validateForm()) {
-      console.log("Форма содержит ошибки");
+      setMessage("Форма содержит ошибки");
       return;
     }
     const postData = {
@@ -100,7 +104,7 @@ const UniversalEntityForm = ({
       ...(data.full_name && { full_name: data.full_name }),
       ...(data.title_code && { title_code: data.title_code }),
     };
-    console.log("Отправляем данные формы", postData);
+    // console.log("Отправляем данные формы", postData);
     // Здесь будет логика отправки данных
     const postgresApi = new PostgresApi();
     const respond = await postgresApi.putEntity(
@@ -109,6 +113,10 @@ const UniversalEntityForm = ({
     );
     if (respond.message) {
       setMessage(respond.message);
+      console.log("Значение в поле success: ", respond.success);
+      if (respond.success) {
+        onSuccess?.();
+      }
     }
     // console.log(respond);
   };
@@ -120,7 +128,7 @@ const UniversalEntityForm = ({
   };
   // Обработчик события нажатия кнопки ОТМЕНА
   const handleClickOnCancel = () => {
-    onClose?.();
+    onCancel?.();
   };
 
   if (isLoading) return null;
