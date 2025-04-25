@@ -4,6 +4,8 @@ import "./style.scss";
 import PostgresApi from "../../services/PostgresApi";
 import Modal from "../modal/Modal";
 import { ModalContext } from "../authForm/AuthForm";
+import { isEqual } from "lodash-es";
+import createObjectEditFields from "../../services/createObjectEditFields";
 
 const entityRus = {
   title: "Титул",
@@ -20,13 +22,16 @@ const UniversalEntityForm = ({
   onClose,
   onSuccess,
   onCancel,
-  // onSuccess,
 }) => {
   const config = ENTITY_CONFIG[entityType];
   const [data, setData] = useState(null);
+  const initData = useRef(null); // храниться изначальный объект
   const [isLoading, setIsLoading] = useState(true);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [message, setMessage] = useState("");
+  const [resultAction, setResultAction] = useState({
+    message: "",
+    status: false,
+  });
   // 1. Добавляем состояние для ошибок
   const [errors, setErrors] = useState({});
   // 2. Создаем функцию валидации
@@ -34,15 +39,15 @@ const UniversalEntityForm = ({
     const newErrors = {};
     const fields = config.fields;
 
-    Object.entries(fields).forEach(([fieldName, fiedConfig]) => {
+    Object.entries(fields).forEach(([fieldName, fieldConfig]) => {
       const value = data[fieldName];
       const fieldErrors = [];
       // Проверка обязательных полей
-      if (fiedConfig.required && !value?.toString().trim())
-        fieldErrors.push(fiedConfig.errorMessage || "Обязательное поле");
+      if (fieldConfig.required && !value?.toString().trim())
+        fieldErrors.push(fieldConfig.errorMessage || "Обязательное поле");
       // Кастомная проверка
-      if (fiedConfig.validate) {
-        const error = fiedConfig.validate(value);
+      if (fieldConfig.validate) {
+        const error = fieldConfig.validate(value);
         if (error) {
           fieldErrors.push(error);
         }
@@ -65,8 +70,11 @@ const UniversalEntityForm = ({
             url += `/value/${valueId}`;
           }
           const res = await postgresApi.getEntity(url);
-          setData(res.data);
+          if (!res.data) throw new Error();
+          initData.current = createObjectEditFields(entityType, res.data);
+          setData(initData.current);
           setIsLoading(false);
+          // console.log(createObjectEditFields(entityType, initData.current));
         } catch (error) {
           console.error("Ошибка загрузки данных:", error);
         }
@@ -78,7 +86,7 @@ const UniversalEntityForm = ({
   // console.log(Object.entries(config.fields));
 
   useEffect(() => {
-    if (message) {
+    if (resultAction.message) {
       setIsOpenModal(true);
       // onSuccess?.(false);
       setTimeout(() => {
@@ -88,22 +96,35 @@ const UniversalEntityForm = ({
         // }, 500);
       }, 1000);
     }
-  }, [message]);
+    if (resultAction.status) {
+      setTimeout(() => {
+        onSuccess?.();
+      }, 1500);
+    }
+  }, [resultAction]);
 
   // Обработчик события нажатия кнопки СОХРАНИТЬ
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      setMessage("Форма содержит ошибки");
+      setResultAction({ message: "Форма содержит ошибки", status: false });
       return;
     }
-    const postData = {
-      // Поля для Title
-      ...(data.brevis && { brevis: data.brevis }),
-      ...(data.full_name && { full_name: data.full_name }),
-      ...(data.title_code && { title_code: data.title_code }),
-    };
+    const postData = createObjectEditFields(entityType, data);
+    // {
+    //   // Поля для Title
+    //   ...(data.brevis && { brevis: data.brevis }),
+    //   ...(data.full_name && { full_name: data.full_name }),
+    //   ...(data.title_code && { title_code: data.title_code }),
+    // };
+
+    if (isEqual(initData.current, postData)) {
+      setResultAction({ message: "Изменения не внесены", status: false });
+      return;
+    }
+
+    // console.log(`initData: ${initData.current}`, initData.current);
     // console.log("Отправляем данные формы", postData);
     // Здесь будет логика отправки данных
     const postgresApi = new PostgresApi();
@@ -112,11 +133,11 @@ const UniversalEntityForm = ({
       postData
     );
     if (respond.message) {
-      setMessage(respond.message);
-      console.log("Значение в поле success: ", respond.success);
-      if (respond.success) {
-        onSuccess?.();
-      }
+      setResultAction({ message: respond.message, status: true });
+      // console.log("Значение в поле success: ", respond.success);
+      // if (respond.success) {
+      //   onSuccess?.();
+      // }
     }
     // console.log(respond);
   };
@@ -165,7 +186,7 @@ const UniversalEntityForm = ({
       {isOpenModal && (
         <Modal>
           <ModalContext>
-            <p>{message}</p>
+            <p>{resultAction.message}</p>
           </ModalContext>
         </Modal>
       )}
