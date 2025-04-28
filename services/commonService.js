@@ -9,11 +9,22 @@ export function getRequestQueryObject(req, keys) {
   return result;
 }
 
-export async function getEntitysByPage(req, res, model, keys) {
+export async function getEntitysByPage(
+  req,
+  res,
+  model,
+  keys,
+  orderValue = null
+) {
   try {
     const { page = 1, limit = 10 } = getRequestQueryObject(req, keys);
     const offset = (page - 1) * limit;
-    const { count, rows } = await model.findAndCountAll({ limit, offset });
+
+    const { count, rows } = await model.findAndCountAll({
+      ...(orderValue && { order: orderValue }),
+      limit,
+      offset,
+    });
     if (rows.length === 0) {
       return res
         .status(404)

@@ -90,3 +90,9 @@ export async function getFactInValuesField(req, res) {
     res.status(500).json({ error: message });
   }
 }
+
+export async function updateFact(req, res) {
+  const { id, idValue } = req.params;
+  const updateFact = req.body;
+  const fact = await Fact.findByPk(+id, { raw: true });
+}

@@ -21,5 +21,40 @@ export async function getDesignById(req, res) {
   }
 }
 export async function saveDesign(req, res) {}
-export async function updateDesign(req, res) {}
+export async function updateDesign(req, res) {
+  try {
+    const { id } = req.params;
+    const updateDesign = req.body;
+    const [affectedRows] = await Design.update(updateDesign, {
+      where: { id: +id },
+      returning: true,
+    });
+    if (affectedRows === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Проект не найден" });
+    }
+
+    const updatedDesign = await Design.findByPk(+id);
+
+    res.status(200).json({
+      success: true,
+      data: updatedDesign,
+      message: "Успешное обновление",
+    });
+  } catch (error) {
+    if (error.name === "SequelizeValidationError") {
+      return res.status(400).json({
+        success: false,
+        data: [],
+        message: error.errors.map((e) => e.message),
+      });
+    }
+    res.status(500).json({
+      success: false,
+      data: [],
+      error: error.message,
+    });
+  }
+}
 export async function deleteDesign(req, res) {}

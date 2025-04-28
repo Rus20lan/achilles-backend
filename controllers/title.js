@@ -49,14 +49,10 @@ export async function updateTitle(req, res) {
   try {
     const { id } = req.params;
     const updateTitle = req.body;
-    console.log(updateTitle);
     const [affectedRows] = await Title.update(updateTitle, {
       where: { titleID: +id },
       returning: true,
     });
-
-    console.log(affectedRows);
-
     if (affectedRows === 0) {
       return res
         .status(404)

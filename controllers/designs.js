@@ -24,7 +24,11 @@ export async function getDesignsByPage(req, res) {
       "limit",
     ]);
     const offset = (page - 1) * limit;
-    const { count, rows } = await Design.findAndCountAll({ limit, offset });
+    const { count, rows } = await Design.findAndCountAll({
+      order: [["id", "ASC"]],
+      limit,
+      offset,
+    });
 
     if (rows.length === 0) {
       return res.status(404).json({ success: false, data: [] });
@@ -47,5 +51,26 @@ export async function getDesignsByPage(req, res) {
     console.error("Ошибка при выборе факта: ", error);
     const message = error.message ?? "Ошибка на сервере";
     res.status(500).json({ succes: false, error: message });
+  }
+}
+
+export async function getDesignBrevis(req, res) {
+  try {
+    const designs = await Design.findAll({
+      attributes: ["id", "brevis"],
+      // where: { active: true },
+      order: [["id", "ASC"]],
+      raw: true,
+    });
+    if (designs.length === 0)
+      return res
+        .status(404)
+        .json({ succes: false, data: [], message: "Not Found" });
+    return res
+      .status(200)
+      .json({ succes: true, data: designs, message: "Успешно" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ succes: false, data: [], error: error.message });
   }
 }

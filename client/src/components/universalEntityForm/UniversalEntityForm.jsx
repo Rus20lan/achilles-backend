@@ -6,6 +6,7 @@ import Modal from "../modal/Modal";
 import { ModalContext } from "../authForm/AuthForm";
 import { isEqual } from "lodash-es";
 import createObjectEditFields from "../../services/createObjectEditFields";
+import { useSelector } from "react-redux";
 
 const entityRus = {
   title: "Титул",
@@ -32,6 +33,8 @@ const UniversalEntityForm = ({
     message: "",
     status: false,
   });
+  const designOptions = useSelector((state) => state.designs.data);
+  console.log("шифры чертежей", designOptions);
   // 1. Добавляем состояние для ошибок
   const [errors, setErrors] = useState({});
   // 2. Создаем функцию валидации
@@ -82,7 +85,7 @@ const UniversalEntityForm = ({
       fethData();
     }
   }, [entityId, mode, config]);
-  // console.log("Данные для редактирования", data);
+  console.log("Данные для редактирования", data);
   // console.log(Object.entries(config.fields));
 
   useEffect(() => {
@@ -223,6 +226,16 @@ const InputField = ({ name, config, value, onChange, error }) => {
         );
       case "textarea":
         return <EditableDiv name={name} value={value} onChange={onChange} />;
+      case "date":
+        return (
+          <input
+            className="universal-form__field-input"
+            type="date"
+            name={name}
+            value={value}
+            onChange={handleInputChange}
+          />
+        );
     }
   };
 

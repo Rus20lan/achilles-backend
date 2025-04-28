@@ -74,6 +74,10 @@ class PostgresApi {
   async putEntity(url, data) {
     return await this.makeRequest(url, { method: "PUT", body: data });
   }
+
+  async getDesignBrevis(url) {
+    return this.makeRequest(url);
+  }
 }
 
 export default PostgresApi;

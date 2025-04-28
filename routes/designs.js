@@ -1,6 +1,10 @@
 import express from "express";
 import passport from "passport";
-import { getAllDesign, getDesignsByPage } from "../controllers/designs.js";
+import {
+  getAllDesign,
+  getDesignBrevis,
+  getDesignsByPage,
+} from "../controllers/designs.js";
 
 const router = express.Router();
 
@@ -12,5 +16,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   getDesignsByPage
 );
+
+router.get("/brevis", getDesignBrevis);
 
 export { router };

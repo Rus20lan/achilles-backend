@@ -6,9 +6,10 @@ import AuthLayout from "../../layouts/authLayout";
 import LoginPage from "../../pages/loginPage";
 import RegisterPage from "../../pages/registerPage";
 import ProtectedRoute from "../protectedRoute/ProtectedRoute";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import EntityProfile from "../entityProfile/EntityProfile";
 import MainPage from "../../pages/mainPage";
+import { getFetchDesignBrevis } from "../../redux/slices/designsSlice";
 
 export const InstallerContext = createContext();
 function App() {
@@ -18,6 +19,9 @@ function App() {
     isActiveBurgerBtn: false,
   });
   const { user } = useSelector((state) => state.authData);
+  const designs = useSelector((state) => state.designs.data);
+
+  const dispatch = useDispatch();
 
   // Данный эффект удаляет token из localStorage при закрытие приложения
   useEffect(() => {
@@ -26,6 +30,9 @@ function App() {
       console.log("Токен удален при закрытие приложения");
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
+
+    dispatch(getFetchDesignBrevis()); // Загрузка шифра РД в хранилище
+
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };

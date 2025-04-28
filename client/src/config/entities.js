@@ -105,6 +105,20 @@ export const ENTITY_CONFIG = {
         priority: 3,
         isVisible: false,
       },
+      dateString: {
+        type: "date",
+        priority: 1,
+        label: "Дата",
+        isVisible: true,
+        required: true,
+      },
+      brevis: {
+        type: "text",
+        label: "Проект",
+        priority: 1,
+        isVisible: true,
+        required: true,
+      },
       name: {
         type: "text",
         label: "Ресурс",
@@ -119,12 +133,6 @@ export const ENTITY_CONFIG = {
         isVisible: true,
         required: true,
       },
-      // dateString: {
-      //   type: "date",
-      //   priority: 1,
-      //   isVisible: true,
-      //   required: true,
-      // },
     },
   },
 };
