@@ -3,15 +3,17 @@ import PostgresApi from '../../services/PostgresApi';
 
 const postgresApi = new PostgresApi();
 
-export const getFetchDesignBrevis = createAsyncThunk(
-  'design/getBrevis',
+export const getFetchResourceName = createAsyncThunk(
+  'resource/getName',
   async (_, thunkAPI) => {
     try {
-      const response = await postgresApi.getDesignBrevis('/api/designs/brevis');
+      const response = await postgresApi.getResourcesName(
+        '/api/resources/name'
+      );
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.message || 'Ошибка загрузки данных'
+        error.message || 'Ошибка загрузики данных'
       );
     }
   }
@@ -24,17 +26,17 @@ const initialState = {
   error: null,
 };
 
-const designsSlice = createSlice({
-  name: 'designs',
+const resourcesSlice = createSlice({
+  name: 'resources',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getFetchDesignBrevis.pending, (state) => {
+      .addCase(getFetchResourceName.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getFetchDesignBrevis.fulfilled, (state, action) => {
+      .addCase(getFetchResourceName.fulfilled, (state, action) => {
         if (!action.payload) return state;
         const { success, data, message } = action.payload;
         state.data = data;
@@ -42,7 +44,7 @@ const designsSlice = createSlice({
         state.isLoading = false;
         state.error = null;
       })
-      .addCase(getFetchDesignBrevis.rejected, (state, action) => {
+      .addCase(getFetchResourceName.rejected, (state, action) => {
         state.isLoading = false;
         state.success = false;
         state.error = action.payload;
@@ -50,4 +52,4 @@ const designsSlice = createSlice({
   },
 });
 
-export default designsSlice.reducer;
+export default resourcesSlice.reducer;

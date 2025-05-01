@@ -10,15 +10,16 @@ class PostgresApi {
     this.controller = new AbortController();
 
     try {
-      const { method = "GET", body, headers = {}, params } = options;
+      const { method = 'GET', body, headers = {}, params } = options;
       const queryString = params
         ? `?${new URLSearchParams(params).toString()}`
-        : "";
-      const res = await fetch(`${url}${queryString}`, {
+        : '';
+
+      const res = await fetch(`${url}${queryString ?? ''}`, {
         method,
         headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
+          'Content-Type': 'application/json',
+          Authorization: localStorage.getItem('token'),
           ...headers,
         },
         body: body ? JSON.stringify(body) : undefined,
@@ -26,18 +27,17 @@ class PostgresApi {
       });
 
       if (res.status === 401) {
-        localStorage.removeItem("token");
-        throw new Error("Unauthorized");
+        localStorage.removeItem('token');
+        throw new Error('Unauthorized');
       }
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || "Запрос не выполнен");
+        throw new Error(errorData.message || 'Запрос не выполнен');
       }
-
       return await res.json();
     } catch (error) {
-      if (error.name !== "AbortError") {
+      if (error.name !== 'AbortError') {
         throw error;
       }
     } finally {
@@ -45,7 +45,7 @@ class PostgresApi {
     }
   }
   async postUser(url, candidate) {
-    return this.makeRequest(url, { method: "POST", body: candidate });
+    return this.makeRequest(url, { method: 'POST', body: candidate });
   }
 
   async getEntity(url) {
@@ -53,15 +53,15 @@ class PostgresApi {
   }
 
   async sendCandidateLogin(candidate) {
-    const result = await this.postUser("/api/auth/login", candidate);
+    const result = await this.postUser('/api/auth/login', candidate);
     if (result?.token) {
-      localStorage.setItem("token", result.token);
+      localStorage.setItem('token', result.token);
     }
     return result;
   }
 
   async sendRegisterUser(candidate) {
-    return this.postUser("/api/auth/register", candidate);
+    return this.postUser('/api/auth/register', candidate);
   }
 
   async fetchWithPagination({ url, page = 1, limit = 10, signal }) {
@@ -72,11 +72,18 @@ class PostgresApi {
   }
 
   async putEntity(url, data) {
-    return await this.makeRequest(url, { method: "PUT", body: data });
+    return await this.makeRequest(url, { method: 'PUT', body: data });
   }
 
   async getDesignBrevis(url) {
-    return this.makeRequest(url);
+    const result = await fetch(url);
+    // console.log(await result.json());
+    return await result.json();
+  }
+
+  async getResourcesName(url) {
+    const result = await fetch(url);
+    return await result.json();
   }
 }
 

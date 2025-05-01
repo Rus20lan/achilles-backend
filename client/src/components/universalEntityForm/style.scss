@@ -1,5 +1,5 @@
-@use "../App/vars" as *;
-@use "../App/mixins" as m;
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
 
 .universal-form {
   @include m.box-shadow-card;
@@ -52,6 +52,41 @@
       }
     }
   }
+  &__wrapper-block {
+    position: relative;
+    width: 100%;
+    &__field {
+      &-input {
+        @include m.input-auto-complete;
+        width: 100%;
+        margin-top: 0.5rem;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+      }
+    }
+    // margin-bottom: 15px;
+    &-list {
+      position: absolute;
+      width: 100%;
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 0;
+      padding: 8px 0;
+      background: #fff;
+      border: 1px solid #eee;
+      // border-radius: 4px;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      list-style: none;
+      animation: fadeIn 0.2s ease;
+      li {
+        padding: 10px;
+        font-size: 0.9em;
+      }
+    }
+  }
   &__actions {
     @include m.flex-end;
     gap: 1em;
@@ -66,11 +101,11 @@
       font-size: 1em;
       transition: transform 0.2s ease;
 
-      &[type="submit"] {
+      &[type='submit'] {
         background-color: $green-ok;
         color: white;
       }
-      &[type="button"] {
+      &[type='button'] {
         background-color: $red-error-40;
         color: white;
       }

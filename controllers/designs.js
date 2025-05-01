@@ -1,5 +1,5 @@
-import { Design } from "../models/associations.js";
-import { getRequestQueryObject } from "../services/commonService.js";
+import { Design } from '../models/associations.js';
+import { getRequestQueryObject } from '../services/commonService.js';
 
 // Получить все комплекты
 export const getAllDesign = async (req, res) => {
@@ -8,11 +8,11 @@ export const getAllDesign = async (req, res) => {
     if (designs.length === 0) {
       return res
         .status(404)
-        .json({ success: false, data: [], message: "Not found" });
+        .json({ success: false, data: [], message: 'Not found' });
     }
     return res.status(200).json({ success: true, data: designs });
   } catch (error) {
-    const message = error.message ?? "Ошибка на сервере";
+    const message = error.message ?? 'Ошибка на сервере';
     res.status(500).json({ error: message });
   }
 };
@@ -20,12 +20,12 @@ export const getAllDesign = async (req, res) => {
 export async function getDesignsByPage(req, res) {
   try {
     const { page = 1, limit = 10 } = getRequestQueryObject(req, [
-      "page",
-      "limit",
+      'page',
+      'limit',
     ]);
     const offset = (page - 1) * limit;
     const { count, rows } = await Design.findAndCountAll({
-      order: [["id", "ASC"]],
+      order: [['id', 'ASC']],
       limit,
       offset,
     });
@@ -48,8 +48,8 @@ export async function getDesignsByPage(req, res) {
       },
     });
   } catch (error) {
-    console.error("Ошибка при выборе факта: ", error);
-    const message = error.message ?? "Ошибка на сервере";
+    console.error('Ошибка при выборе факта: ', error);
+    const message = error.message ?? 'Ошибка на сервере';
     res.status(500).json({ succes: false, error: message });
   }
 }
@@ -57,20 +57,20 @@ export async function getDesignsByPage(req, res) {
 export async function getDesignBrevis(req, res) {
   try {
     const designs = await Design.findAll({
-      attributes: ["id", "brevis"],
+      attributes: ['id', 'brevis'],
       // where: { active: true },
-      order: [["id", "ASC"]],
+      order: [['id', 'ASC']],
       raw: true,
     });
     if (designs.length === 0)
       return res
         .status(404)
-        .json({ succes: false, data: [], message: "Not Found" });
+        .json({ succes: false, data: [], message: 'Not Found' });
     return res
       .status(200)
-      .json({ succes: true, data: designs, message: "Успешно" });
+      .json({ succes: true, data: designs, message: 'Успешно' });
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     res.status(500).json({ succes: false, data: [], error: error.message });
   }
 }
