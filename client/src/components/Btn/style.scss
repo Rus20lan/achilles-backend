@@ -1,6 +1,7 @@
-@use "../App/vars" as *;
-@use "../App/mixins" as m;
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
 .btn_round_wrapper {
+  // position: relative;
   font-size: 16px;
   padding-left: 0.2em;
   visibility: hidden;
@@ -52,6 +53,189 @@
 .green-ok {
   background-color: $green-ok;
 }
+.plus {
+  background-color: $sort-on;
+}
 .icon_white {
-  color: $background;
+  color: $absolute-white;
+}
+
+.ms-nav-container {
+  @include m.dynamic-menu(-50px, -50px);
+  position: relative;
+  width: 100%;
+  height: 2em;
+
+  .ms-nav {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    input {
+      display: none;
+    }
+
+    .ms-li {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      transition: all 0.5s ease;
+      z-index: 1;
+      a i {
+        // z-index: 10;
+        opacity: 0; /* Иконки невидимы */
+        transition: opacity 0.3s ease;
+      }
+    }
+
+    .ms-main {
+      position: relative;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      i {
+        transition: transform 0.5s ease;
+      }
+    }
+
+    .ms-menu-toggle {
+      & ~ .ms-li::before {
+        content: '';
+        display: block;
+        position: absolute;
+        border-right: 8px solid var(--bg-color);
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        opacity: 0;
+      }
+      &:checked ~ .ms-li {
+        opacity: 1;
+        left: calc(var(--base-offset) + (var(--step) * var(--item-index)));
+        transition: left 0.5s ease;
+      }
+      &:checked ~ .ms-li::before {
+        align-self: center;
+        content: '';
+        width: 0;
+        height: 0;
+        position: absolute;
+        right: -5px;
+        top: 0;
+        bottom: 0px;
+        border-right: 8px solid var(--bg-color);
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        transition: border-right 1s ease;
+        z-index: 0;
+        animation: border-left-animation 1s ease 0.1s;
+        opacity: 0;
+      }
+      &:checked ~ .ms-li:after {
+        align-self: center;
+        content: '';
+        width: 0;
+        height: 0;
+        position: absolute;
+        right: -5px;
+        top: 0;
+        bottom: 0px;
+        border-left: 8px solid var(--bg-color);
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        transition: border-left 1s ease;
+        z-index: 0;
+        animation: border-right-animation 1s ease 0.1s;
+        opacity: 0;
+      }
+      &:checked ~ .ms-main::before {
+        align-self: center;
+        content: '';
+        width: 0;
+        height: 0;
+        position: absolute;
+        right: -6px;
+        top: 0;
+        bottom: 0px;
+        border-right: 8px solid var(--bg-main-btn);
+        border-top: 12px solid transparent;
+        border-bottom: 12px solid transparent;
+        transition: border-right 1s ease;
+        z-index: 0;
+        animation: big-border-left-animation 1s ease 0.1s;
+        opacity: 0;
+      }
+      &:checked ~ .ms-li-last::before {
+        content: none;
+      }
+      &:checked ~ .ms-li a i {
+        opacity: 1;
+        transition: opacity 0.5s ease 0.1s;
+      }
+      &:checked ~ .ms-main i {
+        transform: rotate(-90deg);
+        transition: transform 0.5s ease;
+      }
+    }
+  }
+}
+// Создает эффект "подпрыгивания" для верхней части элемента (например, стрелки меню).
+@keyframes border-left-animation {
+  0% {
+    left: 10px;
+    opacity: 0.2;
+  }
+  25% {
+    left: -5px;
+    opacity: 1;
+  }
+  50% {
+    left: -1px;
+    opacity: 0.2;
+  }
+  100% {
+    left: 0px;
+    opacity: 0;
+  }
+}
+// Анимирует нижнюю часть элемента, создавая зеркальный эффект к верхней анимации.
+@keyframes border-right-animation {
+  0% {
+    right: 10px;
+    opacity: 0.2;
+  }
+  25% {
+    right: -5px;
+    opacity: 1;
+  }
+  50% {
+    right: -1px;
+    opacity: 0.2;
+  }
+  100% {
+    right: 0px;
+    opacity: 0;
+  }
+}
+// Усиленная анимация для главной кнопки меню, чтобы выделить её при открытии.
+@keyframes big-border-left-animation {
+  0% {
+    left: 10px;
+    opacity: 0.2;
+  }
+  25% {
+    left: -5px;
+    opacity: 1;
+  }
+  50% {
+    left: -1px;
+    opacity: 0.2;
+  }
+  100% {
+    left: 0px;
+    opacity: 0;
+  }
 }

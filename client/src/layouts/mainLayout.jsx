@@ -1,23 +1,29 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
-import styled from "styled-components";
-import Footer from "../components/footer/Footer";
-import { useResize } from "../hooks/useResize";
-import BurgerMenu from "../components/burgerMenu/BurgerMenu";
-import { useContext } from "react";
-import { InstallerContext } from "../components/App/App";
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+import Footer from '../components/footer/Footer';
+import { useResize } from '../hooks/useResize';
+import BurgerMenu from '../components/burgerMenu/BurgerMenu';
+import { useContext } from 'react';
+import { InstallerContext } from '../components/App/App';
+import { useDispatch, useSelector } from 'react-redux';
+import logoutSvg from '../assets/log-out.svg';
+import { logout } from '../redux/slices/authDataSlice';
+import ThemeSwitch from '../components/themeSwitch/ThemeSwitch';
 
 const MainContainer = styled.div`
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-rows: 100px 3fr 100px;
+  min-height: 100vh;
+  grid-template-rows: 80px 1fr 100px;
+  // background-color: inherit;
 `;
 const NavContainer = styled.div`
   max-width: 1180px;
   width: 100%;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   position: relative;
   @media (max-width: 1180px) {
@@ -45,32 +51,71 @@ const BurgerContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
+const LogoutBtn = styled.a`
+  display: flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  &:active {
+    transform: scale(0.8);
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    objectfit: 'cover';
+  }
+`;
+const LogoutIcon = styled.img`
+  filter: ${({ $isDark }) =>
+    $isDark === 'dark'
+      ? 'invert(92%) sepia(41%) saturate(511%) hue-rotate(185deg) brightness(99%) contrast(117%)'
+      : 'invert(10%) sepia(88%) saturate(3678%) hue-rotate(268deg) brightness(95%) contrast(96%)'};
+  transition: filter 0.3s;
+`;
 const MainLayout = () => {
-  const { installer, setInstaller } = useContext(InstallerContext);
-  const { isOpenBurger, ...tailInstaller } = installer;
+  const { installer } = useContext(InstallerContext);
+  const { isOpenBurger, theme, ...tailInstaller } = installer;
+  const { user } = useSelector((state) => state.authData);
   const { isScreenMD } = useResize();
+  const dispatch = useDispatch();
 
   return (
-    <MainContainer>
-      <header style={{ width: "100%", height: "auto" }}>
+    <div className={`main-app-container ${theme}-theme__main-container`}>
+      <header style={{ display: 'flex', width: '100%' }}>
         <NavContainer>
           {!isScreenMD && (
-            <Link to="/" className={`link_header_a`}>
-              Home
-            </Link>
-          )}
-          {!isScreenMD && (
-            <Nav>
-              <Link to="/title/1" className="link_header_a">
-                1
-              </Link>
-              <Link to="/auth/login" className="link_header_a">
-                Log In
-              </Link>
-              <Link to="/auth/register" className="link_header_a">
-                Sign Up
-              </Link>
-            </Nav>
+            <>
+              {!user && (
+                <Nav>
+                  <Link to="/title/1" className="link_header_a">
+                    1
+                  </Link>
+                  <Link to="/auth/login" className="link_header_a">
+                    Вход
+                  </Link>
+                  <Link to="/auth/register" className="link_header_a">
+                    Регистрация
+                  </Link>
+                </Nav>
+              )}
+              {user && (
+                <>
+                  <div style={{ marginRight: 'auto' }}>
+                    <Link to="/" className={`link_header_a`}>
+                      Home
+                    </Link>
+                  </div>
+                  <Link to="/title/1" className="link_header_a">
+                    1
+                  </Link>
+                  <ThemeSwitch />
+                  <LogoutBtn href="#" onClick={() => dispatch(logout())}>
+                    <LogoutIcon src={logoutSvg} $isDark={installer.theme} />
+                  </LogoutBtn>
+                </>
+              )}
+            </>
           )}
           {isScreenMD && (
             <BurgerContainer>
@@ -79,13 +124,13 @@ const MainLayout = () => {
           )}
         </NavContainer>
       </header>
-      <main style={{ width: "100%" }}>
+      <main style={{ width: '100%', height: '100%' }}>
         <Outlet />
       </main>
       <footer>
         <Footer />
       </footer>
-    </MainContainer>
+    </div>
   );
 };
 

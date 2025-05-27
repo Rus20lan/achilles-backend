@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router';
 // import { useNavigate } from 'react-router-dom';
-import { MainAppContainer } from "../../pages/mainPage";
-import PostgresApi from "../../services/PostgresApi";
-import Loader from "../loader/Loader";
-import "./style.scss";
-import SortBtns from "../sortBtns/SortBtns";
-import AggItemMain from "../aggItemMain/AggItemMain";
-import AddFactForm from "../addFactForm/AddFactForm";
-import Modal from "../modal/Modal";
-import { useSelector } from "react-redux";
+import { MainAppContainer } from '../../pages/mainPage';
+import PostgresApi from '../../services/PostgresApi';
+import Loader from '../loader/Loader';
+import './style.scss';
+import SortBtns from '../sortBtns/SortBtns';
+import AggItemMain from '../aggItemMain/AggItemMain';
+import AddFactForm from '../addFactForm/AddFactForm';
+import Modal from '../modal/Modal';
+import { useSelector } from 'react-redux';
+import { useContext } from 'react';
+import { InstallerContext } from '../App/App';
 
 const EntityProfile = () => {
   const postgresApi = new PostgresApi();
@@ -25,7 +27,7 @@ const EntityProfile = () => {
         const result = await postgresApi.getEntity(`/api/title/${titleID}`);
         setTitleData(result);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
@@ -65,25 +67,28 @@ const EntityProfile = () => {
 };
 
 const View = ({ data }) => {
+  const {
+    installer: { theme },
+  } = useContext(InstallerContext);
   const navigate = useNavigate();
   const [sort, setSort] = useState(1);
   const { brevis, full_name, aggByVolume, aggByDesign } = data;
   return (
     <MainAppContainer>
-      <div className="entity_container">
-        <div className="entity_section">
+      <div className={`entity_container ${theme}-theme__container`}>
+        <div className={`entity_section ${theme}-theme__section`}>
           <h2>{brevis}</h2>
           <h3>{full_name}</h3>
         </div>
         <div className="separator"></div>
-        <div className="entity_section">
+        <div className={`entity_section ${theme}-theme__section`}>
           <h3>Основная информация</h3>
           <SortBtns
             onChangeSort={setSort}
             activeSort={sort}
             arrSort={[
-              { index: 1, name: "Объем" },
-              { index: 2, name: "Документация" },
+              { index: 1, name: 'Объем' },
+              { index: 2, name: 'Документация' },
             ]}
           />
           {aggByVolume.length === 0 ? (
@@ -98,7 +103,7 @@ const View = ({ data }) => {
         </div>
         <button
           className="entity_container__button"
-          onClick={() => navigate("/main")}
+          onClick={() => navigate('/main')}
         >
           Назад
         </button>

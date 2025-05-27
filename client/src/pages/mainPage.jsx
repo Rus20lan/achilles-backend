@@ -16,6 +16,9 @@ import { ModalContext } from '../components/authForm/AuthForm';
 import UniversalEntityForm from '../components/universalEntityForm/UniversalEntityForm';
 import { getFetchDesignBrevis } from '../redux/slices/designsSlice';
 import { getFetchResourceName } from '../redux/slices/resourcesSlice';
+import Btn from '../components/Btn/btn';
+import { useContext } from 'react';
+import { InstallerContext } from '../components/App/App';
 
 const entitys = [
   { index: 1, name: 'Титула', entity: 'title', url: '/api/titles' },
@@ -55,7 +58,7 @@ const initParamConfig = {
 
 const MainPage = () => {
   // Состояние для новой главной странице
-  const { data, limit, page, isLoading } = useSelector(
+  const { data, isEmpty, limit, page, isLoading } = useSelector(
     (state) => state.dynamicPagination
   );
   const [sort, setSort] = useState(1);
@@ -116,11 +119,18 @@ const MainPage = () => {
       if (controllerRef.current) controllerRef.current.abort();
     };
   }, [fetchData, currentIndex]);
-  //
+
+  const handleClickCreateBtn = () => {
+    console.log('Нажал чтобы создать)');
+    setParamConfig({
+      entityType: entitys[currentIndex].entity,
+      mode: 'create',
+      // entityId: id || factId,
+      // ...(valueId && { valueId }),
+    });
+    setIsModalOpen(true);
+  };
   const handleClickEditBtn = ({ id, factId, valueId }) => {
-    // console.log(
-    //   `Из card пришли данные id: ${id}, factId: ${factId}, valueId: ${valueId}`
-    // );
     setParamConfig({
       entityType: entitys[currentIndex].entity,
       mode: 'edit',
@@ -129,13 +139,22 @@ const MainPage = () => {
     });
     setIsModalOpen(true);
   };
+  const handleClickDeleteBtn = ({ id, factId, valueId }) => {
+    setParamConfig({
+      entityType: entitys[currentIndex].entity,
+      mode: 'delete',
+      entityId: id || factId,
+      ...(valueId && { valueId }),
+    });
+    setIsModalOpen(true);
+  };
+
   // Закрытие модального окна: создания, редактирования и удаления
   const handleModalClose = (shouldRefresh = false) => {
     setIsModalOpen(false);
     if (shouldRefresh) fetchData();
   };
-  // console.log("Data из mainPage", data);
-  // console.log("При открытии модального окна из MainPage пропсы: ", paramConfig);
+
   return (
     <>
       <MainAppContainer>
@@ -144,12 +163,15 @@ const MainPage = () => {
         ) : (
           <ViewMain
             data={data}
+            isEmpty={isEmpty}
             sort={sort}
             setSort={setSort}
             isGridContainer={true}
             limit={limit}
             entity={entitys[currentIndex].entity}
+            onClickCreateBtn={handleClickCreateBtn}
             onClickEditBtn={handleClickEditBtn}
+            onClickDeleteBtn={handleClickDeleteBtn}
           />
         )}
         {isModalOpen && (
@@ -162,7 +184,6 @@ const MainPage = () => {
                 onCancel={() => handleModalClose(false)}
                 // onSuccess={setIsSuccess}
               />
-              {/* Здесь будет компонет UniversalEntityForm, который получает props: entityType, mode, entityId*/}
             </ModalContext>
           </Modal>
         )}
@@ -171,11 +192,24 @@ const MainPage = () => {
   );
 };
 
-const ViewMain = ({ data, limit, setSort, sort, entity, onClickEditBtn }) => {
+const ViewMain = ({
+  data,
+  isEmpty,
+  limit,
+  setSort,
+  sort,
+  entity,
+  onClickCreateBtn,
+  onClickEditBtn,
+  onClickDeleteBtn,
+}) => {
+  const {
+    installer: { theme },
+  } = useContext(InstallerContext);
   // console.log(data);
   return (
-    <div className="entity_container">
-      <div className="entity_section">
+    <div className={`entity_container ${theme}-theme__container`}>
+      <div className={`entity_section ${theme}-theme__section`}>
         {/* <h1>Это главная страница программы</h1> */}
         <SortBtns onChangeSort={setSort} activeSort={sort} arrSort={entitys} />
         <LimitSelectWrapper>
@@ -183,18 +217,43 @@ const ViewMain = ({ data, limit, setSort, sort, entity, onClickEditBtn }) => {
           <CustomSelect limit={limit} />
         </LimitSelectWrapper>
       </div>
-      <div className="separator"></div>
-      <div className="entity_section">
-        <CardsList
-          cardsList={data}
-          entity={entity}
-          isGridContainer={false}
-          onClickEditBtn={onClickEditBtn}
-        />
-      </div>
+
+      <div className={`separator ${theme}-theme__separator`}></div>
       <div className="section">
-        <PaginationBtns />
+        <div
+          className="btn_round_wrapper visible"
+          style={{ paddingBottom: '1em' }}
+        >
+          <Btn
+            icon={'fa fa-plus'}
+            btnClassName={'button_round green-ok'}
+            onClickBtn={onClickCreateBtn}
+          />
+        </div>
       </div>
+      {!isEmpty && (
+        <>
+          <div
+            className={`entity_section entity_section__max-height ${theme}-theme__section`}
+          >
+            <CardsList
+              cardsList={data}
+              entity={entity}
+              isGridContainer={false}
+              onClickEditBtn={onClickEditBtn}
+              onClickDeleteBtn={onClickDeleteBtn}
+            />
+          </div>
+          <div className="section">
+            <PaginationBtns />
+          </div>
+        </>
+      )}
+      {isEmpty && (
+        <div className="entity_section">
+          <p>Нет данных</p>
+        </div>
+      )}
     </div>
   );
 };

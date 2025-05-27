@@ -1,18 +1,20 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
 
 const Title = sequelize.define(
-  "Title",
+  'Title',
   {
     titleID: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      // unique: true,
     },
     brevis: {
       type: DataTypes.STRING,
-      primaryKey: true,
+      // primaryKey: true,
       allowNull: false,
+      unique: true,
     },
     full_name: {
       type: DataTypes.STRING,
@@ -22,7 +24,7 @@ const Title = sequelize.define(
     },
   },
   {
-    tableName: "titles",
+    tableName: 'titles',
     timestamps: false,
     createdAt: false,
     updatedAt: false,

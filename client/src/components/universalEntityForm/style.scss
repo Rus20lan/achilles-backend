@@ -6,7 +6,7 @@
   max-width: 600px;
   width: 100%;
   max-height: 90vh;
-  background: $background;
+  // background: $absolute-white;
   font-size: 16px;
   padding: 1.5em;
   border-radius: 8px;
@@ -16,7 +16,6 @@
     margin-bottom: 1em;
     border-bottom: 2px solid rgba($primary-color-text, 0.1);
     h2 {
-      color: $primary-color-text;
       font-family: $main-font;
       font-size: 1.5em;
       margin: 0;
@@ -24,7 +23,7 @@
   }
   &__body {
     display: grid;
-    gap: 0.5em;
+    gap: 0.1em;
   }
   &__field {
     // margin-bottom: 1.2rem;
@@ -64,7 +63,6 @@
         border-top-right-radius: 4px;
       }
     }
-    // margin-bottom: 15px;
     &-list {
       position: absolute;
       width: 100%;
@@ -74,7 +72,6 @@
       padding: 8px 0;
       background: #fff;
       border: 1px solid #eee;
-      // border-radius: 4px;
       border-bottom-left-radius: 4px;
       border-bottom-right-radius: 4px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -113,8 +110,17 @@
   }
   .error-message {
     color: $red-error-40;
-    font-size: 0.8em;
+    font-size: 0.9em;
+    font-weight: 500;
     margin-top: 0.3em;
+    display: flex; // Включаем flex-контейнер
+    align-items: center; // Вертикальное выравнивание
+    gap: 8px; // Расстояние между элементами (заменяет margin-right)
+  }
+  .error-message::before {
+    content: '❗';
+    font-size: 2em;
+    // color: #ffc107; /* Желтый цвет */
   }
   @media (max-width: 1024px) {
     font-size: 14px;
@@ -122,4 +128,8 @@
       padding-top: 0.5em;
     }
   }
+}
+.placeholder-mode {
+  color: #757575; /* Серый цвет */
+  opacity: 0.99; /* Легкая прозрачность */
 }

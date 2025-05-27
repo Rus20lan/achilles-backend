@@ -18,8 +18,10 @@ export async function getEntitysByPage(
 ) {
   try {
     const { page = 1, limit = 10 } = getRequestQueryObject(req, keys);
-    const offset = (page - 1) * limit;
 
+    const correctCount = await model.count();
+    const totalPages = Math.ceil(correctCount / limit);
+    const offset = page > totalPages ? (page - 2) * limit : (page - 1) * limit;
     const { count, rows } = await model.findAndCountAll({
       ...(orderValue && { order: orderValue }),
       limit,
@@ -28,25 +30,25 @@ export async function getEntitysByPage(
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, data: [], message: "Not found" });
+        .json({ success: false, data: null, message: 'Not found' });
     }
-    const totalPages = Math.ceil(count / limit);
-    // console.log(rows);
+
+    const correctPage = page > totalPages ? page - 1 : page;
     return res.status(200).json({
       success: true,
       data: rows,
       pagination: {
-        page,
+        page: correctPage,
         limit,
         totalItems: count,
         totalPages,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1,
+        hasNextPage: correctPage < totalPages,
+        hasPrevPage: correctPage > 1,
       },
     });
   } catch (error) {
-    console.error("Ошибка при выборе факта: ", error);
-    const message = error.message ?? "Ошибка на сервере";
+    console.error('Ошибка при выборе факта: ', error);
+    const message = error.message ?? 'Ошибка на сервере';
     res.status(500).json({ succes: false, error: message });
   }
 }

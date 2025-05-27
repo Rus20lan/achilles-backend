@@ -8,6 +8,7 @@ const Resource = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      unique: true,
     },
     name: {
       type: DataTypes.STRING,

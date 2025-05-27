@@ -1,6 +1,13 @@
+import { method } from 'lodash-es';
+
 class PostgresApi {
-  constructor() {
+  constructor(dispatch) {
     this.controller = null;
+  }
+
+  async handleUnauthorized() {
+    localStorage.removeItem('token');
+    window.location.href = '/auth/login';
   }
 
   async makeRequest(url, options = {}) {
@@ -27,10 +34,9 @@ class PostgresApi {
       });
 
       if (res.status === 401) {
-        localStorage.removeItem('token');
+        this.handleUnauthorized();
         throw new Error('Unauthorized');
       }
-
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.message || 'Запрос не выполнен');
@@ -71,8 +77,18 @@ class PostgresApi {
     });
   }
 
+  // Создаем сущность
+  async createEntity(url, data) {
+    return await this.makeRequest(url, { method: 'POST', body: data });
+  }
+  // Редактируем сущность
   async putEntity(url, data) {
     return await this.makeRequest(url, { method: 'PUT', body: data });
+  }
+  // Удаляем сущность
+  async deleteEntity(url, data) {
+    console.log(data);
+    return await this.makeRequest(url, { method: 'DELETE', body: data });
   }
 
   async getDesignBrevis(url) {

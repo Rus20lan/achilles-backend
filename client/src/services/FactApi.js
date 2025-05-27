@@ -1,4 +1,4 @@
-class Fact {
+export class Fact {
   constructor(fact) {
     this.id = fact.id;
     this.fact = fact.fact;
@@ -7,7 +7,7 @@ class Fact {
     this.year = this.dateObject.getFullYear();
     this.month = this.dateObject.getMonth() + 1;
     this.day = this.dateObject.getDate();
-    this.volumeId = fact.volumeId;
+    this.volumeId = fact.volumeId ?? null;
     this.creating = fact.id;
   }
 }

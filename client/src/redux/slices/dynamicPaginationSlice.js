@@ -1,10 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import PostgresApi from "../../services/PostgresApi";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import PostgresApi from '../../services/PostgresApi';
 
 const postgresApi = new PostgresApi();
 
 export const getFetchWithPagination = createAsyncThunk(
-  "models/fetchDataWithPagination",
+  'models/fetchDataWithPagination',
   async (objectParams, { signal, rejectWithValue }) => {
     try {
       const response = await postgresApi.fetchWithPagination({
@@ -13,15 +13,16 @@ export const getFetchWithPagination = createAsyncThunk(
       });
       return response;
     } catch (error) {
-      if (error.name === "AbortError") {
-        return rejectWithValue("Запрос отменён");
+      if (error.name === 'AbortError') {
+        return rejectWithValue('Запрос отменён');
       }
-      return rejectWithValue(error.message || "Ошибка загрузки данных");
+      return rejectWithValue(error.message || 'Ошибка загрузки данных');
     }
   }
 );
 const initialState = {
   data: [],
+  isEmpty: false,
   page: 1,
   limit: 10,
   totalItems: 0,
@@ -34,16 +35,14 @@ const initialState = {
 };
 
 const dynamicPaginationSlice = createSlice({
-  name: "dynamicPagination",
+  name: 'dynamicPagination',
   initialState,
   reducers: {
     setPage: (state, action) => {
-      console.log("Изменение page:", action.payload);
       state.page = action.payload.page;
       state.aborted = false; // Сбрасываем флаг при изменении страницы
     },
     setLimit: (state, action) => {
-      console.log("Изменение limit:", action.payload);
       state.limit = action.payload;
       state.page = 1;
       state.aborted = false;
@@ -71,27 +70,32 @@ const dynamicPaginationSlice = createSlice({
         if (!action.payload) {
           return state;
         }
-        const { data, pagination } = action.payload;
-        const {
-          page,
-          limit,
-          totalItems,
-          totalPages,
-          hasNextPage,
-          hasPrevPage,
-        } = pagination;
+        const { data, isEmpty, pagination } = action.payload;
+
         state.data = data;
-        state.page = Number(page);
-        state.limit = Number(limit);
-        state.totalItems = totalItems;
-        state.totalPages = totalPages;
-        state.hasNextPage = hasNextPage;
-        state.hasPrevPage = hasPrevPage;
+        state.isEmpty = isEmpty;
+        if (pagination) {
+          const {
+            page,
+            limit,
+            totalItems,
+            totalPages,
+            hasNextPage,
+            hasPrevPage,
+          } = pagination;
+          state.page = Number(page);
+          state.limit = Number(limit);
+          state.totalItems = totalItems;
+          state.totalPages = totalPages;
+          state.hasNextPage = hasNextPage;
+          state.hasPrevPage = hasPrevPage;
+        }
+
         state.isLoading = false;
         state.error = null;
       })
       .addCase(getFetchWithPagination.rejected, (state, action) => {
-        if (action.payload === "Запрос отменён") {
+        if (action.payload === 'Запрос отменён') {
           state.aborted = true;
           return;
         }

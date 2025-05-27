@@ -42,15 +42,11 @@ function App() {
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<RegisterPage />} />
             </Route>
-            <Route
-              path="main"
-              element={
-                <ProtectedRoute user={user}>
-                  <MainPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="title" element={<ProtectedRoute user={user} />}>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/main" element={<MainPage />} />
+            </Route>
+            {/* <ProtectedRoute path="/main" element={<MainPage />} /> */}
+            <Route path="title" element={<ProtectedRoute />}>
               <Route path=":titleID" element={<EntityProfile />} />
             </Route>
           </Route>

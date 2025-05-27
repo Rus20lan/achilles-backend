@@ -1,5 +1,5 @@
-@use "../App/vars" as *;
-@use "../App/mixins" as m;
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
 .sort_btn_group {
   width: 95%;
   grid-column: 2;
@@ -12,7 +12,7 @@
 
 .sort_btn_wrapper {
   box-sizing: border-box;
-  input[type="radio"] {
+  input[type='radio'] {
     display: none;
   }
   label {
@@ -22,13 +22,13 @@
     font-size: 1em;
     font-weight: 700;
     color: $primary-color-text;
-    background: $sort-off;
+    background: $light-bg;
   }
 }
 
-.sort_btn_wrapper input[type="radio"]:checked + label {
+.sort_btn_wrapper input[type='radio']:checked + label {
   background: $sort-on;
-  color: $background;
+  color: $absolute-white;
   transform: scale(0.5);
 }
 

@@ -18,6 +18,15 @@ export const getAllResources = async (req, res) => {
 };
 
 export async function getResourcesByPage(req, res) {
+  const count = await Resource.count();
+  if (count === 0) {
+    return res.status(200).json({
+      success: true,
+      data: null,
+      isEmpty: true,
+      pagination: null,
+    });
+  }
   return await getEntitysByPage(
     req,
     res,

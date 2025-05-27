@@ -12,18 +12,14 @@ const BurgerBtn = ({ installer, onIsOpen, onClick }) => {
         isActiveBurgerBtn: true,
       };
     });
-    // if (installer.isOpenBurger) {
-    //   setClassIsOpenClose('shut');
-    // } else {
-    //   setClassIsOpenClose('active');
-    // }
     onClick();
   };
 
   return (
     <a
-      // className={`burger_btn ${classIsOpenClose}`}
-      className={`burger_btn ${installer.isOpenBurger ? 'active' : 'shut'}`}
+      className={`burger_btn ${installer.isOpenBurger ? 'active' : 'shut'} ${
+        installer.theme
+      }-theme__burger_btn`}
       onClick={handleClick}
     >
       <b></b>

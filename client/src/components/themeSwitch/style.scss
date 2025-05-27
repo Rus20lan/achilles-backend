@@ -1,0 +1,47 @@
+@use '../App/vars' as *;
+.theme-switch__container {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0.5rem 1em;
+  input[type='checkbox'] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+    display: none;
+
+    &:checked + label {
+      background: $light-bg;
+    }
+
+    &:checked + label:after {
+      left: calc(100% - 0.16em);
+      transform: translateX(-100%);
+      background: $color-by-burger-menu;
+    }
+  }
+  label {
+    cursor: pointer;
+    text-indent: -9999px; /*Текст скрыт*/
+    width: 5.4em;
+    height: 2.4em;
+    border-radius: 2.4em;
+    display: block;
+    background: $color-by-burger-menu;
+    position: relative;
+    &:active:after {
+      width: 3.12em;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0.16em;
+      left: 0.16em;
+      width: 2.1em;
+      height: 2.1em;
+      background: $light-bg;
+      border-radius: 2.1em;
+      transition: 0.3s;
+    }
+  }
+}

@@ -2,7 +2,157 @@
 
 #root {
   width: 100vw;
-  height: 100vh;
-  background: $background;
+  height: auto;
+  min-height: 100vh;
   overflow: auto;
+}
+.main-app-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  min-height: 100vh;
+  grid-template-rows: 80px 1fr 100px;
+}
+.dark-theme {
+  &__main-container {
+    background: $dark-bg;
+    transition: all 0.5s ease-out;
+    .link_header_a {
+      color: $absolute-white;
+    }
+  }
+  &__form_container {
+    h3 {
+      color: $absolute-white;
+    }
+    .custom-field {
+      color: $grey-70;
+    }
+    .btn_container {
+      a {
+        color: $absolute-white;
+        background: $dark-link;
+      }
+    }
+  }
+  &__container {
+    background: rgba(208, 188, 255, 0.05);
+    transition: all 0.5s ease-out;
+  }
+  &__separator {
+    background: $dark-link;
+    transition: all 0.5s ease-out;
+  }
+  &__section {
+    // background: rgba(208, 188, 255, 0.14);
+    background: rgba(208, 188, 255, 0.11);
+    transition: all 0.5s ease-out;
+  }
+  &__card_wrapper_line {
+    background: #49454f;
+    transition: all 0.5s ease-out;
+    .value_field,
+    .value_field_second {
+      color: $absolute-white;
+    }
+  }
+  &__value_field {
+    color: $absolute-white;
+    transition: all 0.5s ease-out;
+  }
+  &__page_active {
+    color: $dark-30;
+    border: 2px solid $absolute-white;
+    button {
+      color: $absolute-white;
+    }
+  }
+  &__pagination__number {
+    color: $grey-50;
+  }
+  &__burger_btn {
+    b {
+      // color: $primary-color-text;
+      background-color: $absolute-white;
+    }
+  }
+}
+#modal-container-id {
+  .dark-theme {
+    background: $dark-link;
+    .universal-form__header h2 {
+      color: $absolute-white;
+    }
+    .universal-form__field-label {
+      color: $dark-30;
+    }
+  }
+  .light-theme {
+    background: #fffbfe;
+    .universal-form__header h2 {
+      color: $primary-color-text;
+    }
+    .universal-form__field-label {
+      color: $primary-color-text;
+    }
+  }
+}
+.light-theme {
+  &__main-container {
+    background: $absolute-white;
+    transition: all 0.5s ease-out;
+  }
+  &__form_container {
+    h3 {
+      color: $primary-color-text;
+    }
+    .custom-field {
+      color: $primary-color-text;
+    }
+    .btn_container {
+      a {
+        color: $primary-color-text;
+        background: $absolute-white;
+      }
+    }
+  }
+  &__container {
+    background: rgba(103, 80, 164, 0.05);
+    transition: all 0.5s ease-out;
+  }
+  &__separator {
+    background: $main-first-color-company;
+    transition: all 0.5s ease-out;
+  }
+  &__card_wrapper_line {
+    background: $absolute-white-card-light;
+    transition: all 0.5s ease-out;
+    .value_field,
+    .value_field_second {
+      color: $dark-30;
+    }
+  }
+  &__value_field {
+    color: $dark-30;
+    transition: all 0.5s ease-out;
+  }
+  &__pagination__number {
+    color: $grey-50;
+  }
+  &__page_active {
+    color: $dark-30;
+    border: 2px solid $dark-30;
+    button {
+      color: $dark-30;
+    }
+  }
+  &__universal-form {
+    color: $primary-color-text;
+  }
+  &__burger_btn {
+    b {
+      // color: $primary-color-text;
+      background-color: $primary-color-text;
+    }
+  }
 }

@@ -1,8 +1,8 @@
-import { Fact, Volume, Resource, Design } from "../models/associations.js";
+import { Fact, Volume, Resource, Design } from '../models/associations.js';
 import {
   getEntitysByPage,
   getRequestQueryObject,
-} from "../services/commonService.js";
+} from '../services/commonService.js';
 
 export const getAllFacts = async (req, res) => {
   try {
@@ -12,8 +12,8 @@ export const getAllFacts = async (req, res) => {
     }
     return res.status(200).json({ success: true, data: facts });
   } catch (error) {
-    console.error("Ошибка при выборке факта: ", error);
-    const message = error.message ?? "Ошибка на сервере";
+    console.error('Ошибка при выборке факта: ', error);
+    const message = error.message ?? 'Ошибка на сервере';
     res.status(500).json({ error: message });
   }
 };
@@ -21,13 +21,13 @@ export const getAllFacts = async (req, res) => {
 export async function getFactsByPage(req, res) {
   try {
     const { page = 1, limit = 10 } = getRequestQueryObject(req, [
-      "page",
-      "limit",
+      'page',
+      'limit',
     ]);
     const result = await Fact.findAll();
 
-    if ("error" in result) {
-      throw new Error(result.error.message || "Unknown error");
+    if ('error' in result) {
+      throw new Error(result.error.message || 'Unknown error');
     }
 
     if (result.length !== 0) {
@@ -46,9 +46,9 @@ export async function getFactsByPage(req, res) {
             include: [
               {
                 model: Resource,
-                attributes: ["name", "unit"],
+                attributes: ['name', 'unit'],
               },
-              { model: Design, attributes: ["brevis"] },
+              { model: Design, attributes: ['brevis'] },
             ],
             raw: true,
           });
@@ -58,9 +58,9 @@ export async function getFactsByPage(req, res) {
             titleId: volume.titleId,
             resourceId: volume.resourceId,
             designId: volume.designId,
-            name: volume["Resource.name"],
-            unit: volume["Resource.unit"],
-            brevis: volume["Design.brevis"],
+            name: volume['Resource.name'],
+            unit: volume['Resource.unit'],
+            brevis: volume['Design.brevis'],
           });
         }
       }
@@ -72,8 +72,6 @@ export async function getFactsByPage(req, res) {
           ...comb,
           valueId: item.id,
           factId: comb.factId,
-          // id: item.id + "_" + item.volumeId + "_" + comb.factId,
-          // id: +comb.volumeId,
         };
       });
 
@@ -92,6 +90,13 @@ export async function getFactsByPage(req, res) {
           hasPrevPage: page > 1,
         },
       });
+    } else {
+      return res.status(200).json({
+        success: true,
+        data: null,
+        isEmpty: true,
+        pagination: null,
+      });
     }
   } catch (error) {
     console.error(error.message);
@@ -100,5 +105,4 @@ export async function getFactsByPage(req, res) {
       error: error.message,
     });
   }
-  // return await getEntitysByPage(req, res, Fact, ["page", "limit"]);
 }

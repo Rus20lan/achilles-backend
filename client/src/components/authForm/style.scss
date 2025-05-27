@@ -1,7 +1,7 @@
-@use "../App/vars" as *;
-@use "../App/mixins" as m;
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
 .form_container {
-  padding: 1rem 2rem;
+  padding: 1em 2em;
   max-width: 600px;
   width: 100%;
   max-height: 600px;
@@ -11,18 +11,27 @@
   grid-template-rows: 0.5fr 2fr 1fr;
   box-sizing: border-box;
   font-size: 16px;
-  background: $background-card-light;
+  // background: $absolute-white-card-light;
 
   @media (max-width: 1180px) {
     width: 80%;
+    max-height: 500px;
     font-size: 14px;
+    padding: 0.8em 1.5em;
+  }
+  @media (max-width: 512px) {
+    max-height: 400px;
+    padding: 0.5em 1em;
   }
   h3 {
     font-size: 2.5em;
     margin: 0;
     text-align: center;
     line-height: 200%;
-    color: $primary-color-text;
+    // color: $primary-color-text;
+    @media (max-width: 512px) {
+      font-size: 1.7em;
+    }
   }
   .input_group {
     width: 100%;
@@ -37,7 +46,7 @@
     label {
       width: 100%;
       font-size: 1.5em;
-      color: $primary-color-text;
+      // color: $primary-color-text;
       font-weight: 500;
       input {
         display: block;
@@ -60,6 +69,7 @@
   .btn_container {
     @include m.flex-center;
     a {
+      text-decoration: none;
       box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.3),
         0 6px 10px 4px rgba(0, 0, 0, 0.15);
       user-select: none;
@@ -70,8 +80,6 @@
       border: none;
       cursor: pointer;
       padding: 0.5rem 2em;
-      color: $primary-color-text;
-      background: #fffbfe;
     }
     a:active {
       transform: scale(0.9);

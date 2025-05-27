@@ -29,7 +29,7 @@
   &__number {
     font-size: 1em;
     font-weight: 600;
-    color: $grey-50;
+
     border: none;
     background: none;
     cursor: pointer;
@@ -43,12 +43,10 @@
   width: 2em; // Например, 2em (можно подобрать под ваш дизайн)
   height: 2em;
   @include m.flex-center-horizontal;
-  color: $dark-30;
   border-radius: 50%;
-  border: 2px solid $dark-30;
+
   button {
     @include m.flex-center-horizontal;
     padding: 0;
-    color: $dark-30;
   }
 }

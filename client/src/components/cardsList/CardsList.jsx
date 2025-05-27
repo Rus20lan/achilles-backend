@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import Card from "../card/Card";
+import styled from 'styled-components';
+import Card from '../card/Card';
 
 const CardsContainerGrid = styled.ul`
   width: 100%;
@@ -27,8 +27,15 @@ const CardsContainerLine = styled.ul`
   padding-left: 0;
   row-gap: 1.2em;
   list-style-type: none;
+  overflow-y: scroll;
 `;
-const CardsList = ({ cardsList, entity, isGridContainer, onClickEditBtn }) => {
+const CardsList = ({
+  cardsList,
+  entity,
+  isGridContainer,
+  onClickEditBtn,
+  onClickDeleteBtn,
+}) => {
   return (
     <>
       {isGridContainer && (
@@ -54,6 +61,7 @@ const CardsList = ({ cardsList, entity, isGridContainer, onClickEditBtn }) => {
               id={id ?? titleID ?? factId}
               entity={entity}
               onClickEditBtn={onClickEditBtn}
+              onClickDeleteBtn={onClickDeleteBtn}
               factId={factId}
               {...props}
             />

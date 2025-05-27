@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { getIdEntity } from '../services/getIdEntity';
 
 export const ENTITY_CONFIG = {
   title: {
@@ -15,6 +16,7 @@ export const ENTITY_CONFIG = {
         priority: 1,
         required: true,
         isVisible: true,
+        placeholder: 'Пример: ГК',
       },
       full_name: {
         type: 'textarea',
@@ -22,6 +24,7 @@ export const ENTITY_CONFIG = {
         priority: 2,
         isVisible: true,
         required: true,
+        placeholder: 'Пример: Главный корпус',
       },
       title_code: {
         type: 'text',
@@ -29,6 +32,7 @@ export const ENTITY_CONFIG = {
         priority: 2,
         isVisible: true,
         required: true,
+        placeholder: 'Пример: 1',
         // validate: (value) => {
         //   if (!Number.isInteger(value)) {
         //     return 'Не число';
@@ -52,6 +56,7 @@ export const ENTITY_CONFIG = {
         priority: 1,
         required: true,
         isVisible: true,
+        placeholder: 'Пример: 1-ОЗР',
       },
       full_name: {
         type: 'textarea',
@@ -59,6 +64,7 @@ export const ENTITY_CONFIG = {
         priority: 2,
         isVisible: true,
         required: true,
+        placeholder: 'Пример: Котлован под строительство главного корпуса',
       },
       mark: {
         type: 'text',
@@ -66,6 +72,7 @@ export const ENTITY_CONFIG = {
         priority: 2,
         isVisible: true,
         required: true,
+        placeholder: 'Пример: ОЗР',
       },
       code: {
         type: 'text',
@@ -73,6 +80,7 @@ export const ENTITY_CONFIG = {
         priority: 3,
         isVisible: true,
         required: true,
+        placeholder: 'Пример: 05КА-П009-РТК-1-ОЗР',
       },
     },
   },
@@ -89,6 +97,7 @@ export const ENTITY_CONFIG = {
         priority: 1,
         required: true,
         isVisible: true,
+        placeholder: 'Пример: Бетон',
       },
       unit: {
         type: 'text',
@@ -96,6 +105,7 @@ export const ENTITY_CONFIG = {
         priority: 2,
         required: true,
         isVisible: true,
+        placeholder: 'Пример: м3',
       },
     },
   },
@@ -107,7 +117,7 @@ export const ENTITY_CONFIG = {
         priority: 3,
         isVisible: false,
       },
-      dateString: {
+      date: {
         type: 'date',
         priority: 1,
         label: 'Дата',
@@ -124,6 +134,9 @@ export const ENTITY_CONFIG = {
           const designs = useSelector((state) => state.designs?.data);
           return designs ? designs : null;
         },
+        getIdDesign(designArray, searchField, searchWord) {
+          return getIdEntity(designArray, searchField, searchWord);
+        },
       },
       name: {
         type: 'autocomplete',
@@ -135,6 +148,9 @@ export const ENTITY_CONFIG = {
           const resources = useSelector((state) => state.resources?.data);
           return resources ? resources : null;
         },
+        getIdResource(resourceArray, searchField, searchWord) {
+          return getIdEntity(resourceArray, searchField, searchWord);
+        },
       },
       fact: {
         type: 'number',
@@ -142,6 +158,13 @@ export const ENTITY_CONFIG = {
         label: 'Факт',
         isVisible: true,
         required: true,
+        validate: (value) => {
+          const number = +value;
+          if (isNaN(number)) {
+            return 'Не число';
+          }
+          if (number <= 0) return 'Факт должен быть больше 0';
+        },
       },
     },
   },

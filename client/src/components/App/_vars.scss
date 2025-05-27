@@ -1,10 +1,10 @@
-@import url("https://fonts.cdnfonts.com/css/poppins");
+@import url('https://fonts.cdnfonts.com/css/poppins');
 $max-width-viewport: 1180px;
-// $background: #ffffff;
-$background: #fffbfe;
-$background-card-light: rgba(103, 80, 164, 0.05);
-$main-font: "Poppins", sans-serif;
-$secondary-font: "Roboto", sans-serif;
+// $absolute-white: #ffffff;
+$absolute-white: #fffbfe;
+$absolute-white-card-light: rgba(103, 80, 164, 0.05);
+$main-font: 'Poppins', sans-serif;
+$secondary-font: 'Roboto', sans-serif;
 
 // $primary-color-text: #6750a4;
 $primary-color-text: #21005d;
@@ -17,9 +17,14 @@ $main-second-color-company: #009e6e;
 $main-second-color-company-semi: rgba(#009e6e, 0.6);
 
 $sort-on: #6750a4;
-$sort-off: #eaddff;
 
+$light-bg: #eaddff;
+// $dark-container:
+$dark-section: #232329;
 $dark-30: #474752;
+$dark-bg: #070708;
+
+$dark-link: #1c1c21;
 
 $grey-50: #797c86;
 $grey-70: #afb0b6;
@@ -27,5 +32,5 @@ $grey-70: #afb0b6;
 $red-error-40: #b3261e;
 $green-ok: #00c800;
 
-$bar-w: 30px;
-$bar-h: 3px;
+$bar-w: 1.5em;
+$bar-h: 0.15em;
