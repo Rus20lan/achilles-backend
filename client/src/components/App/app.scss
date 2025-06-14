@@ -6,6 +6,10 @@
   min-height: 100vh;
   overflow: auto;
 }
+button {
+  background: initial;
+  font-family: $main-font;
+}
 .main-app-container {
   width: 100%;
   height: 100%;
@@ -44,9 +48,11 @@
     transition: all 0.5s ease-out;
   }
   &__section {
-    // background: rgba(208, 188, 255, 0.14);
     background: rgba(208, 188, 255, 0.11);
     transition: all 0.5s ease-out;
+    p {
+      color: $absolute-white;
+    }
   }
   &__card_wrapper_line {
     background: #49454f;
@@ -76,6 +82,31 @@
       background-color: $absolute-white;
     }
   }
+  &__dropdown {
+    & .dropdown__button {
+      &:hover {
+        background: $sort-on;
+        border-bottom: 1px solid $light-bg;
+      }
+      &:focus {
+        background: $sort-on;
+        border-bottom: 1px solid $light-bg;
+      }
+    }
+
+    & .dropdown__menu {
+      background: $sort-on;
+    }
+  }
+  &__filter-form {
+    background: $dark-bg;
+    .filter-form__button-group {
+      button {
+        background: $dark-link;
+        color: $absolute-white;
+      }
+    }
+  }
 }
 #modal-container-id {
   .dark-theme {
@@ -101,6 +132,9 @@
   &__main-container {
     background: $absolute-white;
     transition: all 0.5s ease-out;
+    .link_header_a {
+      color: $primary-color-text;
+    }
   }
   &__form_container {
     h3 {
@@ -119,6 +153,13 @@
   &__container {
     background: rgba(103, 80, 164, 0.05);
     transition: all 0.5s ease-out;
+  }
+  &__section {
+    // background: rgba(208, 188, 255, 0.11);
+    transition: all 0.5s ease-out;
+    p {
+      color: $primary-color-text;
+    }
   }
   &__separator {
     background: $main-first-color-company;
@@ -153,6 +194,22 @@
     b {
       // color: $primary-color-text;
       background-color: $primary-color-text;
+    }
+  }
+  &__dropdown {
+    & .dropdown__menu {
+      background: $light-bg;
+    }
+  }
+  &__filter-form {
+    .filter-form__button-group {
+      button[type='submit'] {
+        background: $green-ok;
+      }
+      button {
+        background: $red-error-40;
+        color: $absolute-white;
+      }
     }
   }
 }

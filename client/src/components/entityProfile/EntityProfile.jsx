@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 // import { useNavigate } from 'react-router-dom';
-import { MainAppContainer } from '../../pages/mainPage';
+import { MainAppContainer } from '../../pages/entityPage';
 import PostgresApi from '../../services/PostgresApi';
 import Loader from '../loader/Loader';
 import './style.scss';

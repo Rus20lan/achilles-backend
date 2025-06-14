@@ -4,8 +4,9 @@ const useCloseOnOutsideClick = (ref, isChecked, setIsChecked) => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       const isClickInside = ref.current?.contains(e.target);
-      const isLabelClick = e.target.closest(`label[for=${ref.current?.id}]`);
-
+      const isLabelClick = ref.current?.id
+        ? e.target.closest(`label[for=${ref.current?.id}]`)
+        : null;
       if (!isClickInside && !isLabelClick && isChecked) {
         setIsChecked(false);
       }

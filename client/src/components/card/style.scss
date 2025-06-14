@@ -29,13 +29,9 @@
   }
 }
 .card_wrapper_line {
-  // font-size: 0.9em;
-
   display: grid;
   grid-template-columns: 1fr 0.2fr;
-  padding: 0.5rem 2rem;
-  // max-height: 80px;
-  // height: 100%;
+  padding: 0.5em 2em;
   box-sizing: border-box;
   .card_info_block {
     display: flex;

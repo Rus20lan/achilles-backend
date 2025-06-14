@@ -6,9 +6,11 @@ import AuthLayout from '../../layouts/authLayout';
 import LoginPage from '../../pages/loginPage';
 import RegisterPage from '../../pages/registerPage';
 import ProtectedRoute from '../protectedRoute/ProtectedRoute';
-import { useSelector } from 'react-redux';
-import EntityProfile from '../entityProfile/EntityProfile';
 import MainPage from '../../pages/mainPage';
+import EntityProfile from '../entityProfile/EntityProfile';
+import EntityPage from '../../pages/entityPage';
+import { ENTITY_LINKS } from '../../config/entities';
+import AnalysisPage from '../../pages/analysisPage';
 
 export const InstallerContext = createContext();
 function App() {
@@ -17,7 +19,6 @@ function App() {
     isOpenBurger: false,
     isActiveBurgerBtn: false,
   });
-  const { user } = useSelector((state) => state.authData);
 
   // Данный эффект удаляет token из localStorage при закрытие приложения
   useEffect(() => {
@@ -43,9 +44,17 @@ function App() {
               <Route path="register" element={<RegisterPage />} />
             </Route>
             <Route element={<ProtectedRoute />}>
+              {/* <Route path="/main" element={<EntityPage />} /> */}
               <Route path="/main" element={<MainPage />} />
+              {ENTITY_LINKS.map((link, index) => (
+                <Route
+                  key={index}
+                  path={link.url.replace('/api', '')}
+                  element={<EntityPage selectEntity={link.index} />}
+                />
+              ))}
+              <Route path="/analysis" element={<AnalysisPage />} />
             </Route>
-            {/* <ProtectedRoute path="/main" element={<MainPage />} /> */}
             <Route path="title" element={<ProtectedRoute />}>
               <Route path=":titleID" element={<EntityProfile />} />
             </Route>

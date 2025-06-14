@@ -1,8 +1,5 @@
 import { Design } from '../models/associations.js';
-import {
-  getEntitysByPage,
-  getRequestQueryObject,
-} from '../services/commonService.js';
+import { getBrevis, getEntitysByPage } from '../services/commonService.js';
 
 // Получить все комплекты
 export const getAllDesign = async (req, res) => {
@@ -34,28 +31,29 @@ export async function getDesignsByPage(req, res) {
     req,
     res,
     Design,
-    ['page', 'limit'],
+    // ['page', 'limit'],
     [['id', 'ASC']]
   );
 }
 
 export async function getDesignBrevis(req, res) {
-  try {
-    const designs = await Design.findAll({
-      attributes: ['id', 'brevis'],
-      // where: { active: true },
-      order: [['id', 'ASC']],
-      raw: true,
-    });
-    if (designs.length === 0)
-      return res
-        .status(404)
-        .json({ succes: false, data: [], message: 'Not Found' });
-    return res
-      .status(200)
-      .json({ succes: true, data: designs, message: 'Успешно' });
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ succes: false, data: [], error: error.message });
-  }
+  // try {
+  //   const designs = await Design.findAll({
+  //     attributes: ['id', 'brevis'],
+  //     // where: { active: true },
+  //     order: [['id', 'ASC']],
+  //     raw: true,
+  //   });
+  //   if (designs.length === 0)
+  //     return res
+  //       .status(404)
+  //       .json({ succes: false, data: [], message: 'Not Found' });
+  //   return res
+  //     .status(200)
+  //     .json({ succes: true, data: designs, message: 'Успешно' });
+  // } catch (error) {
+  //   console.log(error.message);
+  //   res.status(500).json({ succes: false, data: [], error: error.message });
+  // }
+  return await getBrevis(Design, res, ['id', 'brevis'], 'id');
 }

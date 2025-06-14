@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 const AutoCompleteField = React.memo(
-  ({ name, value, options, onChange, error }) => {
+  ({ name, value = '', options, onChange, error }) => {
     const wrapperRef = useRef(null);
     const [filteredOptions, setFilteredOptions] = useState([]);
     const [showOptions, setShowOptions] = useState(false);
@@ -19,7 +19,6 @@ const AutoCompleteField = React.memo(
     // Фильтрация опций
     useEffect(() => {
       const searchValue = value.toString();
-
       const exactMatch = findExactMatch(searchValue);
       // Обновляем последнее валидное значение при совпадении
       if (exactMatch) {
@@ -53,7 +52,6 @@ const AutoCompleteField = React.memo(
 
     const handleChange = (e) => {
       const newValue = e.target.value;
-      console.log('Input value:', e.target.value);
       const exactMatch = findExactMatch(newValue);
       // Разрешаем ввод только если есть частичное совпадение
       if (
@@ -89,7 +87,7 @@ const AutoCompleteField = React.memo(
             {filteredOptions.length !== 0 ? (
               filteredOptions.map((option) => (
                 <li
-                  key={option.id}
+                  key={option.id ?? option.titleID}
                   onClick={() => {
                     onChange(name, option.brevis || option.name);
                     setShowOptions(false);

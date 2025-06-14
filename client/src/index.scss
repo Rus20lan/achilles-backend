@@ -11,34 +11,21 @@ body {
   margin: 0;
   height: 100vh;
 }
-
+.left_header_wrapper {
+  @include m.flex-center-horizontal;
+  margin-right: auto;
+}
 .link_header_a {
   display: block;
   white-space: nowrap;
   padding: 0.5rem 2rem;
   text-decoration: none;
   border: 0.1rem solid #0000;
-  font-size: 1rem;
+  font-size: 1em;
   font-weight: 700;
-  // color: inherit;
-  // color: $primary-color-text;
 }
 .link_header_a.open {
   color: $light-bg;
   opacity: 1;
   transition: color 1s ease 0.5s;
 }
-// .dark {
-//   // background-color: $dark-bg;
-//   color: $grey-70;
-//   -webkit-transition: all 0.5s ease-out;
-//   -o-transition: all 0.5s ease-out;
-//   transition: all 0.5s ease-out;
-// }
-// .light {
-//   // background-color: $absolute-white;
-//   color: $primary-color-text;
-//   -webkit-transition: all 0.5s ease-out;
-//   -o-transition: all 0.5s ease-out;
-//   transition: all 0.5s ease-out;
-// }

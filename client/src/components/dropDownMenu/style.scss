@@ -1,0 +1,41 @@
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
+
+.dropdown {
+  &__container {
+    position: relative;
+    display: inline-block;
+  }
+  &__button {
+    @include m.border-left-top-right;
+    cursor: pointer;
+  }
+  &__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    border-radius: 4px;
+    border-top-left-radius: 0;
+    min-width: 200px;
+    z-index: 1000;
+    &_links-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    &__menu_link {
+      display: block;
+      padding: 10px 15px;
+      color: #333;
+      text-decoration: none;
+      transition: background 0.2s;
+      &:hover {
+        background: #f5f5f5;
+      }
+      &:focus {
+        outline: none;
+        background: #e8f0fe;
+      }
+    }
+  }
+}

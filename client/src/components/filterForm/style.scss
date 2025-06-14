@@ -1,0 +1,62 @@
+@use '../App/vars' as *;
+@use '../App/mixins' as m;
+
+.filter-form {
+  &__container {
+    width: 80%;
+    // background: rgba(103, 80, 164, 0.05);
+    border-radius: 8px;
+    padding: 0.5em;
+    display: block;
+    // Начальное состояние
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-20px); // Сдвиг вверх
+    pointer-events: none; // Отключаем взаимодействие со скрытым элементом
+    visibility: hidden;
+
+    transition: max-height 0.5s cubic-bezier(0.33, 1, 0.68, 1),
+      opacity 0.4s ease-out, transform 0.4s ease-out, visibility 0.4s ease-out;
+    &_open {
+      max-height: 400px;
+      pointer-events: auto; // Включаем взаимодействие
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+      transition: max-height 0.5s cubic-bezier(0.33, 1, 0.68, 1),
+        opacity 0.4s ease-out, transform 0.4s ease-out, visibility 0.4s ease-out;
+    }
+  }
+  &__button-group {
+    @include m.flex-center-horizontal;
+    justify-content: flex-end;
+    margin: 0.5em auto;
+    gap: 0.5em;
+
+    button {
+      @include m.box-shadow-card;
+      @include m.active-btn;
+      box-sizing: border-box;
+      padding: 0.5em 2em;
+      font-size: 1em;
+      border: none;
+      margin: 0;
+      font-weight: 600;
+    }
+  }
+
+  @media (max-width: 696px) {
+    &__button-group a,
+    button {
+      padding: 0.5em 0.8em;
+    }
+  }
+  @media (max-width: 424px) {
+    &__button-group a,
+    button {
+      padding: 0.25em 0.5em;
+      font-size: 0.8em;
+      // font-weight: 600;
+    }
+  }
+}

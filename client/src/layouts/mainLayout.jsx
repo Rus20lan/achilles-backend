@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import Footer from '../components/footer/Footer';
 import { useResize } from '../hooks/useResize';
@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import logoutSvg from '../assets/log-out.svg';
 import { logout } from '../redux/slices/authDataSlice';
 import ThemeSwitch from '../components/themeSwitch/ThemeSwitch';
+import DropDownMenu from '../components/dropDownMenu/DropDownMenu';
+import { ENTITY_LINKS } from '../config/entities';
 
 const MainContainer = styled.div`
   width: 100%;
@@ -80,6 +82,10 @@ const MainLayout = () => {
   const { isScreenMD } = useResize();
   const dispatch = useDispatch();
 
+  const linksWithoutAPI = ENTITY_LINKS.map((link) => ({
+    ...link,
+    url: link.url.replace('/api', ''),
+  }));
   return (
     <div className={`main-app-container ${theme}-theme__main-container`}>
       <header style={{ display: 'flex', width: '100%' }}>
@@ -101,10 +107,14 @@ const MainLayout = () => {
               )}
               {user && (
                 <>
-                  <div style={{ marginRight: 'auto' }}>
-                    <Link to="/" className={`link_header_a`}>
+                  <div className="left_header_wrapper">
+                    <Link to="/" className="link_header_a">
                       Home
                     </Link>
+                    <DropDownMenu
+                      nameMenu={'Справочник'}
+                      links={linksWithoutAPI}
+                    />
                   </div>
                   <Link to="/title/1" className="link_header_a">
                     1

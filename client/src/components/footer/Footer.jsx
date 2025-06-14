@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { MainAppContainer } from '../../pages/mainPage';
+import { MainAppContainer } from '../../pages/entityPage';
 import { useLocation } from 'react-router';
 
 const FooterWrapper = styled.div`

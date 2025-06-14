@@ -1,8 +1,5 @@
 import { Title } from '../models/associations.js';
-import {
-  getEntitysByPage,
-  getRequestQueryObject,
-} from '../services/commonService.js';
+import { getEntitysByPage, getBrevis } from '../services/commonService.js';
 
 export async function getAllTitles(req, res) {
   try {
@@ -28,11 +25,9 @@ export async function getTitlesByPage(req, res) {
       pagination: null,
     });
   }
-  return await getEntitysByPage(
-    req,
-    res,
-    Title,
-    ['page', 'limit'],
-    [['titleID', 'ASC']]
-  );
+  return await getEntitysByPage(req, res, Title, [['titleID', 'ASC']]);
+}
+
+export async function getTitleBrevis(req, res) {
+  return await getBrevis(Title, res, ['titleID', 'brevis'], 'titleID');
 }

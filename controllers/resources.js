@@ -31,7 +31,7 @@ export async function getResourcesByPage(req, res) {
     req,
     res,
     Resource,
-    ['page', 'limit'],
+    // ['page', 'limit'],
     [['id', 'ASC']]
   );
 }

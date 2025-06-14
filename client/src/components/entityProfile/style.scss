@@ -47,12 +47,10 @@
 .entity_section {
   @include m.flex-center;
   @include m.box-shadow-card;
-  max-width: 600px;
-  width: 100%;
+  width: 90%;
   margin: 0 auto;
   padding: 0.5rem 0.2rem;
   box-sizing: border-box;
-  // background: $absolute-white;
   border-radius: 16px;
   h2,
   h3 {
@@ -68,25 +66,34 @@
 }
 .entity_section__max-height {
   max-height: 600px;
-  // height: 100%;
   overflow: hidden;
 }
 .section {
-  @include m.flex-center;
-  // @include m.flex-center-horizontal;
-  // padding: 0.5rem 0.2rem;
-  max-width: 600px;
-  width: 100%;
-  margin: 0 auto;
+  display: flex;
+  width: 90%;
+  margin: 0.5em auto;
+  &__center {
+    @include m.flex-center-horizontal;
+  }
+  &__space-between {
+    justify-content: space-between;
+  }
 }
 .separator {
   width: 80%;
   height: 3px;
-
-  margin: 0 auto;
-  margin-top: 2em;
-  margin-bottom: 1em;
+  margin: 1em auto;
 }
+// .section__hidden {
+//   max-height: 0;
+//   transition: max-height 0.8s linear;
+// }
+// .section__visible {
+//   max-height: 200px;
+//   height: auto;
+//   transition: max-height 1s linear;
+// }
+
 .entity_volumes_list {
   list-style-type: none;
   padding-left: 0;
@@ -144,7 +151,6 @@
   }
   .entity_volumes_list {
     .entity_full_name {
-      // white-space: nowrap;
       height: 33px;
       display: flex;
       align-items: center;
@@ -167,6 +173,4 @@
   .entity_volumes_list summary {
     font-size: 0.9rem;
   }
-}
-@media (max-width: 424px) {
 }

@@ -41,6 +41,7 @@ class PostgresApi {
         const errorData = await res.json();
         throw new Error(errorData.message || 'Запрос не выполнен');
       }
+      // console.log(await res.json());
       return await res.json();
     } catch (error) {
       if (error.name !== 'AbortError') {
@@ -70,9 +71,16 @@ class PostgresApi {
     return this.postUser('/api/auth/register', candidate);
   }
 
-  async fetchWithPagination({ url, page = 1, limit = 10, signal }) {
+  async fetchWithPagination({
+    url,
+    page = 1,
+    limit = 10,
+    filter = null,
+    signal,
+  }) {
+    const filterParam = filter ? JSON.stringify(filter) : null;
     return this.makeRequest(`${url}/paginated`, {
-      params: { page, limit },
+      params: { page, limit, ...(filterParam && { filter: filterParam }) },
       signal,
     });
   }
@@ -91,10 +99,11 @@ class PostgresApi {
     return await this.makeRequest(url, { method: 'DELETE', body: data });
   }
 
-  async getDesignBrevis(url) {
-    const result = await fetch(url);
+  async getBrevis(url) {
+    // const result = await fetch(url);
     // console.log(await result.json());
-    return await result.json();
+    // return await result.json();
+    return await this.makeRequest(url);
   }
 
   async getResourcesName(url) {

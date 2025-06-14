@@ -1,6 +1,6 @@
-import express from "express";
-import passport from "passport";
-import { getAllVolumes } from "../controllers/volumes.js";
+import express from 'express';
+import passport from 'passport';
+import { getAllVolumes, getVolumesByPage } from '../controllers/volumes.js';
 
 const router = express.Router();
 
@@ -10,6 +10,12 @@ const router = express.Router();
 //   getAllVolumes
 // );
 
-router.get("/", getAllVolumes);
+router.get(
+  '/paginated',
+  passport.authenticate('jwt', { session: false }),
+  getVolumesByPage
+);
+
+router.get('/', getAllVolumes);
 
 export { router };

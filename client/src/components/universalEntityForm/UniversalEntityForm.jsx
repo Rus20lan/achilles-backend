@@ -196,7 +196,7 @@ const UniversalEntityForm = ({
   };
 
   const handleChange = (field, value) => {
-    console.log('value', value);
+    // console.log('value', value);
     setData((prev) => ({
       ...prev,
       [field]: value,
@@ -331,12 +331,19 @@ const UniversalEntityForm = ({
   );
 };
 
-const InputField = ({ name, config, value, onChange, error }) => {
+export const InputField = ({
+  name,
+  config,
+  value,
+  onChange,
+  hideLabel,
+  error,
+}) => {
   const handleInputChange = (e) => {
-    onChange(name, e.target.value);
+    onChange && onChange(name, e.target.value);
   };
   const renderInput = () => {
-    switch (config.type) {
+    switch (config?.type) {
       case 'number':
         return (
           <input
@@ -396,7 +403,9 @@ const InputField = ({ name, config, value, onChange, error }) => {
         error ? 'universal-form__field--error' : ''
       }`}
     >
-      <label className="universal-form__field-label">{config.label}</label>
+      {!hideLabel && (
+        <label className="universal-form__field-label">{config?.label}</label>
+      )}
       {renderInput()}
       {error && <div className="error-message">{error}</div>}
     </div>

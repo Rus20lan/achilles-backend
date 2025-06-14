@@ -33,6 +33,7 @@ const Card = (props) => {
     code,
     entity,
     mark,
+    value,
     dateString,
     factId,
     valueId,
@@ -40,7 +41,6 @@ const Card = (props) => {
     onClickEditBtn,
     onClickDeleteBtn,
   } = props;
-
   let inputId = '';
   let objId = {};
   const {
@@ -85,7 +85,6 @@ const Card = (props) => {
       setIsChecked(false);
     };
   };
-
   return (
     <>
       {isGridContainer && (
@@ -97,7 +96,7 @@ const Card = (props) => {
       {!isGridContainer && (
         <li className={`card_wrapper_line ${theme}-theme__card_wrapper_line`}>
           <div className="card_info_block">
-            {entity !== 'fact' && (
+            {entity !== 'fact' && entity !== 'volume' && (
               <>
                 <div className="card_firts_line">
                   {brevis && <p className=" name_field no_shrink">{brevis}</p>}
@@ -159,22 +158,43 @@ const Card = (props) => {
                 </div>
               </>
             )}
+            {entity === 'volume' && (
+              <>
+                <div className="card_firts_line">
+                  {props.Resource && (
+                    <>
+                      <p className=" name_field no_shrink">
+                        {props?.Resource?.name}
+                      </p>
+                      <p className="value_field">
+                        {value} {props.Resource.unit}
+                      </p>
+                    </>
+                  )}
+                </div>
+                <div className="card_second_line">
+                  {props.Design && (
+                    <>
+                      <p>
+                        <span className="name_field">Шифр: </span>
+                        <span className="value_field_second">
+                          {props.Design.brevis}
+                        </span>
+                      </p>
+                      <p style={{ justifyContent: 'flex-end' }}>
+                        <span className="name_field">Титул: </span>
+                        <span className="value_field_second">
+                          {props.Title.brevis}
+                        </span>
+                      </p>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
           </div>
           <div className="card_btn_block">
             <div className="btn_round_wrapper visible">
-              {/* {entity !== 'fact' && (
-                <Btn
-                  btnClassName={'button_round blue'}
-                  icon={'fa fa-pencil'}
-                  onClickBtn={() => {
-                    onClickEditBtn({
-                      ...(factId ?? { id }),
-                      ...(factId && { id: factId, valueId }),
-                      ...(titleId && !factId && { id: titleId }),
-                    });
-                  }}
-                />
-              )} */}
               <div className="ms-nav-container">
                 <ul className="ms-nav">
                   <input
@@ -205,14 +225,9 @@ const Card = (props) => {
                         onClickBtn={handleMenuAction(() => {
                           switch (factBtn.mode) {
                             case 'edit':
-                              // onClickEditBtn({ id: factId, valueId });
                               onClickEditBtn(objId);
                               break;
                             case 'delete':
-                              // onClickDeleteBtn({
-                              //   id: factId,
-                              //   valueId,
-                              // });
                               onClickDeleteBtn(objId);
                               break;
                           }
