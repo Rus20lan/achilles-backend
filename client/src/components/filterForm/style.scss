@@ -1,5 +1,5 @@
-@use '../App/vars' as *;
-@use '../App/mixins' as m;
+@use "../App/vars" as *;
+@use "../App/mixins" as m;
 
 .filter-form {
   &__container {
@@ -18,7 +18,7 @@
     transition: max-height 0.5s cubic-bezier(0.33, 1, 0.68, 1),
       opacity 0.4s ease-out, transform 0.4s ease-out, visibility 0.4s ease-out;
     &_open {
-      max-height: 400px;
+      max-height: 600px;
       pointer-events: auto; // Включаем взаимодействие
       visibility: visible;
       opacity: 1;

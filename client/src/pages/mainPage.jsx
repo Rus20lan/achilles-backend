@@ -1,6 +1,6 @@
-import { useContext } from 'react';
-import { InstallerContext } from '../components/App/App';
-import { MainAppContainer } from './entityPage';
+import { useContext } from "react";
+import { InstallerContext } from "../components/App/App";
+import { MainAppContainer } from "./entityPage";
 
 const MainPage = () => {
   const {

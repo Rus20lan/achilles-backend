@@ -1,27 +1,27 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { ENTITY_CONFIG } from '../../config/entities';
-import './style.scss';
-import PostgresApi from '../../services/PostgresApi';
-import Modal from '../modal/Modal';
-import { ModalContext } from '../authForm/AuthForm';
-import { isEqual } from 'lodash-es';
-import createObjectEditFields from '../../services/createObjectEditFields';
-import { useSelector } from 'react-redux';
-import AutoCompleteField from './AutoCompleteField';
-import { Fact } from '../../services/FactApi';
-import Loader from '../loader/Loader';
-import { InstallerContext } from '../App/App';
+import { useContext, useEffect, useRef, useState } from "react";
+import { ENTITY_CONFIG } from "../../config/entities";
+import "./style.scss";
+import PostgresApi from "../../services/PostgresApi";
+import Modal from "../modal/Modal";
+import { ModalContext } from "../authForm/AuthForm";
+import { isEqual } from "lodash-es";
+import createObjectEditFields from "../../services/createObjectEditFields";
+import { useSelector } from "react-redux";
+import AutoCompleteField from "./AutoCompleteField";
+import { Fact } from "../../services/FactApi";
+import Loader from "../loader/Loader";
+import { InstallerContext } from "../App/App";
 
 const entityRus = {
-  title: 'Титул',
-  resource: 'Ресурс',
-  design: 'Проект',
-  fact: 'Факт',
+  title: "Титул",
+  resource: "Ресурс",
+  design: "Проект",
+  fact: "Факт",
 };
 
 const UniversalEntityForm = ({
   entityType,
-  mode = 'create',
+  mode = "create",
   entityId = null,
   valueId = null,
   onClose,
@@ -34,7 +34,7 @@ const UniversalEntityForm = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [resultAction, setResultAction] = useState({
-    message: '',
+    message: "",
     status: false,
   });
   const designOptions = useSelector((state) => state.designs.data);
@@ -54,7 +54,7 @@ const UniversalEntityForm = ({
       const fieldErrors = [];
       // Проверка обязательных полей
       if (fieldConfig.required && !value?.toString().trim())
-        fieldErrors.push(fieldConfig.errorMessage || 'Обязательное поле');
+        fieldErrors.push(fieldConfig.errorMessage || "Обязательное поле");
       // Кастомная проверка
       if (fieldConfig.validate) {
         const error = fieldConfig.validate(value);
@@ -70,7 +70,7 @@ const UniversalEntityForm = ({
     return Object.keys(newErrors).length === 0;
   };
   useEffect(() => {
-    if (mode !== 'create' && entityId) {
+    if (mode !== "create" && entityId) {
       const fethData = async () => {
         const postgresApi = new PostgresApi();
         try {
@@ -81,18 +81,18 @@ const UniversalEntityForm = ({
           const res = await postgresApi.getEntity(url);
           if (!res.data) throw new Error();
           initData.current = createObjectEditFields(entityType, res.data);
-          console.log('Данные из базы данных', res.data);
+          console.log("Данные из базы данных", res.data);
           setData(initData.current);
           setIsLoading(false);
         } catch (error) {
-          console.error('Ошибка загрузки данных:', error);
+          console.error("Ошибка загрузки данных:", error);
         }
       };
       fethData();
     }
-    if (mode === 'create') {
+    if (mode === "create") {
       initData.current = createObjectEditFields(entityType, null, mode);
-      console.log('Данные в initData', initData.current);
+      console.log("Данные в initData", initData.current);
       setData(initData.current);
       setIsLoading(false);
     }
@@ -119,13 +119,13 @@ const UniversalEntityForm = ({
     e.preventDefault();
 
     if (!validateForm()) {
-      setResultAction({ message: 'Форма содержит ошибки', status: false });
+      setResultAction({ message: "Форма содержит ошибки", status: false });
       return;
     }
     let postData = createObjectEditFields(entityType, data);
 
-    if (isEqual(initData.current, postData) && mode === 'edit') {
-      setResultAction({ message: 'Изменения не внесены', status: false });
+    if (isEqual(initData.current, postData) && mode === "edit") {
+      setResultAction({ message: "Изменения не внесены", status: false });
       return;
     }
 
@@ -134,29 +134,29 @@ const UniversalEntityForm = ({
       const postgresApi = new PostgresApi();
       const url = `/api/${entityType}/${entityId}`;
       let respond = null;
-      console.log('postData', postData);
+      console.log("postData", postData);
 
-      if (entityType === 'fact' && (mode === 'create' || mode === 'edit')) {
+      if (entityType === "fact" && (mode === "create" || mode === "edit")) {
         if (
           !isEqual(postData.brevis, initData.current.brevis) ||
           !isEqual(postData.name, initData.current.name)
         ) {
-          postData['idDesign'] = config.fields['brevis'].getIdDesign(
+          postData["idDesign"] = config.fields["brevis"].getIdDesign(
             designOptions,
-            'brevis',
+            "brevis",
             postData.brevis
           );
-          postData['idResource'] = config.fields['name'].getIdResource(
+          postData["idResource"] = config.fields["name"].getIdResource(
             resourceOptions,
-            'name',
+            "name",
             postData.name
           );
         } else {
-          postData['idDesign'] = null;
-          postData['idResource'] = null;
+          postData["idDesign"] = null;
+          postData["idResource"] = null;
         }
 
-        if (mode === 'create') {
+        if (mode === "create") {
           const date = new Date(postData.date);
           postData.id = date.getTime();
         }
@@ -166,25 +166,25 @@ const UniversalEntityForm = ({
       }
 
       switch (mode) {
-        case 'create':
-          console.log('Здесь будет создание сущности в базе');
+        case "create":
+          console.log("Здесь будет создание сущности в базе");
           respond = await postgresApi.createEntity(
             `/api/${entityType}/create`,
             postData
           );
           break;
-        case 'edit':
+        case "edit":
           respond = await postgresApi.putEntity(url, postData);
           break;
-        case 'delete':
-          if (entityType === 'fact') {
+        case "delete":
+          if (entityType === "fact") {
             respond = await postgresApi.deleteEntity(url, postData);
           } else {
             respond = await postgresApi.deleteEntity(url, postData);
           }
           break;
       }
-      console.log('Ответ после обновления: ', respond);
+      console.log("Ответ после обновления: ", respond);
       if (respond.message) {
         setResultAction({ message: respond.message, status: true });
       }
@@ -196,7 +196,6 @@ const UniversalEntityForm = ({
   };
 
   const handleChange = (field, value) => {
-    // console.log('value', value);
     setData((prev) => ({
       ...prev,
       [field]: value,
@@ -210,7 +209,7 @@ const UniversalEntityForm = ({
   if (isLoading) return <Loader />;
 
   const warningLine =
-    entityType !== 'fact' ? (
+    entityType !== "fact" ? (
       <span className="error-message">
         {/* <span className="error-message__icon">&#9888;</span> */}
         {`При удалении ${entityRus[entityType]}(a) будут потеряны связанные данные`}
@@ -221,13 +220,13 @@ const UniversalEntityForm = ({
     <div className={`universal-form ${theme}-theme`}>
       <div className="universal-form__header">
         <h2>
-          {mode === 'create' && `Создание: ${entityRus[entityType]}`}
-          {mode === 'edit' && `Редактирование: ${entityRus[entityType]}`}
-          {mode === 'delete' && 'Удаление'}
+          {mode === "create" && `Создание: ${entityRus[entityType]}`}
+          {mode === "edit" && `Редактирование: ${entityRus[entityType]}`}
+          {mode === "delete" && "Удаление"}
         </h2>
       </div>
       <form className="universal-form__body" onSubmit={handleSubmit}>
-        {mode === 'edit' && (
+        {mode === "edit" && (
           <>
             {Object.entries(config.fields)
               .filter(([, val]) => val.isVisible)
@@ -250,10 +249,10 @@ const UniversalEntityForm = ({
             </div>
           </>
         )}
-        {mode === 'delete' && (
+        {mode === "delete" && (
           <>
             <p>{`Вы хотите удалить ${entityRus[entityType]}`}</p>
-            {entityType === 'title' && (
+            {entityType === "title" && (
               <>
                 <span>
                   {`${data.brevis}`}
@@ -263,7 +262,7 @@ const UniversalEntityForm = ({
                 {warningLine}
               </>
             )}
-            {entityType === 'design' && (
+            {entityType === "design" && (
               <>
                 <span>
                   {`${data.code}`}
@@ -273,7 +272,7 @@ const UniversalEntityForm = ({
                 {warningLine}
               </>
             )}
-            {entityType === 'resource' && (
+            {entityType === "resource" && (
               <>
                 <span>
                   {`${data.name}`}
@@ -283,7 +282,7 @@ const UniversalEntityForm = ({
                 {warningLine}
               </>
             )}
-            {entityType === 'fact' && (
+            {entityType === "fact" && (
               <span>{`${data.date && new Date(data.date).toLocaleDateString()} 
             ${data?.name} ${data?.brevis} ${data?.fact} ${data.unit}`}</span>
             )}
@@ -296,7 +295,7 @@ const UniversalEntityForm = ({
             </div>
           </>
         )}
-        {mode === 'create' && (
+        {mode === "create" && (
           <>
             {Object.entries(config.fields)
               .filter(([, val]) => val.isVisible)
@@ -344,7 +343,7 @@ export const InputField = ({
   };
   const renderInput = () => {
     switch (config?.type) {
-      case 'number':
+      case "number":
         return (
           <input
             className="universal-form__field-input"
@@ -354,7 +353,7 @@ export const InputField = ({
             onChange={handleInputChange}
           />
         );
-      case 'text':
+      case "text":
         return (
           <input
             className="universal-form__field-input"
@@ -365,7 +364,7 @@ export const InputField = ({
             placeholder={config?.placeholder}
           />
         );
-      case 'textarea':
+      case "textarea":
         return (
           <EditableDiv
             name={name}
@@ -374,7 +373,7 @@ export const InputField = ({
             placeholder={config?.placeholder}
           />
         );
-      case 'date':
+      case "date":
         return (
           <input
             className="universal-form__field-input"
@@ -384,7 +383,7 @@ export const InputField = ({
             onChange={handleInputChange}
           />
         );
-      case 'autocomplete':
+      case "autocomplete":
         return (
           <AutoCompleteField
             name={name}
@@ -400,7 +399,7 @@ export const InputField = ({
   return (
     <div
       className={`universal-form__field ${
-        error ? 'universal-form__field--error' : ''
+        error ? "universal-form__field--error" : ""
       }`}
     >
       {!hideLabel && (
@@ -413,12 +412,12 @@ export const InputField = ({
 };
 export default UniversalEntityForm;
 
-const EditableDiv = ({ name, value = '', onChange, placeholder = '' }) => {
+const EditableDiv = ({ name, value = "", onChange, placeholder = "" }) => {
   const divRef = useRef(null);
   useEffect(() => {
     if (!divRef.current) return;
 
-    if (placeholder && value === '') {
+    if (placeholder && value === "") {
       divRef.current.innerHTML = placeholder;
       togglePlaceholderClass(true);
     }
@@ -426,7 +425,7 @@ const EditableDiv = ({ name, value = '', onChange, placeholder = '' }) => {
 
   const togglePlaceholderClass = (isEmpty) => {
     if (!divRef.current) return;
-    divRef.current.classList.toggle('placeholder-mode', isEmpty);
+    divRef.current.classList.toggle("placeholder-mode", isEmpty);
   };
   const handleInput = (e) => {
     const newValue = e.target.innerHTML;
@@ -436,12 +435,12 @@ const EditableDiv = ({ name, value = '', onChange, placeholder = '' }) => {
   const handleFocus = () => {
     // setIsFocused(true);
     if (divRef.current.textContent === placeholder) {
-      divRef.current.innerHTML = '';
+      divRef.current.innerHTML = "";
     }
   };
   const handleBlur = () => {
     // setIsFocused(false);
-    if (divRef.current.textContent === '') {
+    if (divRef.current.textContent === "") {
       divRef.current.innerHTML = placeholder;
       togglePlaceholderClass(true);
     }

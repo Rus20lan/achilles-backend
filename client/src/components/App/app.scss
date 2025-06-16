@@ -1,4 +1,4 @@
-@use './vars' as *;
+@use "./vars" as *;
 
 #root {
   width: 100vw;
@@ -197,13 +197,27 @@ button {
     }
   }
   &__dropdown {
+    & .dropdown__button {
+      &:hover {
+        background: $light-bg;
+        border-bottom: 1px solid $light-bg;
+      }
+      &:focus {
+        background: $light-bg;
+        border-bottom: 1px solid $light-bg;
+      }
+    }
+
     & .dropdown__menu {
       background: $light-bg;
     }
+    // & .dropdown__menu {
+    //   background: $light-bg;
+    // }
   }
   &__filter-form {
     .filter-form__button-group {
-      button[type='submit'] {
+      button[type="submit"] {
         background: $green-ok;
       }
       button {
